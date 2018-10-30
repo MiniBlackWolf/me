@@ -66,7 +66,7 @@ public class PhonePwdRegisterService {
 
                 Log.e(TAG, Util.getWellFormatMobile(countryCode, phoneNumber));
 
-                tlsService.TLSPwdRegAskCode(countryCode, phoneNumber, pwdRegListener);
+             //   tlsService.TLSPwdRegAskCode(countryCode, phoneNumber, pwdRegListener);
             }
         });
 

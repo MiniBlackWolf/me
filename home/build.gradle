@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-noarg'
+apply plugin: 'kotlin-allopen'
 kapt {
     arguments {
         arg("AROUTER_MODULE_NAME", project.getName())
@@ -38,4 +40,11 @@ dependencies {
     //ARouter
     kapt "com.alibaba:arouter-compiler:1.2.1"
 
+}
+noArg {
+    annotation("study.kotin.my.baselibrary.common.Poko")
+}
+
+allOpen {
+    annotation("study.kotin.my.baselibrary.common.Poko")
 }

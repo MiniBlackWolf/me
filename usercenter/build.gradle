@@ -7,6 +7,8 @@ if(isUserModule.toBoolean()){
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-noarg'
+apply plugin: 'kotlin-allopen'
 kapt {
     arguments {
         arg("AROUTER_MODULE_NAME", project.getName())
@@ -55,4 +57,11 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.16'
     kapt 'com.alibaba:arouter-compiler:1.2.1'
 
+}
+noArg {
+    annotation("study.kotin.my.baselibrary.common.Poko")
+}
+
+allOpen {
+    annotation("study.kotin.my.baselibrary.common.Poko")
 }

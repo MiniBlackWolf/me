@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-noarg'
+apply plugin: 'kotlin-allopen'
 kapt {
     arguments {
         arg("AROUTER_MODULE_NAME", project.getName())
@@ -38,6 +40,12 @@ dependencies {
     implementation project(':find')
     implementation project(':address')
     implementation project(':mycenter')
-    implementation project(':presentation')
-    implementation project(':ui')
+
+}
+noArg {
+    annotation("study.kotin.my.baselibrary.common.Poko")
+}
+
+allOpen {
+    annotation("study.kotin.my.baselibrary.common.Poko")
 }

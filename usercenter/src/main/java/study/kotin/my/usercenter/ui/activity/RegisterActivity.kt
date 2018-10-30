@@ -1,7 +1,6 @@
 package study.kotin.my.usercenter.ui.activity
 
 
-
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -17,14 +16,16 @@ import study.kotin.my.usercenter.ui.fragment.RigsterFragment
 import javax.inject.Inject
 import android.view.WindowManager
 import android.os.Build
-import com.alibaba.android.arouter.launcher.ARouter
+import study.kotin.my.usercenter.common.PwdLoginListener
 
 
 class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
-    var count=0
+    var count = 0
     @Inject
-    lateinit var  RigsterFragment:RigsterFragment
-
+    lateinit var RigsterFragment: RigsterFragment
+    val publickey = "nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEwPS+nyBWgVYxxUbNcI5bQtN33OZ\\n9JjpUbmotPfkfGty3R4I9j4KoiVLXfY2m986TTK5w1yWbB3AURvSVnPOtA=="
+    @Inject
+    lateinit var pwdLoginListener: PwdLoginListener
 
     override fun LoginResult(result: Boolean) {
         if (result) {
@@ -44,26 +45,38 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         }
         //注册方法
-        register.setOnClickListener{
+        register.setOnClickListener {
             val Transaction = supportFragmentManager.beginTransaction()
             Transaction.show(RigsterFragment)
             Transaction.commit()
-            loginbutton.visibility=View.INVISIBLE
+            loginbutton.visibility = View.INVISIBLE
 
         }
         //登陆方法
-        loginbutton.setOnClickListener{
-            mpersenter.mView=this
-            mpersenter.Login(username.text.toString(),passworld.text.toString())
-            ARouter.getInstance().build("/App/Homepage").navigation()
-            this.finish()
+        loginbutton.setOnClickListener {
+            if(passworld.text.isEmpty()){
+                toast("密码不能为空")
+                return@setOnClickListener
+            }
+            if(username.text.isEmpty()){
+                toast("用户名不能为空")
+                return@setOnClickListener
+            }
+                val passByte = passworld.text.toString().toByteArray(Charsets.UTF_8)
+                RigsterFragment.tlsHelper.TLSPwdLogin("86-${username.text}", passByte, pwdLoginListener)
+
+            //            mpersenter.mView=this
+//            mpersenter.Login(username.text.toString(),passworld.text.toString())
+//            ARouter.getInstance().build("/App/Homepage").navigation()
+//            this.finish()
         }
 
 
     }
-//切换页面
-private fun changFragment() {
-    val Transaction = supportFragmentManager.beginTransaction()
+
+    //切换页面
+    private fun changFragment() {
+        val Transaction = supportFragmentManager.beginTransaction()
         Transaction.add(R.id.s, RigsterFragment, "RigsterFragment")
         Transaction.hide(RigsterFragment)
         Transaction.commit()
@@ -76,19 +89,19 @@ private fun changFragment() {
 
     override fun onBackPressed() {
 
-        if(RigsterFragment.tag=="RigsterFragment"){
-            if(!RigsterFragment.isVisible){
+        if (RigsterFragment.tag == "RigsterFragment") {
+            if (!RigsterFragment.isVisible) {
                 toast("再次点击退出程序")
                 count++
-                Handler().postDelayed({ count=0 },2000)
-                if(count==2){
+                Handler().postDelayed({ count = 0 }, 2000)
+                if (count == 2) {
                     finish()
-            }
-        }else {
+                }
+            } else {
                 val Transaction = supportFragmentManager.beginTransaction()
                 Transaction.hide(RigsterFragment)
                 Transaction.commit()
-                loginbutton.visibility=View.VISIBLE
+                loginbutton.visibility = View.VISIBLE
             }
 
         }

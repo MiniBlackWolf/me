@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+}
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "study.kotin.my.kotinstudy"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    kapt 'com.google.dagger:dagger-compiler:2.16'
+    implementation project(':provider')
+    if (isUserModule.toBoolean()) {
+        implementation project(':usercenter')
+    }
+    kapt 'com.alibaba:arouter-compiler:1.2.1'
+    implementation project(':home')
+    implementation project(':find')
+    implementation project(':address')
+    implementation project(':mycenter')
+    implementation project(':presentation')
+    implementation project(':ui')
+}

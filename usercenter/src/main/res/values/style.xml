@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="MyEditText" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorControlNormal">#ffffff</item>
+    <item name="colorControlActivated">#ffffff</item>
+</style>
+    </resources>

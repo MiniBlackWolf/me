@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+<style name="AlertDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
+    <!--该行代码就是设置AlertDialog的背景-->
+    <item name="android:background">@color/mainred</item>
+    <item name="android:windowFrame">@null</item>
+
+    <item name="android:windowIsFloating">true</item>
+
+    <item name="android:windowIsTranslucent">true</item>
+
+    <item name="android:windowNoTitle">true</item>
+
+    <item name="android:backgroundDimEnabled">false</item>
+
+    <item name="android:windowBackground">@color/mainred</item>
+</style>
+</resources>

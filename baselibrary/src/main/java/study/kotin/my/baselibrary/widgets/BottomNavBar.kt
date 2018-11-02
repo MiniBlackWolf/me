@@ -15,11 +15,11 @@ class BottomNavBar @JvmOverloads constructor(context: Context, attrs: AttributeS
 ) : BottomNavigationBar(context, attrs, defStyleAttr) {
 
     //消息Tab 标签
-    private val mMsgBadge:TextBadgeItem
+    private val mMsgBadge: TextBadgeItem
 
     init {
         //聊天
-        val homeItem = BottomNavigationItem(R.drawable.a1,resources.getString(R.string.nav_bar_home))
+        val homeItem = BottomNavigationItem(R.drawable.a1, "聊天")
                 .setInactiveIconResource(R.drawable.a1_2)
                 .setActiveColorResource(R.color.mainred)
                 .setInActiveColorResource(R.color.text_normal)
@@ -27,22 +27,21 @@ class BottomNavBar @JvmOverloads constructor(context: Context, attrs: AttributeS
         mMsgBadge = TextBadgeItem()
         homeItem.setBadgeItem(mMsgBadge)
         //通讯
-        val cartItem = BottomNavigationItem(R.drawable.a2_2,resources.getString(R.string.nav_bar_cart))
+        val cartItem = BottomNavigationItem(R.drawable.a2_2, "通讯")
                 .setInactiveIconResource(R.drawable.a2)
                 .setActiveColorResource(R.color.mainred)
                 .setInActiveColorResource(R.color.text_normal)
 
 
         //消息
-        val msgItem = BottomNavigationItem(R.drawable.a3,resources.getString(R.string.nav_bar_msg))
+        val msgItem = BottomNavigationItem(R.drawable.a3, "发现")
                 .setInactiveIconResource(R.drawable.a3_2)
                 .setActiveColorResource(R.color.mainred)
                 .setInActiveColorResource(R.color.text_normal)
 
 
-
         //我的
-        val userItem = BottomNavigationItem(R.drawable.a4_2,resources.getString(R.string.nav_bar_user))
+        val userItem = BottomNavigationItem(R.drawable.a4_2, "我的")
                 .setInactiveIconResource(R.drawable.a4)
                 .setActiveColorResource(R.color.mainred)
                 .setInActiveColorResource(R.color.text_normal)
@@ -61,15 +60,14 @@ class BottomNavBar @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
 
-
     /*
         检查消息Tab是否显示标签
      */
-    fun checkMsgBadge(count:Int){
-        if (count!=0){
+    fun checkMsgBadge(count: Int) {
+        if (count != 0) {
             mMsgBadge.show()
             mMsgBadge.setText("$count")
-        }else {
+        } else {
             mMsgBadge.hide()
 
         }

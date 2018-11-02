@@ -31,9 +31,9 @@
         tools:replace="android:allowBackup"
         >
 
-        <activity android:name="study.kotin.my.kotinstudy.ui.activity.MainActivity"/>
-        <activity android:name="study.kotin.my.usercenter.ui.activity.RegisterActivity"
-            >
+        <activity android:name="study.kotin.my.kotinstudy.ui.activity.MainActivity">
+        </activity>
+        <activity android:name="study.kotin.my.usercenter.ui.activity.RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -9,25 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import com.tencent.bugly.imsdk.Bugly.applicationContext
+import androidx.core.view.isVisible
 import com.tencent.qalsdk.QALSDKManager
 import com.tencent.qcloud.sdk.Constant
-import com.tencent.qcloud.tlslibrary.service.PhonePwdRegisterService
-import kotlinx.android.synthetic.main.registerpage.*
 import org.jetbrains.anko.find
-import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ext.passverify
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import study.kotin.my.usercenter.R
 import study.kotin.my.usercenter.common.PwdRegListener
+import study.kotin.my.usercenter.common.TextWatchers
 import study.kotin.my.usercenter.injection.commponent.DaggerUserCommponent
 import study.kotin.my.usercenter.injection.module.UserModule
 import study.kotin.my.usercenter.persenter.registerPersenter
-import tencent.tls.platform.TLSErrInfo
+import study.kotin.my.usercenter.ui.activity.RegisterActivity
 import tencent.tls.platform.TLSHelper
-import tencent.tls.platform.TLSPwdRegListener
-import tencent.tls.platform.TLSUserInfo
 
 
 import javax.inject.Inject
@@ -42,20 +38,13 @@ class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>
     lateinit var fsyzm: Button
     lateinit var yzm: EditText
     lateinit var phonenmber: EditText
-    private fun inits() {
-        injectactivity()
-        pwdRegListener = PwdRegListener(mpersenter.context)
-        // 初始化TLSSDK
-        QALSDKManager.getInstance().setEnv(0)
-        QALSDKManager.getInstance().init(mpersenter.context, Constant.SDK_APPID)
-        tlsHelper = TLSHelper.getInstance().init(mpersenter.context, Constant.SDK_APPID.toLong())
 
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        inits()
+        injectactivity()
         val view = inflater.inflate(R.layout.registerpage, container, false)
+        pwdRegListener = PwdRegListener(mpersenter.context, view)
         initlayout(view)
         passverify(view)
         return view
@@ -71,7 +60,7 @@ class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>
     }
 
     private fun passverify(view: View) {
-        var a=0
+        var a = 0
         fsyzm.setOnClickListener {
             a++
             object : CountDownTimer(60000, 1000) {
@@ -88,27 +77,28 @@ class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>
             }.start()
             fsyzm.isEnabled = false
             fsyzm.isClickable = false
-            Log.i("iiiiiiiii","$a")
+            Log.i("iiiiiiiii", "$a")
             tlsHelper.TLSPwdRegAskCode("86-${phonenmber.text}", pwdRegListener)
         }
+        yzm.onFocusChangeListener = TextWatchers(tlsHelper, pwdRegListener, yzm, 1,mpersenter.context)
         registerbutton.setOnClickListener {
-            val yzmcode = tlsHelper.TLSPwdRegVerifyCode(yzm.text.toString(), pwdRegListener)
-            if (yzm.text.isEmpty()) {
-                activity!!.toast("请输入验证码")
-                return@setOnClickListener
+
+
+            if (it.passverify(setpassworld.text.toString(), activity)) {
+                if (okpassworld.text.toString() == setpassworld.text.toString()) {
+                    view.find<Button>(R.id.button3).isVisible = true
+                    tlsHelper.TLSPwdRegCommit(okpassworld.text.toString(), pwdRegListener);
+                } else activity!!.toast("两次密码不正确")
             }
-             else {
-                if (it.passverify(setpassworld.text.toString(), activity)) {
-                    if (okpassworld.text.toString() == setpassworld.text.toString()) {
-                        tlsHelper.TLSPwdRegCommit(okpassworld.text.toString(), pwdRegListener);
-                    } else activity!!.toast("两次密码不正确")
-                }
-            }
+
         }
     }
 
     private fun injectactivity() {
         DaggerUserCommponent.builder().activityCommpoent(mActivityComponent).userModule(UserModule()).build().inject(this)
+        QALSDKManager.getInstance().setEnv(0)
+        QALSDKManager.getInstance().init(mpersenter.context, Constant.SDK_APPID)
+        tlsHelper = TLSHelper.getInstance().init(mpersenter.context, Constant.SDK_APPID.toLong())
     }
 }
 

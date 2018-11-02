@@ -1,10 +1,13 @@
 package study.kotin.my.baselibrary.common
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
+import com.tencent.bugly.imsdk.Bugly.applicationContext
 import com.tencent.imsdk.*
 import com.tencent.qalsdk.sdk.MsfSdkUtils
 import com.tencent.qcloud.presentation.business.InitBusiness
@@ -19,6 +22,7 @@ class BaseApplication : MultiDexApplication() {
     lateinit var appCommpoen: AppCommpoent
     override fun onCreate() {
         super.onCreate()
+        context = this
         initjection()
         ARouter.openLog()    // 打印日志
         ARouter.openDebug()
@@ -41,6 +45,10 @@ class BaseApplication : MultiDexApplication() {
 
     private fun initjection() {
         appCommpoen = DaggerAppCommpoent.builder().appModule(AppModule(this)).build()
+    }
+
+    companion object {
+        lateinit var context: Context
     }
 
 }

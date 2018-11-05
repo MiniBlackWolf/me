@@ -87,6 +87,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         injectactivity()
+        navToHome()
         //----------------------
         try {
             userInfo = tlsHelper.lastUserInfo
@@ -128,6 +129,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
                 toast("用户名不能为空")
                 return@setOnClickListener
             }
+
             val passByte = passworld.text.toString().toByteArray(Charsets.UTF_8)
             tlsHelper.TLSPwdLogin("86-${username.text}", passByte, pwdLoginListener)
 
@@ -186,5 +188,41 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         }
 
 
+    }
+    fun navToHome() {
+        //登录之前要初始化群和好友关系链缓存
+        var userConfig = TIMUserConfig()
+        userConfig.setUserStatusListener(object : TIMUserStatusListener {
+            override fun onForceOffline() {
+                Log.d("iiiiii", "receive force offline message")
+
+            }
+
+            override fun onUserSigExpired() {
+                //票据过期，需要重新登录
+                NotifyDialog().show(getString(study.kotin.my.baselibrary.R.string.tls_expire), supportFragmentManager) { dialog, which ->
+                    //                             logout()
+                }
+            }
+        }).connectionListener = object : TIMConnListener {
+            override fun onConnected() {
+                Log.i("iiiiiiii", "onConnected")
+            }
+
+            override fun onDisconnected(code: Int, desc: String) {
+                Log.i("iiiiiiiiiiiiiiiii", "onDisconnected")
+            }
+
+            override fun onWifiNeedAuth(name: String) {
+                Log.i("iiiiiiiiiiiiiiiii", "onWifiNeedAuth")
+            }
+        }
+
+        //设置刷新监听
+        RefreshEvent.getInstance().init(userConfig)
+        userConfig = FriendshipEvent.getInstance().init(userConfig)
+        userConfig = GroupEvent.getInstance().init(userConfig)
+        userConfig = MessageEvent.getInstance().init(userConfig)
+        TIMManager.getInstance().userConfig = userConfig
     }
 }

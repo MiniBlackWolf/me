@@ -1,13 +1,10 @@
-package com.example.home.common
+package com.example.home.Messges
 
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import com.example.home.HomeAdapter.chatadapter
 import com.example.home.persenter.view.HomeView
 import com.tencent.imsdk.TIMElemType
 import com.tencent.imsdk.TIMMessage
 import com.tencent.imsdk.TIMTextElem
-import study.kotin.my.baselibrary.common.BaseApplication
 
 object TextMessge {
 
@@ -18,7 +15,7 @@ object TextMessge {
             val elemType = elem.getType()
             Log.d("iiiii", "elem type: " + elemType.name)
             if (elemType == TIMElemType.Text) {
-                mview.showmsg(elem as TIMTextElem)
+                mview.showtextmsg(elem as TIMTextElem)
 
             } else if (elemType == TIMElemType.Image) {
                 //处理图片消息

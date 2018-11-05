@@ -22,17 +22,7 @@ class ChatViewSet constructor(val mView:HomeView):ChatView {
 
     override fun showMessage(messages: MutableList<TIMMessage>?) {
         for (d in 0..messages!!.size) {
-            for (i in 0 until messages.get(d).getElementCount()) {
-                val elem = messages.get(i.toInt()).getElement(i.toInt())
-                //获取当前元素的类型
-                val elemType = elem.getType()
-                Log.d("iiiii", "elem type: " + elemType.name)
-                if (elemType == TIMElemType.Text) {
-                    //处理文本消息
-                } else if (elemType == TIMElemType.Image) {
-                    //处理图片消息
-                }//...处理更多消息
-            }
+            MessageFactory.getMessage(messages[d],mView)
         }
 
     }

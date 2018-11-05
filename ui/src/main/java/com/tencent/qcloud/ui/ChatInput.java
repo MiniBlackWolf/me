@@ -47,7 +47,7 @@ import static android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED;
 /**
  * 聊天界面输入控件
  */
-public class ChatInput extends RelativeLayout implements TextWatcher, View.OnClickListener {
+public class ChatInput extends RelativeLayout implements TextWatcher, View.OnClickListener{
 
 
     private static final String TAG = "ChatInput";

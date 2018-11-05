@@ -24,7 +24,6 @@ fun <T> Observable<T>.excute(Observer: BaseObserver<T>, lifecycleProvider: Lifec
 }
 
 fun View.passverify(s:String,context: Activity?):Boolean{
-
     val patternnmber = """^[1-9]\d*${'$'}"""
     val patterEN = """^[A-Za-z]+${'$'}"""
     val matcher = Pattern.compile(patternnmber).matcher(s.trim())

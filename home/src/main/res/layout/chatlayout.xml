@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/background_gray1"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -72,11 +72,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginStart="284dp"
-                android:layout_marginLeft="284dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginRight="40dp"
-                android:gravity="center_horizontal"
+                android:layout_marginLeft="280dp"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageView

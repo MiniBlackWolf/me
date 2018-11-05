@@ -5,12 +5,14 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 public class Msg implements MultiItemEntity {
     public static final int TYPE_RECEIVED = 0;// 接收消息
     public static final int TYPE_SENT = 1;// 发送消息
-    private String content;
+    private Object content;
     private int type;
-
-    public Msg(String content, int type) {
+    private int datatype;
+//datatype 1:文本 2:图片 3：语音 4：文件
+    public Msg(Object content, int type,int datatype) {
         this.content = content;
         this.type = type;
+        this.datatype=datatype;
     }
 
     public static int getTypeReceived() {
@@ -21,11 +23,19 @@ public class Msg implements MultiItemEntity {
         return TYPE_SENT;
     }
 
-    public String getContent() {
+    public int getDatatype() {
+        return datatype;
+    }
+
+    public void setDatatype(int datatype) {
+        this.datatype = datatype;
+    }
+
+    public Object getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Object content) {
         this.content = content;
     }
 

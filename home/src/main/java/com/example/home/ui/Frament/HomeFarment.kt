@@ -1,7 +1,6 @@
 package com.example.home.ui.Frament
 
 import android.os.Bundle
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -9,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.eightbitlab.rxbus.Bus
@@ -19,16 +19,76 @@ import com.example.home.common.UpdateMessgeSizeEvent
 import com.example.home.data.UserList
 import com.example.home.persenter.HomePersenter
 import com.example.home.ui.activity.HomeActivity
+import com.tencent.imsdk.*
 import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
-import com.tencent.imsdk.TIMManager
+import com.tencent.imsdk.ext.group.TIMGroupCacheInfo
+import com.tencent.qcloud.presentation.presenter.ConversationPresenter
+import com.tencent.qcloud.presentation.viewfeatures.ConversationView
 import org.jetbrains.anko.support.v4.startActivity
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
+import java.util.*
 
 
-class HomeFarment : BaseMVPFragmnet<HomePersenter>() {
-    val userlist: ArrayList<UserList> = ArrayList()
+class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
+    lateinit var lastmsg: String
+
+    /**
+     * 初始化界面或刷新界面
+     */
+    override fun initView(conversationList: MutableList<TIMConversation>?) {
+
+    }
+
+    /**
+     * 更新最新消息显示
+     *
+     * @param message 最后一条消息
+     */
+    override fun updateMessage(message: TIMMessage?) {
+        when (message!!.getElement(0).type) {
+            TIMElemType.Text, TIMElemType.Face -> lastmsg = (message.getElement(0) as TIMTextElem).text
+            TIMElemType.Image -> lastmsg = "图片"
+            TIMElemType.Sound -> lastmsg = "语音"
+            TIMElemType.Video -> lastmsg = "视频"
+            TIMElemType.GroupTips -> return
+            //  return new GroupTipMessage(message);
+            TIMElemType.File -> lastmsg = "文件"
+            TIMElemType.UGC -> return
+            else -> return
+        }
+        val user = UserList("", "", message.conversation.peer, lastmsg, message.msg.seq().toInt(),message.timestamp().toString())
+        userlist.add(user)
+        RecyclerViewset1()
+        RecyclerViewset2()
+    }
+
+    /**
+     * 更新好友关系链消息
+     */
+    override fun updateFriendshipMessage() {
+    }
+
+    /**
+     * 删除会话
+     */
+    override fun removeConversation(identify: String?) {
+    }
+
+    /**
+     * 更新群信息
+     */
+    override fun updateGroupInfo(info: TIMGroupCacheInfo?) {
+    }
+
+    /**
+     * 刷新
+     */
+    override fun refresh() {
+    }
+
+    val userlist = HashSet<UserList>()
     lateinit var chatlist: RecyclerView
     lateinit var chatlist2: RecyclerView
     lateinit var left: ImageView
@@ -38,20 +98,9 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>() {
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
         initinject()
         initlayout(view)
-        for (i in 1..10) {
-            val user = UserList("", "", "皮皮虾", "撒大了可打算离开", 11)
-            userlist.add(user)
-        }
-        TIMManager.getInstance().loginUser
-        RecyclerViewset1()
-        RecyclerViewset2()
-        //收到新消息
-        //消息的内容解析请参考消息收发文档中的消息解析说明
-        //返回true将终止回调链，不再调用下一个新消息监听器
-        TIMManager.getInstance().addMessageListener { it ->
-            return@addMessageListener false
-        }
 
+        val conversationPresenter = ConversationPresenter(this)
+        conversationPresenter.getConversation()
         view.find<ImageView>(R.id.search).let { it ->
             it.setOnClickListener {
                 Bus.send(UpdateMessgeSizeEvent(5))
@@ -62,11 +111,14 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>() {
         return view
     }
 
+    //消息列表
     fun RecyclerViewset1() {
-        val homeListAdapter = HomeListAdapter(userlist)
-        homeListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener{
+        val homeListAdapter = HomeListAdapter(userlist.toList())
+        homeListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                startActivity<HomeActivity>()
+                val viewByPosition:TextView = adapter!!.getViewByPosition(chatlist, position, R.id.peername) as TextView
+                startActivity<HomeActivity>("id" to viewByPosition.text)
+
             }
         }
         chatlist.adapter = homeListAdapter
@@ -76,10 +128,12 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>() {
 
     }
 
+    //消息上方列表
     fun RecyclerViewset2() {
-        val chatListAdapter = ChatListAdapter(userlist)
-        chatListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener{
+        val chatListAdapter = ChatListAdapter(userlist.toList())
+        chatListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+
                 startActivity<HomeActivity>()
             }
         }
@@ -117,6 +171,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>() {
         rigth = view.find(R.id.right)
     }
 
+    //注入
     fun initinject() {
         DaggerHomeCommponent.builder().activityCommpoent(mActivityComponent).homemodule(Homemodule()).build().inject(this)
 

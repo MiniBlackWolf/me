@@ -5,14 +5,15 @@ import android.os.Parcel
 import android.os.Parcelable
 import study.kotin.my.baselibrary.common.Poko
 
-
-data class UserList(val HaedImgUrl: String, val LogoUrl: String, val Name: String, val msg: String, val noreadmsg: Int) : Parcelable {
+@Poko
+data class UserList(val HaedImgUrl: String, val LogoUrl: String, val Name: String, val msg: String, val noreadmsg: Int, val lastmsgtime: String) : Parcelable {
     constructor(source: Parcel) : this(
             source.readString(),
             source.readString(),
             source.readString(),
             source.readString(),
-            source.readInt()
+            source.readInt(),
+            source.readString()
     )
 
     override fun describeContents() = 0
@@ -23,6 +24,7 @@ data class UserList(val HaedImgUrl: String, val LogoUrl: String, val Name: Strin
         writeString(Name)
         writeString(msg)
         writeInt(noreadmsg)
+        writeString(lastmsgtime)
     }
 
     companion object {

@@ -21,7 +21,7 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView {
     }
 
     private fun iniinject() {
-        DaggerAddressCommponent.builder().activityCommpoent(activityCommpoent).addressmodule(Addressmodule()).build().Addressinject(this)
+        DaggerAddressCommponent.builder().activityCommpoent(activityCommpoent).addressmodule(Addressmodule()).build().inject(this)
         mpersenter.mView=this
     }
 

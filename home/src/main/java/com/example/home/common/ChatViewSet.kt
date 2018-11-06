@@ -1,5 +1,6 @@
 package com.example.home.common
 
+import android.os.Environment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -12,6 +13,12 @@ import com.tencent.imsdk.ext.message.TIMMessageLocator
 import com.tencent.qcloud.presentation.viewfeatures.ChatView
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.ext.MessageFactory
+import com.tencent.imsdk.TIMMessage
+import com.tencent.imsdk.TIMValueCallBack
+import android.os.Environment.getExternalStorageDirectory
+import com.tencent.imsdk.TIMImageElem
+
+
 
 
 class ChatViewSet constructor(val mView:HomeView):ChatView {
@@ -40,6 +47,36 @@ class ChatViewSet constructor(val mView:HomeView):ChatView {
     }
 
     override fun sendImage() {
+        val peer = "86-13068380650"  //获取与用户 "sample_user_1" 的会话
+        val conversation = TIMManager.getInstance().getConversation(
+                TIMConversationType.C2C, //会话类型：单聊
+                peer)
+        //构造一条消息
+        val msg = TIMMessage()
+
+//添加图片
+        val elem = TIMImageElem()
+        elem.path = Environment.getExternalStorageDirectory().absolutePath
+
+//将 elem 添加到消息
+        if (msg.addElement(elem) != 0) {
+            Log.d("iiiiiii", "addElement failed")
+            return
+        }
+
+//发送消息
+        conversation.sendMessage(msg, object : TIMValueCallBack<TIMMessage> {
+            //发送消息回调
+            override fun onError(code: Int, desc: String) {//发送消息失败
+                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                //错误码 code 列表请参见错误码表
+                Log.d("iiiiiii", "send message failed. code: $code errmsg: $desc")
+            }
+
+            override fun onSuccess(msg: TIMMessage) {//发送消息成功
+                Log.e("iiiiiii", "SendMsg ok")
+            }
+        })
     }
 
     override fun sendPhoto() {

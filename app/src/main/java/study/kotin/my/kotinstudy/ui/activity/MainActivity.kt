@@ -43,8 +43,6 @@ class MainActivity : AppCompatActivity() {
             val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         }
-
-
         initFragment()
         val manager = supportFragmentManager.beginTransaction()
         for (fragment in mStack) {

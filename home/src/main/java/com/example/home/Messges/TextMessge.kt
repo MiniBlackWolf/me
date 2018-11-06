@@ -16,10 +16,7 @@ object TextMessge {
             Log.d("iiiii", "elem type: " + elemType.name)
             if (elemType == TIMElemType.Text) {
                 mview.showtextmsg(elem as TIMTextElem)
-
-            } else if (elemType == TIMElemType.Image) {
-                //处理图片消息
-            }//...处理更多消息
+            }
         }
 
     }

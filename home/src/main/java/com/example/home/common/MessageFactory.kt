@@ -1,6 +1,7 @@
 package study.kotin.my.baselibrary.ext
 
 
+import com.example.home.Messges.FileMessge
 import com.example.home.Messges.ImgMessge
 import com.example.home.Messges.SoundMessge
 import com.example.home.Messges.TextMessge
@@ -23,7 +24,7 @@ object MessageFactory {
                 TIMElemType.Video -> return
                 TIMElemType.GroupTips,
                     //  return new GroupTipMessage(message);
-                TIMElemType.File -> return
+                TIMElemType.File -> return FileMessge.showfileMessge(message, mview)
                 TIMElemType.UGC -> return
                 else -> return
             }

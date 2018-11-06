@@ -9,7 +9,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.example.home.HomeAdapter.chatadapter
 import com.example.home.R
-import com.example.home.Utils.TakePhotoUt
 import com.example.home.common.ChatViewSet
 import com.example.home.common.Msg
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
@@ -30,39 +29,19 @@ import com.zhihu.matisse.engine.impl.GlideEngine
 import android.content.pm.ActivityInfo
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
-import com.zhihu.matisse.filter.Filter
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.webkit.JavascriptInterface
 import com.oden.syd_camera.SydCameraActivity
 import com.oden.syd_camera.camera.CameraParaUtil
-import com.oden.syd_camera.camera.CameraParaUtil.picturePath
+import study.kotin.my.baselibrary.utils.MediaUtil
+import java.io.FileInputStream
 
 
-class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, ConversationView, View.OnClickListener {
+class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickListener {
 
-
+    lateinit var id: String
     lateinit var chatadapter: chatadapter
-    override fun initView(conversationList: MutableList<TIMConversation>?) {
-
-    }
-
-    override fun updateMessage(message: TIMMessage?) {
-    }
-
-    override fun updateFriendshipMessage() {
-    }
-
-    override fun removeConversation(identify: String?) {
-    }
-
-    override fun updateGroupInfo(info: TIMGroupCacheInfo?) {
-    }
-
-    override fun refresh() {
-    }
-
     //文本信息
     var msglist = ArrayList<Msg>()
 
@@ -82,18 +61,41 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, ConversationVie
         chatadapter.addData(msglist)
         chatadapter.notifyDataSetChanged()
     }
+
     //语音消息
-    override fun showSoundmsg(soundpath: String) {
+    override fun showSoundmsg(soundfile: FileInputStream) {
+        try {
+            MediaUtil.getInstance().play(soundfile)
+            MediaUtil.getInstance().setEventListener(object : MediaUtil.EventListener {
+                override fun onStop() {
+
+                }
+            })
+        } catch (e: Exception) {
+
+        }
+
 //        initview()
 //        showimgmsg.isVisible = true
 //        msglist.add(Msg("1", 0, 2))
 //        chatadapter.addData(msglist)
 //        chatadapter.notifyDataSetChanged()
     }
+
+    //文件消息
+    override fun showFilemsg(path: String) {
+        Log.i("iiiiiiiiii", path)
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chatlayout)
         initinject()
+        //用户名获取
+        val extras = intent.extras
+        id = extras.get("id") as String
+        //对话消息页面初始化
         chatadapter = chatadapter(msglist, BaseApplication.context)
         chatrecyclerview.adapter = chatadapter
         chatrecyclerview.layoutManager = LinearLayoutManager(BaseApplication.context)
@@ -105,8 +107,8 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, ConversationVie
         chatsendview.btnAdd.setOnClickListener {
             morePanel.isVisible = !morePanel.isVisible
         }
-        mpersenter.showtextmessge()
-        ConversationPresenter(this)
+        mpersenter.showmessge()
+
 
     }
 
@@ -166,18 +168,18 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, ConversationVie
             val obtainPathResult = Matisse.obtainPathResult(data)
             Log.d("Matisse", "mSelected: $obtainPathResult")
         }
-           if (resultCode == Activity.RESULT_CANCELED){
+        if (resultCode == Activity.RESULT_CANCELED) {
             Log.i("iiiiii", "拍照取消!")
             return;
         }
-        if (resultCode != Activity.RESULT_OK){
+        if (resultCode != Activity.RESULT_OK) {
             Log.w("iiiiii", "拍照失败!")
             return;
         }
 
         if (requestCode == CameraParaUtil.REQUEST_CODE_FROM_CAMERA) {
 
-         val picturePath = data!!.getStringExtra(CameraParaUtil.picturePath)
+            val picturePath = data!!.getStringExtra(CameraParaUtil.picturePath)
             val bitmap = BitmapFactory.decodeFile(picturePath)
             Log.d("iiiii", "onActivityResult picturePath: " + picturePath)
         }

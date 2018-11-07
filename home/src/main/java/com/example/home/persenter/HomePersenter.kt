@@ -1,15 +1,12 @@
 package com.example.home.persenter
 
-import com.example.home.Messges.FileMessge
-import com.example.home.Messges.ImgMessge
-import com.example.home.Messges.SoundMessge
-import com.example.home.Messges.TextMessge
+import android.os.Environment
+import android.util.Log
+import com.example.home.Messges.*
 import com.example.home.common.ChatViewSet
 import study.kotin.my.baselibrary.presenter.Basepersenter
 import com.example.home.persenter.view.HomeView
-import com.tencent.imsdk.TIMElem
-import com.tencent.imsdk.TIMElemType
-import com.tencent.imsdk.TIMManager
+import com.tencent.imsdk.*
 import javax.inject.Inject
 
 class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
@@ -32,10 +29,18 @@ class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
     fun sendmessge(id: String, data: TIMElem) {
         when (data.type) {
             TIMElemType.Text, TIMElemType.Face -> {
-                
-
+                val TIMTextMessage = TIMMessage()
+                TIMTextMessage.addElement(data as TIMTextElem)
+                SendTextMsg.sendtextmsg(id,TIMTextMessage)
             }
             TIMElemType.Image -> {
+                val msg = TIMMessage()
+                //将 elem 添加到消息
+                if (msg.addElement(data) != 0) {
+                    Log.d("iiiiiii", "addElement failed")
+                    return
+                }
+                SendImgMsg.sendimgmsg(id,msg)
             }
             TIMElemType.Sound -> {
             }

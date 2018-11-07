@@ -23,12 +23,15 @@ import com.tencent.imsdk.*
 import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import com.tencent.imsdk.ext.group.TIMGroupCacheInfo
+import com.tencent.imsdk.ext.message.TIMConversationExt
+import com.tencent.imsdk.ext.message.TIMManagerExt
 import com.tencent.qcloud.presentation.presenter.ConversationPresenter
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView
 import org.jetbrains.anko.support.v4.startActivity
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
 import java.util.*
+import kotlin.collections.LinkedHashSet
 
 
 class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
@@ -38,7 +41,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
      * 初始化界面或刷新界面
      */
     override fun initView(conversationList: MutableList<TIMConversation>?) {
-
+        Log.i("iiiiii", "初始化界面或刷新界面")
     }
 
     /**
@@ -47,48 +50,67 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
      * @param message 最后一条消息
      */
     override fun updateMessage(message: TIMMessage?) {
-        when (message!!.getElement(0).type) {
-            TIMElemType.Text, TIMElemType.Face -> lastmsg = (message.getElement(0) as TIMTextElem).text
-            TIMElemType.Image -> lastmsg = "图片"
-            TIMElemType.Sound -> lastmsg = "语音"
-            TIMElemType.Video -> lastmsg = "视频"
-            TIMElemType.GroupTips -> return
-            //  return new GroupTipMessage(message);
-            TIMElemType.File -> lastmsg = "文件"
-            TIMElemType.UGC -> return
-            else -> return
+        val userlist = LinkedHashSet<UserList>()
+        Log.i("iiiiii", "更新最新消息显示")
+        val list = TIMManagerExt.getInstance().conversationList
+        for (lists in list) {
+            if (lists.peer == TIMManager.getInstance().loginUser) {
+                TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, TIMManager.getInstance().loginUser)
+            }
+            if (lists.peer == "") {
+                TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, "")
+                list.remove(lists)
+                continue
+            }
+            val s = TIMConversationExt(lists).getLastMsgs(1)
+            when (s.get(0)!!.getElement(0).type) {
+                TIMElemType.Text, TIMElemType.Face -> lastmsg = (s.get(0).getElement(0) as TIMTextElem).text
+                TIMElemType.Image -> lastmsg = "图片"
+                TIMElemType.Sound -> lastmsg = "语音"
+                TIMElemType.Video -> lastmsg = "视频"
+                TIMElemType.GroupTips -> return
+                //  return new GroupTipMessage(message);
+                TIMElemType.File -> lastmsg = "文件"
+                TIMElemType.UGC -> return
+                else -> return
+            }
+            val unreadMessageNum = TIMConversationExt(lists).unreadMessageNum
+           val user = UserList("", "", lists.peer,lastmsg, unreadMessageNum.toInt(), s.get(0).timestamp().toString())
+            userlist.add(user)
         }
-        val user = UserList("", "", message.conversation.peer, lastmsg, message.msg.seq().toInt(),message.timestamp().toString())
-        userlist.add(user)
-        RecyclerViewset1()
-        RecyclerViewset2()
+        RecyclerViewset1(userlist)
+        RecyclerViewset2(userlist)
     }
 
     /**
      * 更新好友关系链消息
      */
     override fun updateFriendshipMessage() {
+        Log.i("iiiiii", "更新好友关系链消息")
     }
 
     /**
      * 删除会话
      */
     override fun removeConversation(identify: String?) {
+        Log.i("iiiiii", "删除会话")
     }
 
     /**
      * 更新群信息
      */
     override fun updateGroupInfo(info: TIMGroupCacheInfo?) {
+        Log.i("iiiiii", "更新群信息")
     }
 
     /**
      * 刷新
      */
     override fun refresh() {
+        Log.i("iiiiii", "刷新")
     }
 
-    val userlist = HashSet<UserList>()
+
     lateinit var chatlist: RecyclerView
     lateinit var chatlist2: RecyclerView
     lateinit var left: ImageView
@@ -98,7 +120,6 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
         initinject()
         initlayout(view)
-
         val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
         view.find<ImageView>(R.id.search).let { it ->
@@ -112,12 +133,12 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
     }
 
     //消息列表
-    fun RecyclerViewset1() {
+    fun RecyclerViewset1(userlist:LinkedHashSet<UserList>) {
         val homeListAdapter = HomeListAdapter(userlist.toList())
         homeListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                val viewByPosition:TextView = adapter!!.getViewByPosition(chatlist, position, R.id.peername) as TextView
-                startActivity<HomeActivity>("id" to viewByPosition.text)
+                val viewByPosition: TextView = adapter!!.getViewByPosition(chatlist, position, R.id.peername) as TextView
+                startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
 
             }
         }
@@ -129,7 +150,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
     }
 
     //消息上方列表
-    fun RecyclerViewset2() {
+    fun RecyclerViewset2(userlist:LinkedHashSet<UserList>) {
         val chatListAdapter = ChatListAdapter(userlist.toList())
         chatListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
@@ -175,5 +196,11 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
     fun initinject() {
         DaggerHomeCommponent.builder().activityCommpoent(mActivityComponent).homemodule(Homemodule()).build().inject(this)
 
+    }
+
+    override fun onResume() {
+        val conversationPresenter = ConversationPresenter(this)
+        conversationPresenter.getConversation()
+        super.onResume()
     }
 }

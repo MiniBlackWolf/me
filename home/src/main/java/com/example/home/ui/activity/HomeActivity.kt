@@ -14,15 +14,9 @@ import com.example.home.common.Msg
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import com.example.home.persenter.HomePersenter
 import com.example.home.persenter.view.HomeView
-import com.tencent.imsdk.TIMConversation
 import kotlinx.android.synthetic.main.chatlayout.*
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
-import com.tencent.imsdk.TIMMessage
-import com.tencent.imsdk.TIMTextElem
-import com.tencent.imsdk.ext.group.TIMGroupCacheInfo
-import com.tencent.qcloud.presentation.presenter.ConversationPresenter
-import com.tencent.qcloud.presentation.viewfeatures.ConversationView
 import kotlinx.android.synthetic.main.chatitem2.*
 import study.kotin.my.baselibrary.common.BaseApplication
 import com.zhihu.matisse.engine.impl.GlideEngine
@@ -32,34 +26,55 @@ import com.zhihu.matisse.MimeType
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.provider.MediaStore
+import android.widget.Toast
+import com.example.home.Messges.SendImgMsg
 import com.oden.syd_camera.SydCameraActivity
 import com.oden.syd_camera.camera.CameraParaUtil
+import com.tencent.imsdk.*
+import com.tencent.imsdk.ext.message.TIMConversationExt
 import study.kotin.my.baselibrary.utils.MediaUtil
+import java.io.File
 import java.io.FileInputStream
+import java.util.*
 
 
 class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickListener {
 
+    val SEND_MSG_TYPE = 1
+    val SHOW_MSG_TYPE = 0
     lateinit var id: String
     lateinit var chatadapter: chatadapter
+    //发送消息
+    override fun sendmsg() {
+        val timTextElem = TIMTextElem()
+        timTextElem.text = chatsendview.editText.text.toString()
+        mpersenter.sendmessge(id, timTextElem)
+        var msglists = ArrayList<Msg>()
+        msglists.add(Msg(chatsendview.editText.text.toString(), SEND_MSG_TYPE, 1))
+        chatadapter.addData(msglists)
+        chatadapter.notifyDataSetChanged()
+        chatsendview.editText.setText("")
+        chatrecyclerview.scrollToPosition(msglist.size - 1)
+
+    }
+
     //文本信息
     var msglist = ArrayList<Msg>()
 
     override fun showtextmsg(TIMTextElem: TIMTextElem) {
-        initview()
-        chatmsg2.isVisible = true
-        msglist.add(Msg((TIMTextElem).text, 0, 2))
-        chatadapter.addData(msglist)
+        var msglists = ArrayList<Msg>()
+        msglists.add(Msg((TIMTextElem).text, SHOW_MSG_TYPE, 1))
+        chatadapter.addData(msglists)
         chatadapter.notifyDataSetChanged()
     }
 
     //图片信息
     override fun showimgmsg(bitmap: Bitmap) {
-        initview()
-        showimgmsg.isVisible = true
-        msglist.add(Msg(bitmap, 0, 2))
+        msglist.add(Msg(bitmap, SHOW_MSG_TYPE, 2))
         chatadapter.addData(msglist)
         chatadapter.notifyDataSetChanged()
+
     }
 
     //语音消息
@@ -108,8 +123,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             morePanel.isVisible = !morePanel.isVisible
         }
         mpersenter.showmessge()
-
-
+        getlangtimemsg()
     }
 
     fun initinject() {
@@ -117,11 +131,6 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 
     }
 
-    fun initview() {
-        showimgmsg.isVisible = false
-        chatmsg2.isVisible = false
-        palyer.isVisible = false
-    }
 
 //    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -144,7 +153,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 Matisse.from(this)
                         .choose(MimeType.ofImage())
                         .countable(true)
-                        .maxSelectable(9)
+                        .maxSelectable(1)
 //                .addFilter(GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
 //                .gridExpectedSize(resources.getDimensionPixelSize(R.dimen.grid_expected_size))
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
@@ -153,7 +162,10 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                         .forResult(1)
             }
             R.id.btn_file -> {
-
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "*/*"//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                startActivityForResult(intent, 99)
             }
         }
     }
@@ -163,9 +175,19 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            //获取图片路径
             mSelected = Matisse.obtainResult(data!!)
-
             val obtainPathResult = Matisse.obtainPathResult(data)
+            val bitmap = BitmapFactory.decodeFile(obtainPathResult.get(0))
+            //构筑消息
+            val timImageElem = TIMImageElem()
+            timImageElem.path=obtainPathResult.get(0)
+            mpersenter.sendmessge(id, timImageElem)
+            //显示界面
+            msglist.add(Msg(bitmap, SEND_MSG_TYPE, 2))
+            chatadapter.addData(msglist)
+            chatadapter.notifyDataSetChanged()
+            chatrecyclerview.scrollToPosition(chatadapter.itemCount-1)
             Log.d("Matisse", "mSelected: $obtainPathResult")
         }
         if (resultCode == Activity.RESULT_CANCELED) {
@@ -178,11 +200,82 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         }
 
         if (requestCode == CameraParaUtil.REQUEST_CODE_FROM_CAMERA) {
-
             val picturePath = data!!.getStringExtra(CameraParaUtil.picturePath)
             val bitmap = BitmapFactory.decodeFile(picturePath)
             Log.d("iiiii", "onActivityResult picturePath: " + picturePath)
+            val timimgElem = TIMImageElem()
+            timimgElem.path = picturePath
+            mpersenter.sendmessge(id, timimgElem)
+        }
+
+        if (requestCode == 99) {
+            val uri = data!!.getData()//得到uri，后面就是将uri转化成file的过程。
+            val proj = arrayOf(MediaStore.Images.Media.DATA)
+            val actualimagecursor = managedQuery(uri, proj, null, null, null)
+            val actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            actualimagecursor.moveToFirst()
+            val img_path = actualimagecursor.getString(actual_image_column_index)
+            val file = File(img_path)
+            val length = file.length()
+            Toast.makeText(this, file.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
+
+    fun getlangtimemsg(){
+        val userconversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, id)
+        TIMConversationExt(userconversation).getLocalMessage(10, null, object :
+                TIMValueCallBack<MutableList<TIMMessage>> {
+            override fun onSuccess(p0: MutableList<TIMMessage>?) {
+                p0!!.reverse()
+                for (i in 0 until p0.size) {
+                    val element  = p0.get(i).getElement(0)
+                    when (element.type) {
+                        TIMElemType.Text, TIMElemType.Face -> {
+                            if(p0.get(i).isSelf){
+                                val msglists = ArrayList<Msg>()
+                                msglists.add(Msg((element as TIMTextElem).text, SEND_MSG_TYPE, 1))
+                                chatadapter.addData(msglists)
+                                chatadapter.notifyDataSetChanged()
+                                chatrecyclerview.scrollToPosition(i)
+                            }else {
+                                showtextmsg(element as TIMTextElem)
+                            }
+                        }
+                        TIMElemType.Image -> {
+                            val bitmap = BitmapFactory.decodeFile((element as TIMImageElem).path)
+                            if(p0.get(i).isSelf){
+                                val msglists = ArrayList<Msg>()
+                                msglists.add(Msg(bitmap, SEND_MSG_TYPE, 2))
+                                chatadapter.addData(msglists)
+                                chatadapter.notifyDataSetChanged()
+                                chatrecyclerview.scrollToPosition(i)
+                            }else {
+
+                                showimgmsg(bitmap)
+                            }
+
+                        }
+                        TIMElemType.Sound -> {
+                        }
+                        TIMElemType.Video -> {
+                        }
+                        TIMElemType.GroupTips -> return
+                        //  return new GroupTipMessage(message);
+                        TIMElemType.File -> {
+                        }
+                        TIMElemType.UGC -> return
+                        else -> return
+                    }
+
+                }
+
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+                Log.i("iiiiiiiiiiiiii", p1)
+            }
+        })
+
+    }
 }

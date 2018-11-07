@@ -10,4 +10,6 @@ interface HomeView:BaseView {
     fun showimgmsg(bitmap: Bitmap)
     fun showSoundmsg(soundfile: FileInputStream)
     fun showFilemsg(path:String)
+    fun sendmsg()
+
 }

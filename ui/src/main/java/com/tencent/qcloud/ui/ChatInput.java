@@ -53,7 +53,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     private static final String TAG = "ChatInput";
 
     public ImageButton btnAdd, btnSend, btnVoice, btnKeyboard, btnEmotion;
-    private EditText editText;
+    public EditText editText;
     private boolean isSendVisible, isHoldVoiceBtn, isEmoticonReady;
     private InputMode inputMode = InputMode.NONE;
     private ChatView chatView;

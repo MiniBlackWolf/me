@@ -29,6 +29,7 @@
         android:name="study.kotin.my.baselibrary.common.BaseApplication"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup"
+        android:windowSoftInputMode="stateVisible|adjustResize"
         >
 
         <activity android:name="study.kotin.my.kotinstudy.ui.activity.MainActivity">

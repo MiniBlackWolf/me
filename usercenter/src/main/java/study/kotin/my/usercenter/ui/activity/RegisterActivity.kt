@@ -56,6 +56,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             TIMManager.getInstance().login(userInfo.identifier, usersig, object : TIMCallBack {
                 override fun onSuccess() {
                     ARouter.getInstance().build("/App/Homepage").navigation()
+                    finish()
                 }
 
                 override fun onError(p0: Int, p1: String?) {

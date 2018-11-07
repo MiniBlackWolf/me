@@ -42,11 +42,10 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView16"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.68">
+        app:layout_constraintTop_toBottomOf="@+id/chatname">
 
         <TextView
-            android:id="@+id/chatmsg1"
+            android:id="@+id/chatmsgs1"
             android:layout_width="191dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -56,11 +55,27 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="TextView"
+            android:visibility="gone"
+            android:textIsSelectable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/chatmsgs2"
+            android:layout_width="180dp"
+            android:layout_height="300dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/a1" />
+
+        <Button
+            android:id="@+id/chatmsgs3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            android:visibility="gone" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

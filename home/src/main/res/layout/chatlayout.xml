@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.tencent.qcloud.ui.VoiceSendingView
+        android:id="@+id/voiceSendingView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/chatsendview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
     <LinearLayout
         android:id="@+id/morePanel"
         android:layout_width="match_parent"
@@ -119,9 +130,9 @@
             android:layout_width="wrap_content"
             android:layout_height="57dp"
             android:layout_weight="5"
-            android:gravity="left|center"
-            android:paddingLeft="20dp"
-            android:text="客服"
+            android:gravity="center"
+            android:paddingRight="20dp"
+            android:text="聊天"
             android:textColor="@color/text_normal" />
     </LinearLayout>
 
@@ -142,15 +153,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <com.tencent.qcloud.ui.VoiceSendingView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

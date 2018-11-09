@@ -54,7 +54,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
 
     public ImageButton btnAdd, btnSend, btnVoice, btnKeyboard, btnEmotion;
     public EditText editText;
-    private boolean isSendVisible, isHoldVoiceBtn, isEmoticonReady;
+    private boolean isSendVisible, isHoldVoiceBtn=true, isEmoticonReady;
     private InputMode inputMode = InputMode.NONE;
     private ChatView chatView;
     public LinearLayout morePanel, textPanel;
@@ -62,6 +62,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     private LinearLayout emoticonPanel;
     private final int REQUEST_CODE_ASK_PERMISSIONS = 100;
     private int btn_photo, btn_image, btn_file;
+    private VoiceSendingView VoiceSendingView;
 
     public ChatInput(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -83,20 +84,16 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         btnKeyboard = (ImageButton) findViewById(R.id.btn_keyboard);
         btnKeyboard.setOnClickListener(this);
         voicePanel = (TextView) findViewById(R.id.voice_panel);
-        voicePanel.setOnTouchListener(new OnTouchListener() {
+        voicePanel.setOnClickListener(new OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        isHoldVoiceBtn = true;
-                        updateVoiceView();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        isHoldVoiceBtn = false;
-                        updateVoiceView();
-                        break;
-                }
-                return true;
+            public void onClick(View v) {
+               if(isHoldVoiceBtn){
+                   updateVoiceView();
+                   isHoldVoiceBtn = false;
+               }else{
+                   updateVoiceView();
+                   isHoldVoiceBtn = true;
+               }
             }
         });
         editText = (EditText) findViewById(R.id.input);
@@ -171,10 +168,12 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
             voicePanel.setText(getResources().getString(R.string.chat_release_send));
             voicePanel.setBackground(getResources().getDrawable(R.drawable.btn_voice_pressed));
             chatView.startSendVoice();
+            VoiceSendingView.showRecording();
         } else {
             voicePanel.setText(getResources().getString(R.string.chat_press_talk));
             voicePanel.setBackground(getResources().getDrawable(R.drawable.btn_voice_normal));
             chatView.endSendVoice();
+            VoiceSendingView.showCancel();
         }
     }
 
@@ -182,11 +181,12 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     /**
      * 关联聊天界面逻辑
      */
-    public void setChatView(ChatView chatView,int btn_photo, int btn_image, int btn_file) {
+    public void setChatView(ChatView chatView,int btn_photo, int btn_image, int btn_file,VoiceSendingView VoiceSendingView) {
         this.btn_photo=btn_photo;
         this.btn_image=btn_image;
         this.btn_file=btn_file;
         this.chatView = chatView;
+        this.VoiceSendingView=VoiceSendingView;
     }
 
     /**

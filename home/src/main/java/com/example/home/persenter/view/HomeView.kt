@@ -8,8 +8,9 @@ import java.io.FileInputStream
 interface HomeView:BaseView {
     fun showtextmsg(TIMTextElem: TIMTextElem)
     fun showimgmsg(bitmap: Bitmap)
-    fun showSoundmsg(soundfile: FileInputStream)
+    fun showSoundmsg(path:String,time:Long)
     fun showFilemsg(path:String)
     fun sendmsg()
+    fun sendSoundmsg()
 
 }

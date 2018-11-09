@@ -68,6 +68,7 @@ dependencies {
     api 'com.github.autume:syd-camera:v1.0.0'
     api project(':presentation')
     api project(':ui')
+    api 'com.github.chrisbanes:PhotoView:2.0.0'
 }
 noArg {
     annotation("study.kotin.my.baselibrary.common.Poko")

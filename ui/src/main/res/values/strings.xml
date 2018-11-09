@@ -3,8 +3,8 @@
     <string name="chat_up_finger">手指上滑，取消发送</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
-    <string name="chat_press_talk">按住 说话</string>
-    <string name="chat_release_send">松开 结束</string>
+    <string name="chat_press_talk">点击开始说话</string>
+    <string name="chat_release_send">点击结束说话</string>
     <string name="chat_image">图片</string>
     <string name="chat_file">文件</string>
     <string name="chat_photo">拍摄</string>

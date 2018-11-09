@@ -37,6 +37,7 @@ import kotlin.collections.LinkedHashSet
 class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
     lateinit var lastmsg: String
 
+
     /**
      * 初始化界面或刷新界面
      */
@@ -50,6 +51,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
      * @param message 最后一条消息
      */
     override fun updateMessage(message: TIMMessage?) {
+
         val userlist = LinkedHashSet<UserList>()
         Log.i("iiiiii", "更新最新消息显示")
         val list = TIMManagerExt.getInstance().conversationList
@@ -64,7 +66,13 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
             }
             val s = TIMConversationExt(lists).getLastMsgs(1)
             when (s.get(0)!!.getElement(0).type) {
-                TIMElemType.Text, TIMElemType.Face -> lastmsg = (s.get(0).getElement(0) as TIMTextElem).text
+                TIMElemType.Text, TIMElemType.Face -> {
+                    lastmsg = (s.get(0).getElement(0) as TIMTextElem).text
+                    if(lastmsg.length>10){
+                        val substring = lastmsg.substring(0, 10)
+                        lastmsg=("$substring....")
+                    }
+                }
                 TIMElemType.Image -> lastmsg = "图片"
                 TIMElemType.Sound -> lastmsg = "语音"
                 TIMElemType.Video -> lastmsg = "视频"
@@ -75,9 +83,10 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
                 else -> return
             }
             val unreadMessageNum = TIMConversationExt(lists).unreadMessageNum
-           val user = UserList("", "", lists.peer,lastmsg, unreadMessageNum.toInt(), s.get(0).timestamp().toString())
+            val user = UserList("", "", lists.peer, lastmsg, unreadMessageNum.toInt(), s.get(0).timestamp().toString())
             userlist.add(user)
         }
+
         RecyclerViewset1(userlist)
         RecyclerViewset2(userlist)
     }
@@ -122,22 +131,18 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         initlayout(view)
         val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
-        view.find<ImageView>(R.id.search).let { it ->
-            it.setOnClickListener {
-                Bus.send(UpdateMessgeSizeEvent(5))
-            }
 
-        }
+
 
         return view
     }
 
     //消息列表
-    fun RecyclerViewset1(userlist:LinkedHashSet<UserList>) {
+    fun RecyclerViewset1(userlist: LinkedHashSet<UserList>) {
+        var noReadAllCount:Int=0
         val homeListAdapter = HomeListAdapter(userlist.toList())
         homeListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                val viewByPosition: TextView = adapter!!.getViewByPosition(chatlist, position, R.id.peername) as TextView
                 startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
 
             }
@@ -146,16 +151,18 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         chatlist.layoutManager = linearLayoutManager
-
+        for(i in userlist){
+            noReadAllCount +=i.noreadmsg
+        }
+        Bus.send(UpdateMessgeSizeEvent(noReadAllCount))
     }
 
     //消息上方列表
-    fun RecyclerViewset2(userlist:LinkedHashSet<UserList>) {
+    fun RecyclerViewset2(userlist: LinkedHashSet<UserList>) {
         val chatListAdapter = ChatListAdapter(userlist.toList())
         chatListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-
-                startActivity<HomeActivity>()
+                startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
             }
         }
         chatlist2.adapter = chatListAdapter

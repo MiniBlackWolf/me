@@ -40,6 +40,9 @@ buildscript {
         repositories {
             google()
             jcenter()
+            maven {
+                url "https://raw.github.com/bmob/bmob-android-sdk/master"
+            }
             maven { url "https://jitpack.io" }
             maven {
                 url 'http://dl.bintray.com/dev-fingerlinks/maven'

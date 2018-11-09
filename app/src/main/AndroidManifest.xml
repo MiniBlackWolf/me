@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="study.kotin.my.kotinstudy"
-    >
-<uses-permission android:name="android.permission.INTERNET"/>
+    package="study.kotin.my.kotinstudy">
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -20,20 +19,18 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name="study.kotin.my.baselibrary.common.BaseApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:name="study.kotin.my.baselibrary.common.BaseApplication"
-        tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup"
         android:windowSoftInputMode="stateVisible|adjustResize"
-        >
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup">
 
-        <activity android:name="study.kotin.my.kotinstudy.ui.activity.MainActivity">
-        </activity>
+        <activity android:name="study.kotin.my.kotinstudy.ui.activity.MainActivity"></activity>
         <activity android:name="study.kotin.my.usercenter.ui.activity.RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,13 +42,11 @@
         <service
             android:name="com.tencent.qalsdk.service.QalService"
             android:exported="true"
-            android:process=":QALSERVICE" >
-        </service>
+            android:process=":QALSERVICE"></service>
         <service
             android:name="com.tencent.qalsdk.service.QalAssistService"
             android:exported="false"
-            android:process=":QALSERVICE" >
-        </service>
+            android:process=":QALSERVICE"></service>
 
         <!-- 【必须】 离线消息广播接收器 -->
         <receiver
@@ -62,7 +57,8 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.tencent.qalsdk.core.NetConnInfoCenter" android:process=":QALSERVICE">
+            android:name="com.tencent.qalsdk.core.NetConnInfoCenter"
+            android:process=":QALSERVICE">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -81,5 +77,6 @@
             </intent-filter>
         </receiver>
 
+        <service android:name="com.example.home.Utils.RecordingService" />
     </application>
 </manifest>

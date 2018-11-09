@@ -6,6 +6,9 @@ import com.tencent.imsdk.TIMMessage
 import com.tencent.imsdk.TIMSoundElem
 import study.kotin.my.baselibrary.utils.FileUtil
 import java.io.FileInputStream
+import android.media.MediaPlayer
+
+
 
 object SoundMessge {
     fun showSoundMsg(message: TIMMessage?, mview: HomeView) {
@@ -14,8 +17,12 @@ object SoundMessge {
             val tempAudio = FileUtil.getTempFile(FileUtil.FileType.AUDIO)
             element.getSoundToFile(tempAudio.absolutePath,object: TIMCallBack{
                 override fun onSuccess() {
-                    val file=FileInputStream(tempAudio)
-                    mview.showSoundmsg(file)
+                 //   val file=FileInputStream(tempAudio)
+                    val mediaPlayer = MediaPlayer()
+                    mediaPlayer.setDataSource(tempAudio.canonicalPath)
+                    mediaPlayer.prepare()
+                    val duration= mediaPlayer.duration
+                    mview.showSoundmsg(tempAudio.canonicalPath,duration.toLong())
                 }
 
                 override fun onError(p0: Int, p1: String?) {

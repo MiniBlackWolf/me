@@ -23,6 +23,7 @@ public class VoiceSendingView extends RelativeLayout {
         img.setBackgroundResource(R.drawable.animation_voice);
         frameAnimation = (AnimationDrawable) img.getBackground();
 
+
     }
 
     public void showRecording(){

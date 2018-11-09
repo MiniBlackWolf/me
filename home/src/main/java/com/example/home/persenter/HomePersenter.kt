@@ -11,10 +11,16 @@ import javax.inject.Inject
 
 class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
 
-    fun showmessge() {
+    fun showmessge(id:String) {
         //消息监听
         TIMManager.getInstance().loginUser
         TIMManager.getInstance().addMessageListener {
+           for(i in it){
+               if(i.conversation.peer!=id){
+                   return@addMessageListener false
+               }
+
+           }
             if (it.size == 1) {
                 ChatViewSet(mView).showMessage(it.get(0))
             } else {
@@ -31,18 +37,24 @@ class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
             TIMElemType.Text, TIMElemType.Face -> {
                 val TIMTextMessage = TIMMessage()
                 TIMTextMessage.addElement(data as TIMTextElem)
-                SendTextMsg.sendtextmsg(id,TIMTextMessage)
+                SendTextMsg.sendtextmsg(id, TIMTextMessage)
             }
             TIMElemType.Image -> {
                 val msg = TIMMessage()
                 //将 elem 添加到消息
-                if (msg.addElement(data) != 0) {
+                if (msg.addElement(data as TIMImageElem) != 0) {
                     Log.d("iiiiiii", "addElement failed")
                     return
                 }
-                SendImgMsg.sendimgmsg(id,msg)
+                SendImgMsg.sendimgmsg(id, msg)
             }
             TIMElemType.Sound -> {
+                val TIMsoundMessage = TIMMessage()
+                if (TIMsoundMessage.addElement(data as TIMSoundElem) != 0) {
+                    Log.d("iiiiiii", "addElement failed")
+                    return
+                }
+                SendSoundMsg.sendsoundmsg(id, TIMsoundMessage)
             }
             TIMElemType.Video -> {
             }

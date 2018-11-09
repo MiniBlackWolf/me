@@ -3,9 +3,11 @@ package study.kotin.my.baselibrary.ext
 
 import android.app.Activity
 import android.content.Context
+import android.media.MediaPlayer
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import androidx.core.widget.toast
+import com.tencent.imsdk.TIMSoundElem
 import com.trello.rxlifecycle2.LifecycleProvider
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,4 +44,12 @@ fun View.passverify(s:String,context: Activity?):Boolean{
     }
     return true
 
+}
+
+fun MediaPlayer.getsoundtime(path:String):Long{
+    val mediaPlayer = MediaPlayer()
+    mediaPlayer.setDataSource(path)
+    mediaPlayer.prepare()
+    val duration= mediaPlayer.duration
+    return duration.toLong()
 }

@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +38,10 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
     lateinit var chatbg: LinearLayout
     lateinit var dialog: Dialog
     lateinit var soundanm: ImageView
-    lateinit var chatpaly2:ImageView
+    lateinit var chatpaly2: ImageView
+    lateinit var filepackage: ConstraintLayout
+    lateinit var filaename:TextView
+    lateinit var filesize:TextView
 
     init {
         addItemType(Msg.TYPE_RECEIVED, R.layout.chatitem2)
@@ -63,11 +67,17 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     3 -> {
                         initview(helper)
                         chatpaly.isVisible = true
-                        chatpaly2.isVisible=true
-                        chatpaly.text = (((item.content as Sounddata).time/1000).toString()+"\'\'")
+                        chatpaly2.isVisible = true
+                        chatpaly.text = (((item.content as Sounddata).time / 1000).toString() + "\'\'")
                         helper.addOnClickListener(R.id.chatpaly)
                     }
-
+                    4 -> {
+                        initview(helper)
+                        filepackage.isVisible=true
+                        val file=File(item.content as String)
+                        filaename.setText(file.name)
+                        filesize.text=((file.length()/1024).toString()+"Mb")
+                    }
                 }
 
 
@@ -90,10 +100,17 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     3 -> {
                         initview2(helper)
                         chatmsgs3.isVisible = true
-                        soundanm.isVisible=true
-                        chatmsgs3.text = (((item.content as Sounddata).time/1000).toString()+"\'\'")
+                        soundanm.isVisible = true
+                        chatmsgs3.text = (((item.content as Sounddata).time / 1000).toString() + "\'\'")
                         helper.addOnClickListener(R.id.chatmsgs3)
 
+                    }
+                    4 -> {
+                        initview2(helper)
+                        filepackage.isVisible=true
+                        val file=File(item.content as String)
+                        filaename.setText(file.name)
+                        filesize.text=((file.length()/1024).toString()+"Mb")
                     }
 
                 }
@@ -108,10 +125,14 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
         chatpaly2 = helper.getView(R.id.chatpaly2)
         chatmsg2 = helper.getView(R.id.chatmsg2)
         showimgmsgs = helper.getView(R.id.showimgmsgs)
+        filepackage = helper.getView(R.id.filepackage)
+        filaename = helper.getView(R.id.filaename)
+        filesize = helper.getView(R.id.filesize)
+        filepackage.isVisible=false
         showimgmsgs.isVisible = false
         chatmsg2.isVisible = false
         chatpaly.isVisible = false
-        chatpaly2.isVisible=false
+        chatpaly2.isVisible = false
 
     }
 
@@ -121,7 +142,11 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
         chatmsgs2 = helper.getView(R.id.chatmsgs2)
         chatmsgs1 = helper.getView(R.id.chatmsgs1)
         soundanm = helper.getView(R.id.soundanm)
-        soundanm.isVisible=false
+        filepackage = helper.getView(R.id.filepackage)
+        filaename = helper.getView(R.id.filaename)
+        filesize = helper.getView(R.id.filesize)
+        filepackage.isVisible=false
+        soundanm.isVisible = false
         chatmsgs1.isVisible = false
         chatmsgs2.isVisible = false
         chatmsgs3.isVisible = false

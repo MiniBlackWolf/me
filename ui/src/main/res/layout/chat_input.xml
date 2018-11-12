@@ -60,13 +60,16 @@
             android:layout_weight="1"
             android:background="@drawable/bg_inputbox"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:focusable="false"
+            >
 
             <EditText
                 android:id="@+id/input"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
+                android:focusable="auto"
                 android:background="@null"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -74,6 +77,7 @@
 
             <ImageButton
                 android:id="@+id/btnEmoticon"
+                android:focusable="false"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="10dp"
@@ -100,8 +104,8 @@
 
     <LinearLayout
         android:id="@+id/emoticonPanel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="47dp"
+        android:layout_height="34dp"
         android:background="@color/background_gray1"
         android:orientation="vertical"
         android:visibility="gone">

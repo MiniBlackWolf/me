@@ -61,6 +61,9 @@ class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
             TIMElemType.GroupTips -> return
             //  return new GroupTipMessage(message);
             TIMElemType.File -> {
+                val TIMFileMessage = TIMMessage()
+                TIMFileMessage.addElement(data)
+                SendFileMessge.SendFileMessge(id,TIMFileMessage)
             }
             TIMElemType.UGC -> return
             else -> return

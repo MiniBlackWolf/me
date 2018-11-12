@@ -1,20 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <com.tencent.qcloud.ui.VoiceSendingView
-        android:id="@+id/voiceSendingView"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.tencent.qcloud.ui.ChatInput
+            android:id="@+id/chatsendview"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:focusable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="282dp"
+            app:layout_constraintBottom_toTopOf="@+id/morePanel"
+            />
+
+    <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:background="@color/mainred"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/chatfh"
+                android:layout_width="5dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="25dp"
+                android:layout_weight="0.3"
+                android:background="@drawable/h7" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="57dp"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:paddingRight="20dp"
+                android:text="聊天"
+                android:textColor="@color/text_normal" />
+        </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/chatrecyclerview"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/chatsendview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/morePanel"
@@ -107,52 +151,28 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout5"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:background="@color/mainred"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/chatfh"
-            android:layout_width="5dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="25dp"
-            android:layout_weight="0.3"
-            android:background="@drawable/h7" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="57dp"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:paddingRight="20dp"
-            android:text="聊天"
-            android:textColor="@color/text_normal" />
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chatrecyclerview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/chatsendview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
-
-    <com.tencent.qcloud.ui.ChatInput
-        android:id="@+id/chatsendview"
+    <com.tencent.qcloud.ui.VoiceSendingView
+        android:id="@+id/voiceSendingView"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:layout_constraintBottom_toTopOf="@+id/morePanel"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Emo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:text="EmoticonUtil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.303"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

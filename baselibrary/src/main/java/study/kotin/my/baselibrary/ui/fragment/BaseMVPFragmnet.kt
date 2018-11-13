@@ -25,7 +25,7 @@ open class BaseMVPFragmnet<T: Basepersenter<*>>:BaseFragment(),BaseView {
     override fun hideLoading() {
     }
 
-    override fun onError() {
+    override fun onError(text:String) {
     }
     open fun onKeyBackPressed(): Boolean {
         return false

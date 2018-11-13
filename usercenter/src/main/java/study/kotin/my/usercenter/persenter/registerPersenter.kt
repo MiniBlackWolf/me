@@ -22,6 +22,5 @@ class registerPersenter @Inject constructor() : Basepersenter<registerView>() {
                     }
                 },lifecycleProvider)
 
-
     }
 }

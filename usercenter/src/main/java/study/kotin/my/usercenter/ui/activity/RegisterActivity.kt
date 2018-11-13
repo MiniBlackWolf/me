@@ -31,6 +31,7 @@ import com.tencent.qcloud.presentation.event.RefreshEvent
 import com.tencent.qcloud.sdk.Constant
 import com.tencent.qcloud.ui.NotifyDialog
 import study.kotin.my.usercenter.common.PwdLoginListener
+import study.kotin.my.usercenter.common.RefreshUserSigListener
 import study.kotin.my.usercenter.ui.fragment.ResetFrament
 import tencent.tls.platform.TLSErrInfo
 import tencent.tls.platform.TLSHelper
@@ -50,30 +51,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
     @Inject
     lateinit var pwdLoginListener: PwdLoginListener
     var usersig: String = ""
-    val refreshUserSigListener: TLSRefreshUserSigListener = object : TLSRefreshUserSigListener {
-        override fun OnRefreshUserSigSuccess(p0: TLSUserInfo?) {
-            usersig = tlsHelper.getUserSig(p0!!.identifier)
-            TIMManager.getInstance().login(userInfo.identifier, usersig, object : TIMCallBack {
-                override fun onSuccess() {
-                    ARouter.getInstance().build("/App/Homepage").navigation()
-                    finish()
-                }
 
-                override fun onError(p0: Int, p1: String?) {
-                    toast("$p1")
-                    Log.i("iiiiiiiiiiiiii", p1)
-                }
-            })
-        }
-
-        override fun OnRefreshUserSigTimeout(p0: TLSErrInfo?) {
-            Log.i("iiiiiiiiiii", p0!!.Msg)
-        }
-
-        override fun OnRefreshUserSigFail(p0: TLSErrInfo?) {
-            Log.i("iiiiiiiiiii", p0!!.Msg)
-        }
-    }
 
 
     override fun LoginResult(result: Boolean) {
@@ -94,7 +72,8 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             userInfo = tlsHelper.lastUserInfo
             val hasLogin = userInfo != null && !tlsHelper.needLogin(userInfo.identifier)
             if (hasLogin) {
-                tlsHelper.TLSRefreshUserSig(userInfo.identifier, refreshUserSigListener)
+                usersig = tlsHelper.getUserSig(userInfo.identifier)
+                tlsHelper.TLSRefreshUserSig(userInfo.identifier, RefreshUserSigListener(userInfo.identifier,usersig,this@RegisterActivity))
 
             }
         } catch (e: IllegalStateException) {

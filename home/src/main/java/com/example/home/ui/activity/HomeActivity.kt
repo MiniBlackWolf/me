@@ -63,6 +63,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.charset.Charset
 import java.util.*
+import kotlin.Comparator
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
@@ -174,7 +175,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 
 
         }
-
+        //      getdata()
         //软键盘跟随
         getkeyboy()
         //消息监听器
@@ -190,8 +191,16 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 val data = adapter!!.data
                 when (view!!.id) {
                     //图片点击
-                    R.id.chatmsgs2, R.id.showimgmsgs -> {
+                    R.id.chatmsgs2->{
                         val imgview = adapter.getViewByPosition(chatrecyclerview, position, R.id.chatmsgs2) as ImageView
+                        imgview.setDrawingCacheEnabled(true)
+                        val bitmap = Bitmap.createBitmap(imgview.drawingCache)
+                        imgview.setDrawingCacheEnabled(false)
+                        val dialog = ImgUtils(bitmap, this@HomeActivity).init()
+                        dialog.show()
+                    }
+                    R.id.showimgmsgs -> {
+                        val imgview = adapter.getViewByPosition(chatrecyclerview, position, R.id.showimgmsgs) as ImageView
                         imgview.setDrawingCacheEnabled(true)
                         val bitmap = Bitmap.createBitmap(imgview.drawingCache)
                         imgview.setDrawingCacheEnabled(false)
@@ -381,11 +390,11 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 TIMValueCallBack<MutableList<TIMMessage>> {
             override fun onSuccess(p0: MutableList<TIMMessage>?) {
                 p0!!.reverse()
-                for (i in 0 until p0.size) {
+                loop@ for (i in 0 until p0.size) {
                     val element = p0.get(i).getElement(0)
                     when (element.type) {
                         TIMElemType.Text, TIMElemType.Face -> {
-                            list.add(longtimedata((element as TIMTextElem).text, p0.get(i).timestamp()))
+                            list.add(longtimedata((element as TIMTextElem).text, p0.get(i).timestamp(), 1,  p0.get(i).isSelf))
 //                            if (p0.get(i).isSelf) {
 //                                updataview((element as TIMTextElem).text, SEND_MSG_TYPE, 1)
 //                            } else {
@@ -405,7 +414,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                                     override fun onSuccess() {//成功，参数为图片数据
                                         //doSomething
                                         val bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(uuid))
-                                        list.add(longtimedata(bitmap, p0.get(i).timestamp()))
+                                        list.add(longtimedata(bitmap, p0.get(i).timestamp(), 2,  p0.get(i).isSelf))
                                         Log.d("imgs--d", "getImage success.")
                                     }
                                 })
@@ -419,12 +428,22 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 
                         }
                         TIMElemType.Sound -> {
+                            val string = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMSoundElem).uuid, "")
+                            if (string != "") {
+                                val getsoundtime = MediaPlayer().getsoundtime(string!!)
+                                list.add(longtimedata(Sounddata(string, getsoundtime), p0.get(i).timestamp(), 3,  p0.get(i).isSelf))
+                                continue@loop
+                            }
+
                             val tempAudio = FileUtil.getTempFile(FileUtil.FileType.AUDIO)
                             (element as TIMSoundElem).getSoundToFile(tempAudio.absolutePath, object : TIMCallBack {
                                 override fun onSuccess() {
-                                    val getsoundtime = MediaPlayer().getsoundtime(tempAudio.absolutePath)
-                                    list.add(longtimedata(Sounddata(tempAudio.absolutePath, getsoundtime), p0.get(i).timestamp()))
-//                                    if (p0.get(i).isSelf) {
+                                    val getsoundtime = MediaPlayer().getsoundtime(tempAudio.canonicalPath)
+                                    list.add(longtimedata(Sounddata(tempAudio.absolutePath, getsoundtime), p0.get(i).timestamp(), 3,  p0.get(i).isSelf))
+                                    val edit = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).edit()
+                                    edit.putString(element.uuid, tempAudio.absolutePath)
+                                    edit.apply()
+// if (p0.get(i).isSelf) {
 //                                        updataview(Sounddata(tempAudio.absolutePath ,getsoundtime), SEND_MSG_TYPE, 3)
 //                                    } else {
 //                                        showSoundmsg(tempAudio.absolutePath, getsoundtime)
@@ -442,6 +461,11 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                         TIMElemType.GroupTips -> return
                         //  return new GroupTipMessage(message);
                         TIMElemType.File -> {
+                            val string = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMFileElem).uuid, "")
+                            if (string != "") {
+                                list.add(longtimedata(string!!, p0.get(i).timestamp(), 4, p0.get(i).isSelf))
+                                continue@loop
+                            }
                             val str = (element as TIMFileElem).getFileName().split("/".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                             val filename = str[str.size - 1]
                             if (FileUtil.isFileExist(filename, Environment.DIRECTORY_DOWNLOADS)) {
@@ -450,8 +474,10 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                             }
                             (element as TIMFileElem).getToFile(FileUtil.getCacheFilePath(filename), object : TIMCallBack {
                                 override fun onSuccess() {
-                                    list.add(longtimedata(FileUtil.getCacheFilePath(filename), p0.get(i).timestamp()))
-
+                                    list.add(longtimedata(FileUtil.getCacheFilePath(filename), p0.get(i).timestamp(), 4, p0.get(i).isSelf))
+                                    val edit = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).edit()
+                                    edit.putString(element.uuid, FileUtil.getCacheFilePath(filename))
+                                    edit.apply()
                                 }
 
                                 override fun onError(p0: Int, p1: String?) {
@@ -477,7 +503,6 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                     override fun run() {
                         while (true) {
                             if (list.size == p0.size) {
-                                Thread.sleep(1000)
                                 break
                             }
                         }
@@ -510,20 +535,50 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             super.handleMessage(msg)
             val data = msg!!.data
             val datalists = data.getSerializable("list") as LinkedHashSet<longtimedata>
-            val datalist=datalists.toMutableList()
-            val datacount=HashSet<Int>()
+            val datalist = datalists.toMutableList()
+            val datacount = HashSet<Int>()
             for (i in 0 until datalist.size) {
-                for (j in datalist.size-1 downTo i ) {
-                    if(i==j)continue
-                    if (datalist[i].time==datalist.get(j).time) {
+                for (j in datalist.size - 1 downTo i) {
+                    if (i == j) continue
+                    if (datalist[i].time == datalist.get(j).time) {
                         datacount.add(j)
                     }
                 }
             }
             val toMutableList = datacount.toMutableList()
             toMutableList.sort()
-            for(i in toMutableList.size-1 downTo 0){
+            for (i in toMutableList.size - 1 downTo 0) {
                 datalist.removeAt(toMutableList.get(i))
+            }
+            datalist.sortWith(Comparator<longtimedata> { o1, o2 ->
+                o1.time.compareTo(o2.time)
+            })
+            for (datas in datalist) {
+                when (datas.type) {
+                    1 -> {
+                        if(datas.isseft){
+                            updataview(datas.data as String,SEND_MSG_TYPE,1)
+                        }else  updataview(datas.data as String,SHOW_MSG_TYPE,1)
+
+                    }
+                    2 -> {
+                        if(datas.isseft){
+                            updataview(datas.data as Bitmap,SEND_MSG_TYPE,2)
+                        }else  updataview(datas.data as Bitmap,SHOW_MSG_TYPE,2)
+                    }
+                    3 -> {
+                        if(datas.isseft){
+                            updataview(datas.data as Sounddata,SEND_MSG_TYPE,3)
+                        }else  updataview(datas.data as Sounddata,SHOW_MSG_TYPE,3)
+                    }
+                    4 -> {
+                        if(datas.isseft){
+                            updataview(datas.data as String,SEND_MSG_TYPE,4)
+                        }else  updataview(datas.data as String,SHOW_MSG_TYPE,4)
+                    }
+
+                }
+
             }
 
 
@@ -556,6 +611,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         })
 
     }
+
 
     override fun onBackPressed() {
         MediaUtil.getInstance().stop()

@@ -1,18 +1,27 @@
 package study.kotin.my.usercenter.common
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
+import com.tencent.imsdk.TIMCallBack
+import com.tencent.imsdk.TIMManager
+import com.tencent.imsdk.TIMUserConfig
+import com.tencent.qcloud.sdk.Constant
 import com.tencent.qcloud.tlslibrary.activity.ImgCodeActivity
 import com.tencent.qcloud.tlslibrary.service.Constants
 import org.jetbrains.anko.toast
-import tencent.tls.platform.TLSErrInfo
-import tencent.tls.platform.TLSPwdLoginListener
-import tencent.tls.platform.TLSUserInfo
+import study.kotin.my.usercenter.ui.activity.RegisterActivity
+import tencent.tls.platform.*
 import javax.inject.Inject
 
-class PwdLoginListener @Inject constructor(val context: Context) : TLSPwdLoginListener {
+class PwdLoginListener @Inject constructor(val context: Activity) : TLSPwdLoginListener {
+     var tlsHelper: TLSHelper
+    init {
+        tlsHelper = TLSHelper.getInstance().init(context, Constant.SDK_APPID.toLong())
+    }
     var identifier: String = ""
     override fun OnPwdLoginNeedImgcode(p0: ByteArray?, p1: TLSErrInfo?) {
         /* 用户需要进行图片验证码的验证，需要把验证码图片展示给用户，并引导用户输入；如果验证码输入错误，仍然会到达此回调并更新图片验证码*/
@@ -26,7 +35,9 @@ class PwdLoginListener @Inject constructor(val context: Context) : TLSPwdLoginLi
         /* 登录成功了，在这里可以获取用户票据*/
         context.toast("登陆成功")
         identifier = p0!!.identifier
-        ARouter.getInstance().build("/App/Homepage").navigation()
+        tlsHelper.TLSRefreshUserSig(identifier, RefreshUserSigListener(identifier,tlsHelper.getUserSig(identifier),context))
+       // RegisterActivity().tlsHelper.TLSRefreshUserSig(identifier,  RegisterActivity().refreshUserSigListener)
+
 
     }
 

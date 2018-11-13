@@ -22,7 +22,7 @@ open class BaseMVPActivity<T:Basepersenter<*>>:BaseActivity(),BaseView {
     override fun hideLoading() {
     }
 
-    override fun onError() {
+    override fun onError(text:String) {
     }
     @Inject
     lateinit var mpersenter:T

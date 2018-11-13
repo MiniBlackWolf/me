@@ -68,9 +68,9 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
             when (s.get(0)!!.getElement(0).type) {
                 TIMElemType.Text, TIMElemType.Face -> {
                     lastmsg = (s.get(0).getElement(0) as TIMTextElem).text
-                    if(lastmsg.length>10){
+                    if (lastmsg.length > 10) {
                         val substring = lastmsg.substring(0, 10)
-                        lastmsg=("$substring....")
+                        lastmsg = ("$substring....")
                     }
                 }
                 TIMElemType.Image -> lastmsg = "图片"
@@ -131,7 +131,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         initlayout(view)
         val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
-
+        mpersenter.getdatas()
 
 
         return view
@@ -139,7 +139,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
 
     //消息列表
     fun RecyclerViewset1(userlist: LinkedHashSet<UserList>) {
-        var noReadAllCount:Int=0
+        var noReadAllCount: Int = 0
         val homeListAdapter = HomeListAdapter(userlist.toList())
         homeListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
@@ -151,8 +151,8 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         chatlist.layoutManager = linearLayoutManager
-        for(i in userlist){
-            noReadAllCount +=i.noreadmsg
+        for (i in userlist) {
+            noReadAllCount += i.noreadmsg
         }
         Bus.send(UpdateMessgeSizeEvent(noReadAllCount))
     }

@@ -17,15 +17,16 @@ import java.util.regex.Pattern
 
 
 fun <T> Observable<T>.excute(Observer: BaseObserver<T>, lifecycleProvider: LifecycleProvider<*>) {
-    this.observeOn(AndroidSchedulers.mainThread())
+
+    this.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .compose(lifecycleProvider.bindToLifecycle())
-            .subscribeOn(Schedulers.io())
             .subscribe(Observer)
 
 
 }
 
-fun View.passverify(s:String,context: Activity?):Boolean{
+fun View.passverify(s: String, context: Activity?): Boolean {
     val patternnmber = """^[1-9]\d*${'$'}"""
     val patterEN = """^[A-Za-z]+${'$'}"""
     val matcher = Pattern.compile(patternnmber).matcher(s.trim())
@@ -38,7 +39,7 @@ fun View.passverify(s:String,context: Activity?):Boolean{
         context!!.toast("不能全数字")
         return false
     }
-    if(matcher2.find()){
+    if (matcher2.find()) {
         context!!.toast("不能全字母")
         return false
     }
@@ -46,10 +47,10 @@ fun View.passverify(s:String,context: Activity?):Boolean{
 
 }
 
-fun MediaPlayer.getsoundtime(path:String):Long{
+fun MediaPlayer.getsoundtime(path: String): Long {
     val mediaPlayer = MediaPlayer()
     mediaPlayer.setDataSource(path)
     mediaPlayer.prepare()
-    val duration= mediaPlayer.duration
+    val duration = mediaPlayer.duration
     return duration.toLong()
 }

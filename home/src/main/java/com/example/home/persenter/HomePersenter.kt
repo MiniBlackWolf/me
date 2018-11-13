@@ -1,16 +1,28 @@
 package com.example.home.persenter
 
+import android.annotation.SuppressLint
 import android.os.Environment
 import android.util.Log
 import com.example.home.Messges.*
 import com.example.home.common.ChatViewSet
 import study.kotin.my.baselibrary.presenter.Basepersenter
 import com.example.home.persenter.view.HomeView
+import com.example.home.seriver.HomeSeriver
 import com.tencent.imsdk.*
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.annotations.NonNull
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
+import study.kotin.my.baselibrary.ext.excute
+import study.kotin.my.baselibrary.rx.BaseObserver
 import javax.inject.Inject
 
 class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
-
+    @Inject
+    lateinit var HomeSeriverImp: HomeSeriver
     fun showmessge(id:String) {
         //消息监听
         TIMManager.getInstance().loginUser
@@ -71,6 +83,29 @@ class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
         }
 
     }
+@SuppressLint("CheckResult")
+fun getdatas(){
+//    Observable.create(object :ObservableOnSubscribe<Int> {
+//        override fun subscribe(emitter: ObservableEmitter<Int>) {
+//            Log.e("iiiiii", "Observable thread is : " + Thread.currentThread().getName())
+//            emitter.onNext(1)
+//            emitter.onComplete()
+//        }
+//
+//    }).subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(object :Consumer<Int>{
+//                override fun accept(t: Int?) {
+//                    Log.e("iiiiiiiii",Thread.currentThread().getName())
+//                }
+//            })
+    HomeSeriverImp.getdata().excute(object :  BaseObserver<Boolean>() {
+        override fun onNext(t: Boolean) {
+            Log.e("iiiiiiiii",Thread.currentThread().getName())
+            super.onNext(t)
+        }
+    },lifecycleProvider)
 
+}
 
 }

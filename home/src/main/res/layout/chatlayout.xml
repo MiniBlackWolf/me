@@ -5,7 +5,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.ajguan.library.EasyRefreshLayout
+        android:id="@+id/morelayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/emoticon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/chatrecyclerview"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/emoticon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+            </android.support.v7.widget.RecyclerView>
+        </com.ajguan.library.EasyRefreshLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/emoticon"
             android:layout_width="0dp"
@@ -58,19 +79,6 @@
                 android:text="聊天"
                 android:textColor="@color/text_normal" />
         </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chatrecyclerview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/emoticon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
-
-    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/morePanel"

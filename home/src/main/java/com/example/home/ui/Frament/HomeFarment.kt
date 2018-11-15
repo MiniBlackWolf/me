@@ -11,11 +11,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.ajguan.library.EasyRefreshLayout
+import com.ajguan.library.LoadModel
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.eightbitlab.rxbus.Bus
 import com.example.home.HomeAdapter.ChatListAdapter
 import com.example.home.HomeAdapter.HomeListAdapter
 import com.example.home.R
+import com.example.home.Utils.RefreshView
 import com.example.home.common.UpdateMessgeSizeEvent
 import com.example.home.data.UserList
 import com.example.home.persenter.HomePersenter
@@ -28,6 +30,7 @@ import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.message.TIMManagerExt
 import com.tencent.qcloud.presentation.presenter.ConversationPresenter
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView
+import kotlinx.android.synthetic.main.chatlayout.*
 import org.jetbrains.anko.support.v4.startActivity
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
@@ -91,6 +94,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         RecyclerViewset1(userlist)
         RecyclerViewset2(userlist)
         easylayout.refreshComplete()
+
     }
 
     /**
@@ -127,6 +131,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
     lateinit var left: ImageView
     lateinit var rigth: ImageView
     lateinit var easylayout:EasyRefreshLayout
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
@@ -135,6 +140,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
         mpersenter.getdatas()
+        easylayout.setLoadMoreModel(LoadModel.NONE)
         easylayout.addEasyEvent(object : EasyRefreshLayout.EasyEvent{
             override fun onLoadMore() {
 
@@ -162,6 +168,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         chatlist.layoutManager = linearLayoutManager
+        //未读总计数
         for (i in userlist) {
             noReadAllCount += i.noreadmsg
         }

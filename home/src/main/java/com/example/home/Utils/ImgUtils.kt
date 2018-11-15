@@ -17,6 +17,7 @@ import java.io.IOException
 import android.graphics.drawable.BitmapDrawable
 import com.github.chrisbanes.photoview.PhotoView
 import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.utils.FileUtil
 
 
 class ImgUtils(val bmp: Bitmap, val context: Activity) {
@@ -59,7 +60,7 @@ class ImgUtils(val bmp: Bitmap, val context: Activity) {
 
     //保存图片
     private fun saveCroppedImage(bmp: Bitmap) {
-        var file = File("/sdcard/madengFolder")
+        var file = File(FileUtil.getSDPath()+"/madengFolder")
         if (!file.exists()) file.mkdir()
 
         file = File("/sdcard/temp.jpg".trim())
@@ -68,7 +69,7 @@ class ImgUtils(val bmp: Bitmap, val context: Activity) {
         val sName = fileName.substring(fileName.lastIndexOf("."))
 
         // /sdcard/myFolder/temp_cropped.jpg
-        val newFilePath = "/sdcard/madengFolder" + "/" + mName + "_cropped" + sName
+        val newFilePath = FileUtil.getSDPath()+"/madengFolder"+ "/" + mName + "_cropped" + sName
         file = File(newFilePath)
         try {
             file.createNewFile()

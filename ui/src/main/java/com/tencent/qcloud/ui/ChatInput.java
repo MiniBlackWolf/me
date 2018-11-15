@@ -59,7 +59,6 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
     private ChatView chatView;
     public LinearLayout morePanel, textPanel;
     private TextView voicePanel;
-    private LinearLayout emoticonPanel;
     private final int REQUEST_CODE_ASK_PERMISSIONS = 100;
     private int btn_photo, btn_image, btn_file;
     private VoiceSendingView VoiceSendingView;
@@ -68,6 +67,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.chat_input, this);
         initView();
+
     }
 
 
@@ -107,7 +107,6 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
             }
         });
         isSendVisible = editText.getText().length() != 0;
-        emoticonPanel = (LinearLayout) findViewById(R.id.emoticonPanel);
 
     }
 
@@ -132,10 +131,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 btnKeyboard.setVisibility(VISIBLE);
                 break;
             case EMOTICON:
-                if (!isEmoticonReady) {
-                    prepareEmoticon();
-                }
-                emoticonPanel.setVisibility(VISIBLE);
+//                if (!isEmoticonReady) {
+//                    prepareEmoticon();
+//                }
                 break;
         }
     }
@@ -158,7 +156,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
                 btnKeyboard.setVisibility(GONE);
                 break;
             case EMOTICON:
-                emoticonPanel.setVisibility(GONE);
+
         }
     }
 
@@ -258,48 +256,48 @@ public class ChatInput extends RelativeLayout implements TextWatcher, View.OnCli
         }
     }
 
-    private void prepareEmoticon() {
-        if (emoticonPanel == null) return;
-        for (int i = 0; i < 5; ++i) {
-            LinearLayout linearLayout = new LinearLayout(getContext());
-            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f));
-            for (int j = 0; j < 7; ++j) {
-
-                try {
-                    AssetManager am = getContext().getAssets();
-                    final int index = 7 * i + j;
-                    InputStream is = am.open(String.format("emoticon/%d.gif", index));
-                    Bitmap bitmap = BitmapFactory.decodeStream(is);
-                    Matrix matrix = new Matrix();
-                    int width = bitmap.getWidth();
-                    int height = bitmap.getHeight();
-                    matrix.postScale(3.5f, 3.5f);
-                    final Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                            width, height, matrix, true);
-                    ImageView image = new ImageView(getContext());
-                    image.setImageBitmap(resizedBitmap);
-                    image.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-                    linearLayout.addView(image);
-                    image.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String content = String.valueOf(index);
-                            SpannableString str = new SpannableString(String.valueOf(index));
-                            ImageSpan span = new ImageSpan(getContext(), resizedBitmap, ImageSpan.ALIGN_BASELINE);
-                            str.setSpan(span, 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            editText.append(str);
-                        }
-                    });
-                    is.close();
-                } catch (IOException e) {
-
-                }
-
-            }
-            emoticonPanel.addView(linearLayout);
-        }
-        isEmoticonReady = true;
-    }
+//    private void prepareEmoticon() {
+//        if (emoticonPanel == null) return;
+//        for (int i = 0; i < 5; ++i) {
+//            LinearLayout linearLayout = new LinearLayout(getContext());
+//            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f));
+//            for (int j = 0; j < 7; ++j) {
+//
+//                try {
+//                    AssetManager am = getContext().getAssets();
+//                    final int index = 7 * i + j;
+//                    InputStream is = am.open(String.format("emoticon/%d.gif", index));
+//                    Bitmap bitmap = BitmapFactory.decodeStream(is);
+//                    Matrix matrix = new Matrix();
+//                    int width = bitmap.getWidth();
+//                    int height = bitmap.getHeight();
+//                    matrix.postScale(3.5f, 3.5f);
+//                    final Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+//                            width, height, matrix, true);
+//                    ImageView image = new ImageView(getContext());
+//                    image.setImageBitmap(resizedBitmap);
+//                    image.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+//                    linearLayout.addView(image);
+//                    image.setOnClickListener(new OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            String content = String.valueOf(index);
+//                            SpannableString str = new SpannableString(String.valueOf(index));
+//                            ImageSpan span = new ImageSpan(getContext(), resizedBitmap, ImageSpan.ALIGN_BASELINE);
+//                            str.setSpan(span, 0, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                            editText.append(str);
+//                        }
+//                    });
+//                    is.close();
+//                } catch (IOException e) {
+//
+//                }
+//
+//            }
+//            emoticonPanel.addView(linearLayout);
+//        }
+//        isEmoticonReady = true;
+//    }
 
     /**
      * Called when a view has been clicked.

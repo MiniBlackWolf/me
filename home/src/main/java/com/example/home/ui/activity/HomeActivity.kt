@@ -2,7 +2,9 @@ package com.example.home.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -32,17 +34,19 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
+import android.support.v7.widget.GridLayoutManager
+import android.text.Editable
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.example.home.HomeAdapter.emoji
 import com.example.home.Messges.SendImgMsg
 import com.example.home.Messges.SoundMessge
 import com.example.home.Utils.GifSizeFilter
 import com.example.home.Utils.ImgUtils
+import com.example.home.common.itemclickListener
 import com.example.home.data.Sounddata
 import com.example.home.data.longtimedata
 import com.oden.syd_camera.SydCameraActivity
@@ -54,6 +58,7 @@ import com.tencent.imsdk.ext.message.TIMMessageExt
 import com.tencent.qcloud.ui.VoiceSendingView
 import com.zhihu.matisse.filter.Filter
 import org.jetbrains.anko.find
+import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ext.getsoundtime
 import study.kotin.my.baselibrary.utils.EmoticonUtil
 import study.kotin.my.baselibrary.utils.FileUtil
@@ -136,9 +141,9 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
     }
 
     //文件消息
-    override fun showFilemsg(path: String) {
-        updataview(path, SHOW_MSG_TYPE, 4)
-        Log.i("iiiiiiiiii", path)
+    override fun showFilemsg(TIMFileElem: TIMFileElem) {
+        updataview(TIMFileElem, SHOW_MSG_TYPE, 4)
+
 
     }
 
@@ -177,7 +182,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         }
         //      getdata()
         //软键盘跟随
-        getkeyboy()
+        //  getkeyboy()
         //消息监听器
         mpersenter.showmessge(id)
         //历史消息读取
@@ -185,89 +190,28 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         //已读消息上报
         UpdataReadMessage()
         //事件点击方法
-        chatadapter.onItemChildClickListener = object : BaseQuickAdapter.OnItemChildClickListener {
-            override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                //全部数据
-                val data = adapter!!.data
-                when (view!!.id) {
-                    //图片点击
-                    R.id.chatmsgs2->{
-                        val imgview = adapter.getViewByPosition(chatrecyclerview, position, R.id.chatmsgs2) as ImageView
-                        imgview.setDrawingCacheEnabled(true)
-                        val bitmap = Bitmap.createBitmap(imgview.drawingCache)
-                        imgview.setDrawingCacheEnabled(false)
-                        val dialog = ImgUtils(bitmap, this@HomeActivity).init()
-                        dialog.show()
-                    }
-                    R.id.showimgmsgs -> {
-                        val imgview = adapter.getViewByPosition(chatrecyclerview, position, R.id.showimgmsgs) as ImageView
-                        imgview.setDrawingCacheEnabled(true)
-                        val bitmap = Bitmap.createBitmap(imgview.drawingCache)
-                        imgview.setDrawingCacheEnabled(false)
-                        val dialog = ImgUtils(bitmap, this@HomeActivity).init()
-                        dialog.show()
-                    }
-                    //语音点击
-                    R.id.chatmsgs3 -> {
-                        val soundanm = adapter.getViewByPosition(chatrecyclerview, position, R.id.soundanm) as ImageView
-                        val chatmsgs3 = adapter.getViewByPosition(chatrecyclerview, position, R.id.chatmsgs3) as Button
-                        val an = soundanm.background as AnimationDrawable
-                        an.start()
-                        try {
-                            val fileInputStream = FileInputStream(((data.get(position) as Msg).content as Sounddata).path)
-                            MediaUtil.getInstance().play(fileInputStream)
-                            MediaUtil.getInstance().setEventListener {
-                                an.stop()
-                            }
-                            val getsoundtime = MediaPlayer().getsoundtime(((data.get(position) as Msg).content as Sounddata).path)
-                            object : CountDownTimer(getsoundtime, 1000) {
-                                override fun onFinish() {
-                                    MediaUtil.getInstance().stop()
-                                    chatmsgs3.text = ((getsoundtime / 1000).toString() + "\'\'")
-                                }
+        chatsendview.btnEmotion.setOnClickListener{
+            emoticon.isVisible=!emoticon.isVisible
 
-                                override fun onTick(millisUntilFinished: Long) {
-                                    chatmsgs3.text = ((millisUntilFinished / 1000).toString() + "\'\'")
-                                }
-
-
-                            }.start()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-                    R.id.chatpaly -> {
-                        val chatpaly2 = adapter.getViewByPosition(chatrecyclerview, position, R.id.chatpaly2)
-                        val chatpaly = adapter.getViewByPosition(chatrecyclerview, position, R.id.chatpaly) as Button
-                        val an = chatpaly2!!.background as AnimationDrawable
-                        an.start()
-                        try {
-                            val fileInputStream = FileInputStream(((data.get(position) as Msg).content as Sounddata).path)
-                            MediaUtil.getInstance().play(fileInputStream)
-                            MediaUtil.getInstance().setEventListener {
-                                an.stop()
-                            }
-                            val getsoundtime = MediaPlayer().getsoundtime(((data.get(position) as Msg).content as Sounddata).path)
-                            object : CountDownTimer(getsoundtime, 1000) {
-                                override fun onFinish() {
-                                    MediaUtil.getInstance().stop()
-                                    chatpaly.text = ((getsoundtime / 1000).toString() + "\'\'")
-                                }
-
-                                override fun onTick(millisUntilFinished: Long) {
-                                    chatpaly.text = ((millisUntilFinished / 1000).toString() + "\'\'")
-                                }
-
-
-                            }.start()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-
-                }
+        }
+        chatfh.setOnClickListener{
+            finish()
+        }
+        chatadapter.onItemChildClickListener = itemclickListener(chatrecyclerview, this@HomeActivity)
+        //表情！！！！！！！！！！
+        val emojiadapter=emoji(EmoticonUtil.emoticonData.toList())
+        emoticon.adapter=emojiadapter
+        emojiadapter.onItemClickListener=object : BaseQuickAdapter.OnItemClickListener{
+            override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+               val text=adapter!!.getViewByPosition(emoticon,position,android.R.id.text1) as TextView
+                 val index = chatsendview.editText.getSelectionStart()
+                 val editable = chatsendview.editText.text
+                 editable.insert(index, text.text.toString())
             }
         }
+        emoticon.layoutManager=GridLayoutManager(this@HomeActivity,7)
+
+
     }
 
     private fun UpdataReadMessage() {
@@ -373,11 +317,12 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             val img_path = actualimagecursor.getString(actual_image_column_index)
             val file = File(img_path)
             val length = file.length()
+            if (length > 10240) return
             val TIMFileElem = TIMFileElem()
             TIMFileElem.path = img_path
             TIMFileElem.fileName = file.name
             mpersenter.sendmessge(id, TIMFileElem)
-            updataview(img_path, SEND_MSG_TYPE, 4)
+            updataview(TIMFileElem, SEND_MSG_TYPE, 4)
             Toast.makeText(this, file.toString(), Toast.LENGTH_SHORT).show()
         }
     }
@@ -394,12 +339,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                     val element = p0.get(i).getElement(0)
                     when (element.type) {
                         TIMElemType.Text, TIMElemType.Face -> {
-                            list.add(longtimedata((element as TIMTextElem).text, p0.get(i).timestamp(), 1,  p0.get(i).isSelf))
-//                            if (p0.get(i).isSelf) {
-//                                updataview((element as TIMTextElem).text, SEND_MSG_TYPE, 1)
-//                            } else {
-//                                showtextmsg(element as TIMTextElem)
-//                            }
+                            list.add(longtimedata((element as TIMTextElem).text, p0.get(i).timestamp(), 1, p0.get(i).isSelf))
                         }
                         TIMElemType.Image -> {
                             for (image in (element as TIMImageElem).imageList) {
@@ -414,24 +354,18 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                                     override fun onSuccess() {//成功，参数为图片数据
                                         //doSomething
                                         val bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(uuid))
-                                        list.add(longtimedata(bitmap, p0.get(i).timestamp(), 2,  p0.get(i).isSelf))
+                                        list.add(longtimedata(bitmap, p0.get(i).timestamp(), 2, p0.get(i).isSelf))
                                         Log.d("imgs--d", "getImage success.")
                                     }
                                 })
                             }
-//                            val bitmap = BitmapFactory.decodeFile((element as TIMImageElem).path)
-//                            if (p0.get(i).isSelf) {
-//                                updataview(bitmap, SEND_MSG_TYPE, 2)
-//                            } else {
-//                                showimgmsg(bitmap)
-//                            }
 
                         }
                         TIMElemType.Sound -> {
                             val string = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMSoundElem).uuid, "")
                             if (string != "") {
                                 val getsoundtime = MediaPlayer().getsoundtime(string!!)
-                                list.add(longtimedata(Sounddata(string, getsoundtime), p0.get(i).timestamp(), 3,  p0.get(i).isSelf))
+                                list.add(longtimedata(Sounddata(string, getsoundtime), p0.get(i).timestamp(), 3, p0.get(i).isSelf))
                                 continue@loop
                             }
 
@@ -439,15 +373,10 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                             (element as TIMSoundElem).getSoundToFile(tempAudio.absolutePath, object : TIMCallBack {
                                 override fun onSuccess() {
                                     val getsoundtime = MediaPlayer().getsoundtime(tempAudio.canonicalPath)
-                                    list.add(longtimedata(Sounddata(tempAudio.absolutePath, getsoundtime), p0.get(i).timestamp(), 3,  p0.get(i).isSelf))
+                                    list.add(longtimedata(Sounddata(tempAudio.absolutePath, getsoundtime), p0.get(i).timestamp(), 3, p0.get(i).isSelf))
                                     val edit = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).edit()
                                     edit.putString(element.uuid, tempAudio.absolutePath)
                                     edit.apply()
-// if (p0.get(i).isSelf) {
-//                                        updataview(Sounddata(tempAudio.absolutePath ,getsoundtime), SEND_MSG_TYPE, 3)
-//                                    } else {
-//                                        showSoundmsg(tempAudio.absolutePath, getsoundtime)
-//                                    }
                                 }
 
                                 override fun onError(p0: Int, p1: String?) {
@@ -461,36 +390,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                         TIMElemType.GroupTips -> return
                         //  return new GroupTipMessage(message);
                         TIMElemType.File -> {
-                            val string = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMFileElem).uuid, "")
-                            if (string != "") {
-                                list.add(longtimedata(string!!, p0.get(i).timestamp(), 4, p0.get(i).isSelf))
-                                continue@loop
-                            }
-                            val str = (element as TIMFileElem).getFileName().split("/".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
-                            val filename = str[str.size - 1]
-                            if (FileUtil.isFileExist(filename, Environment.DIRECTORY_DOWNLOADS)) {
-                                Toast.makeText(BaseApplication.context, BaseApplication.context.getString(R.string.save_exist), Toast.LENGTH_SHORT).show()
-                                return
-                            }
-                            (element as TIMFileElem).getToFile(FileUtil.getCacheFilePath(filename), object : TIMCallBack {
-                                override fun onSuccess() {
-                                    list.add(longtimedata(FileUtil.getCacheFilePath(filename), p0.get(i).timestamp(), 4, p0.get(i).isSelf))
-                                    val edit = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).edit()
-                                    edit.putString(element.uuid, FileUtil.getCacheFilePath(filename))
-                                    edit.apply()
-                                }
-
-                                override fun onError(p0: Int, p1: String?) {
-                                    Log.e("eeeeee", p1)
-                                }
-                            })
-//                            if (p0.get(i).isSelf) {
-//                                updataview((element as TIMFileElem).path, SEND_MSG_TYPE, 4)
-//                            } else {
-//                                showFilemsg((element as TIMFileElem).path)
-//                            }
-
-
+                            list.add(longtimedata((element as TIMFileElem), p0.get(i).timestamp(), 4, p0.get(i).isSelf))
                         }
                         TIMElemType.UGC -> return
                         else -> return
@@ -556,33 +456,30 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             for (datas in datalist) {
                 when (datas.type) {
                     1 -> {
-                        if(datas.isseft){
-                            updataview(datas.data as String,SEND_MSG_TYPE,1)
-                        }else  updataview(datas.data as String,SHOW_MSG_TYPE,1)
+                        if (datas.isseft) {
+                            updataview(datas.data as String, SEND_MSG_TYPE, 1)
+                        } else updataview(datas.data as String, SHOW_MSG_TYPE, 1)
 
                     }
                     2 -> {
-                        if(datas.isseft){
-                            updataview(datas.data as Bitmap,SEND_MSG_TYPE,2)
-                        }else  updataview(datas.data as Bitmap,SHOW_MSG_TYPE,2)
+                        if (datas.isseft) {
+                            updataview(datas.data as Bitmap, SEND_MSG_TYPE, 2)
+                        } else updataview(datas.data as Bitmap, SHOW_MSG_TYPE, 2)
                     }
                     3 -> {
-                        if(datas.isseft){
-                            updataview(datas.data as Sounddata,SEND_MSG_TYPE,3)
-                        }else  updataview(datas.data as Sounddata,SHOW_MSG_TYPE,3)
+                        if (datas.isseft) {
+                            updataview(datas.data as Sounddata, SEND_MSG_TYPE, 3)
+                        } else updataview(datas.data as Sounddata, SHOW_MSG_TYPE, 3)
                     }
                     4 -> {
-                        if(datas.isseft){
-                            updataview(datas.data as String,SEND_MSG_TYPE,4)
-                        }else  updataview(datas.data as String,SHOW_MSG_TYPE,4)
+                        if (datas.isseft) {
+                            updataview(datas.data as TIMFileElem, SEND_MSG_TYPE, 4)
+                        } else updataview(datas.data as TIMFileElem, SHOW_MSG_TYPE, 4)
                     }
 
                 }
 
             }
-
-
-            Emo.setText("[惊讶]")
             //   data.getSerializable()
         }
     }
@@ -609,9 +506,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 layoutParams.height = (height + layoutParams.height)
             }
         })
-
     }
-
 
     override fun onBackPressed() {
         MediaUtil.getInstance().stop()

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.ajguan.library.EasyRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.eightbitlab.rxbus.Bus
 import com.example.home.HomeAdapter.ChatListAdapter
@@ -89,6 +90,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
 
         RecyclerViewset1(userlist)
         RecyclerViewset2(userlist)
+        easylayout.refreshComplete()
     }
 
     /**
@@ -124,6 +126,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
     lateinit var chatlist2: RecyclerView
     lateinit var left: ImageView
     lateinit var rigth: ImageView
+    lateinit var easylayout:EasyRefreshLayout
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
@@ -132,7 +135,15 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
         mpersenter.getdatas()
+        easylayout.addEasyEvent(object : EasyRefreshLayout.EasyEvent{
+            override fun onLoadMore() {
 
+            }
+
+            override fun onRefreshing() {
+                conversationPresenter.getConversation()
+            }
+        })
 
         return view
     }
@@ -197,6 +208,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         chatlist2 = view.find(R.id.chatlist2)
         left = view.find(R.id.left)
         rigth = view.find(R.id.right)
+        easylayout=view.find(R.id.easylayout)
     }
 
     //注入

@@ -15,8 +15,8 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
 
 
     override fun getdata(): Observable<Boolean> {
-        return  Observable.create { emitter ->
-            Log.e("iiiiiiiiis",Thread.currentThread().getName())
+        return Observable.create { emitter ->
+            Log.e("iiiiiiiiis", Thread.currentThread().getName())
             val list = TIMManagerExt.getInstance().conversationList
             for (userconversation in list) {
                 TIMConversationExt(userconversation).getMessage(10, null, object :
@@ -26,7 +26,8 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
                         loop@ for (i in 0 until p0.size) {
                             val element = p0.get(i).getElement(0)
                             when (element.type) {
-                                TIMElemType.Text, TIMElemType.Face -> return
+                                TIMElemType.Text, TIMElemType.Face -> {
+                                }
                                 TIMElemType.Image -> {
                                     for (image in (element as TIMImageElem).imageList) {
                                         val uuid = image.uuid
@@ -40,7 +41,7 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
                                             override fun onSuccess() {//成功，参数为图片数据
                                                 //doSomething
                                                 Log.d("imgs--d", "getImage success.")
-                                                Log.i("iiiiiiiii",Thread.currentThread().getName())
+                                                Log.i("iiiiiiiii", Thread.currentThread().getName())
                                             }
                                         })
                                     }
@@ -64,27 +65,15 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
                                     })
 
                                 }
-                                TIMElemType.Video -> return
-                                TIMElemType.GroupTips -> return
-                                TIMElemType.File -> {
-                                    val string = BaseApplication.context.getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMFileElem).uuid, "")
-                                    if (string != "") {
-                                        continue@loop
-                                    }
-                                    (element as TIMFileElem).getToFile(FileUtil.getCacheFilePath(element.fileName), object : TIMCallBack {
-                                        override fun onSuccess() {
-                                            val edit = BaseApplication.context.getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).edit()
-                                            edit.putString(element.uuid, FileUtil.getCacheFilePath(element.fileName))
-                                            edit.apply()
-
-                                        }
-
-                                        override fun onError(p0: Int, p1: String?) {
-                                            Log.e("eeeeee", p1)
-                                        }
-                                    })
+                                TIMElemType.Video -> {
                                 }
-                                TIMElemType.UGC -> return
+                                TIMElemType.GroupTips -> {
+                                }
+                                TIMElemType.File -> {
+
+                                }
+                                TIMElemType.UGC -> {
+                                }
                                 else -> return
                             }
 

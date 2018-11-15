@@ -21,15 +21,16 @@ object FileMessge {
                 Toast.makeText(BaseApplication.context, BaseApplication.context.getString(R.string.save_exist), Toast.LENGTH_SHORT).show()
                 return
             }
-            elem.getToFile(FileUtil.getCacheFilePath(filename), object : TIMCallBack {
-                override fun onSuccess() {
-                    mview.showFilemsg(FileUtil.getCacheFilePath(filename))
-                }
-
-                override fun onError(p0: Int, p1: String?) {
-                    Log.e("eeeeee", p1)
-                }
-            })
+            mview.showFilemsg(elem)
+//            elem.getToFile(FileUtil.getCacheFilePath(filename), object : TIMCallBack {
+//                override fun onSuccess() {
+//
+//                }
+//
+//                override fun onError(p0: Int, p1: String?) {
+//                    Log.e("eeeeee", p1)
+//                }
+//            })
         }
 
     }

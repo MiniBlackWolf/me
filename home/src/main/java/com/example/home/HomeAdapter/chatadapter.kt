@@ -19,6 +19,8 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.home.R
 import com.example.home.common.Msg
 import com.example.home.data.Sounddata
+import com.tencent.imsdk.TIMFileElem
+import kotlinx.android.synthetic.main.chatitem.view.*
 import kotlinx.android.synthetic.main.chatitem2.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.toast
@@ -74,9 +76,9 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     4 -> {
                         initview(helper)
                         filepackage.isVisible=true
-                        val file=File(item.content as String)
-                        filaename.setText(file.name)
-                        filesize.text=((file.length()/1024).toString()+"Mb")
+                        filaename.text=((item.content as TIMFileElem).fileName)
+                        filesize.text=(((item.content as TIMFileElem).fileSize/1000).toString()+"Mb")
+                        helper.addOnClickListener(R.id.filepackage)
                     }
                 }
 
@@ -108,9 +110,9 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     4 -> {
                         initview2(helper)
                         filepackage.isVisible=true
-                        val file=File(item.content as String)
-                        filaename.setText(file.name)
-                        filesize.text=((file.length()/1024).toString()+"Mb")
+                        filaename.text=((item.content as TIMFileElem).fileName)
+                        filesize.text=(((item.content as TIMFileElem).fileSize/1000).toString()+"Mb")
+                        helper.addOnClickListener(R.id.filepackage)
                     }
 
                 }

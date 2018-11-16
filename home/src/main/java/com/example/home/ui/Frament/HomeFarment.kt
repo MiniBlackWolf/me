@@ -22,6 +22,7 @@ import com.example.home.common.UpdateMessgeSizeEvent
 import com.example.home.data.UserList
 import com.example.home.persenter.HomePersenter
 import com.example.home.ui.activity.HomeActivity
+import com.example.home.ui.activity.SearchActivity
 import com.tencent.imsdk.*
 import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
@@ -38,7 +39,20 @@ import java.util.*
 import kotlin.collections.LinkedHashSet
 
 
-class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
+class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView,View.OnClickListener {
+    override fun onClick(v: View?) {
+        when(v!!.id){
+            R.id.search->{
+                startActivity<SearchActivity>()
+            }
+            R.id.more->{
+
+
+            }
+
+        }
+    }
+
     lateinit var lastmsg: String
 
 
@@ -216,6 +230,8 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView {
         left = view.find(R.id.left)
         rigth = view.find(R.id.right)
         easylayout=view.find(R.id.easylayout)
+        view.find<ImageView>(R.id.search).setOnClickListener(this)
+        view.find<ImageView>(R.id.more).setOnClickListener(this)
     }
 
     //注入

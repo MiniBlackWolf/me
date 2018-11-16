@@ -9,5 +9,6 @@
         <activity android:name="com.example.home.ui.activity.HomeActivity"
             android:windowSoftInputMode="adjustPan"
             />
+        <activity android:name=".ui.activity.SearchActivity"/>
     </application>
 </manifest>

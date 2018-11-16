@@ -6,7 +6,7 @@
     <string name="chat_press_talk">点击开始说话</string>
     <string name="chat_release_send">点击结束说话</string>
     <string name="chat_image">图片</string>
-    <string name="chat_file">文件</string>
+    <string name="chat_file">小文件</string>
     <string name="chat_photo">拍摄</string>
     <string name="chat_video">小视频</string>
     <string name="chat_audio_too_short">录音过短，请重试</string>

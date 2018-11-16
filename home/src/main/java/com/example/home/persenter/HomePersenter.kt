@@ -8,6 +8,8 @@ import com.example.home.common.ChatViewSet
 import study.kotin.my.baselibrary.presenter.Basepersenter
 import com.example.home.persenter.view.HomeView
 import com.example.home.seriver.HomeSeriver
+import com.example.home.seriver.SearchSeriver
+import com.example.home.seriver.imp.SearchServiceimp
 import com.tencent.imsdk.*
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -23,6 +25,8 @@ import javax.inject.Inject
 class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
     @Inject
     lateinit var HomeSeriverImp: HomeSeriver
+    @Inject
+    lateinit var SearchServiceimp:SearchSeriver
     fun showmessge(id:String) {
         //消息监听
         TIMManager.getInstance().loginUser

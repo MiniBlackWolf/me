@@ -84,7 +84,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
     lateinit var chatadapter: chatadapter
     lateinit var lastTIMMessage: TIMMessage
     var trun: Boolean = true
-
+    var trun2: Boolean = true
     //发送语音消息
     override fun sendSoundmsg() {
         val audiosh = getSharedPreferences("sp_name_audio", MODE_PRIVATE)
@@ -93,6 +93,8 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         if (adpath != "" && adtime != -1L) {
             val TIMSoundElem = TIMSoundElem()
             TIMSoundElem.path = adpath
+            trun=true
+            trun2=false
             mpersenter.sendmessge(id, TIMSoundElem)
             //--updataview
             updataview(Sounddata(adpath!!, adtime), SEND_MSG_TYPE, 3)
@@ -107,6 +109,8 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         timTextElem.text = chatsendview.editText.text.toString()
         mpersenter.sendmessge(id, timTextElem)
         //----updataview
+        trun=true
+        trun2=false
         updataview(chatsendview.editText.text.toString(), SEND_MSG_TYPE, 1)
         chatsendview.editText.setText("")
 
@@ -302,6 +306,8 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 //构筑消息
                 val timImageElem = TIMImageElem()
                 timImageElem.path = obtainPathResult.get(0)
+                trun=true
+                trun2=false
                 mpersenter.sendmessge(id, timImageElem)
                 //显示界面
                 updataview(bitmap, SEND_MSG_TYPE, 2)
@@ -322,6 +328,8 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 Log.d("iiiii", "onActivityResult picturePath: " + picturePath)
                 val timimgElem = TIMImageElem()
                 timimgElem.path = picturePath
+                trun=true
+                trun2=false
                 mpersenter.sendmessge(id, timimgElem)
                 updataview(bitmap, SEND_MSG_TYPE, 2)
             }
@@ -335,10 +343,14 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 val img_path = actualimagecursor.getString(actual_image_column_index)
                 val file = File(img_path)
                 val length = file.length()
-                if (length > 10240) return
+                if (length > 10485697){
+                    toast("文件不能大于10mb!")
+                    return}
                 val TIMFileElem = TIMFileElem()
                 TIMFileElem.path = img_path
                 TIMFileElem.fileName = file.name
+                trun=true
+                trun2=false
                 mpersenter.sendmessge(id, TIMFileElem)
                 updataview(TIMFileElem, SEND_MSG_TYPE, 4)
                 Toast.makeText(this, file.toString(), Toast.LENGTH_SHORT).show()
@@ -358,7 +370,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                         return
                     }
                     if (count == 10) {
-                        trun = false
+                        trun2 = false
                     }
                     p0.reverse()
                     lastTIMMessage = p0[0]
@@ -481,6 +493,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                     o1.time.compareTo(o2.time)
                 })
                 datalist.reverse()
+                trun=false
                 for (datas in datalist) {
                     when (datas.type) {
                         1 -> {
@@ -508,7 +521,9 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                     }
 
                 }
+
                 trun=true
+                trun2=true
                 //   data.getSerializable()
             }
         }
@@ -517,10 +532,16 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         fun updataview(data: Any, Type: Int, datatype: Int) {
             val msglists = ArrayList<Msg>()
             msglists.add(Msg(data, Type, datatype))
-            chatadapter.addData(0, msglists)
-            chatadapter.notifyDataSetChanged()
             if (!trun) {
-                chatrecyclerview.scrollToPosition(chatadapter.itemCount - 1)
+                chatadapter.addData(0, msglists)
+                chatadapter.notifyDataSetChanged()
+
+            }else{
+                chatadapter.addData(chatadapter.itemCount, msglists)
+                chatadapter.notifyDataSetChanged()
+            }
+            if(!trun2){
+                chatrecyclerview.scrollToPosition(chatadapter.itemCount-1)
             }
             morelayout.refreshComplete()
 

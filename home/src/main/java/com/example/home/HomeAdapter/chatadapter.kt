@@ -2,15 +2,8 @@ package com.example.home.HomeAdapter
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.support.constraint.ConstraintLayout
-import android.support.v7.app.AlertDialog
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.isVisible
 
@@ -20,15 +13,7 @@ import com.example.home.R
 import com.example.home.common.Msg
 import com.example.home.data.Sounddata
 import com.tencent.imsdk.TIMFileElem
-import kotlinx.android.synthetic.main.chatitem.view.*
-import kotlinx.android.synthetic.main.chatitem2.*
-import org.jetbrains.anko.find
-import org.jetbrains.anko.toast
-import study.kotin.my.baselibrary.common.BaseApplication
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
+import java.math.BigDecimal
 
 class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMultiItemQuickAdapter<Msg, BaseViewHolder>(data) {
     lateinit var showimgmsgs: ImageView
@@ -77,7 +62,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                         initview(helper)
                         filepackage.isVisible=true
                         filaename.text=((item.content as TIMFileElem).fileName)
-                        filesize.text=(((item.content as TIMFileElem).fileSize/1000).toString()+"Mb")
+                        filesize.text=(((item.content as TIMFileElem).fileSize.toDouble().toBigDecimal().divide(1000000.toBigDecimal(),2, BigDecimal.ROUND_HALF_UP)).toString()+"Mb")
                         helper.addOnClickListener(R.id.filepackage)
                     }
                 }
@@ -111,7 +96,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                         initview2(helper)
                         filepackage.isVisible=true
                         filaename.text=((item.content as TIMFileElem).fileName)
-                        filesize.text=(((item.content as TIMFileElem).fileSize/1000).toString()+"Mb")
+                        filesize.text=(((item.content as TIMFileElem).fileSize.toDouble().toBigDecimal().divide(1000000.toBigDecimal(),2, BigDecimal.ROUND_HALF_UP)).toString()+"Mb")
                         helper.addOnClickListener(R.id.filepackage)
                     }
 

@@ -39,13 +39,13 @@ import java.util.*
 import kotlin.collections.LinkedHashSet
 
 
-class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView,View.OnClickListener {
+class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnClickListener {
     override fun onClick(v: View?) {
-        when(v!!.id){
-            R.id.search->{
+        when (v!!.id) {
+            R.id.search -> {
                 startActivity<SearchActivity>()
             }
-            R.id.more->{
+            R.id.more -> {
 
 
             }
@@ -79,7 +79,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView,View.OnCl
             }
             if (lists.peer == "") {
                 TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, "")
-                list.remove(lists)
+                //     list.remove(lists)
                 continue
             }
             val s = TIMConversationExt(lists).getLastMsgs(1)
@@ -144,7 +144,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView,View.OnCl
     lateinit var chatlist2: RecyclerView
     lateinit var left: ImageView
     lateinit var rigth: ImageView
-    lateinit var easylayout:EasyRefreshLayout
+    lateinit var easylayout: EasyRefreshLayout
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -155,7 +155,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView,View.OnCl
         conversationPresenter.getConversation()
         mpersenter.getdatas()
         easylayout.setLoadMoreModel(LoadModel.NONE)
-        easylayout.addEasyEvent(object : EasyRefreshLayout.EasyEvent{
+        easylayout.addEasyEvent(object : EasyRefreshLayout.EasyEvent {
             override fun onLoadMore() {
 
             }
@@ -171,11 +171,23 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView,View.OnCl
     //消息列表
     fun RecyclerViewset1(userlist: LinkedHashSet<UserList>) {
         var noReadAllCount: Int = 0
-        val homeListAdapter = HomeListAdapter(userlist.toList())
-        homeListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
-            override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
-
+        val homeListAdapter = HomeListAdapter(mpersenter.context,userlist.toList())
+//        homeListAdapter.onItemChildClickListener  = object : BaseQuickAdapter.OnItemChildClickListener {
+//            override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+//                startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
+//            }
+//
+//        }
+        homeListAdapter.setOnItemChildClickListener { adapter, view, position ->
+            let {
+                val id = userlist.toList().get(position).Name
+                if (id.substring(0, 5) == "@TGS#") {
+                    TIMManagerExt.getInstance().deleteConversation(TIMConversationType.Group, id)
+                    ConversationPresenter(this).getConversation()
+                } else {
+                    TIMManagerExt.getInstance().deleteConversation(TIMConversationType.C2C, id)
+                    ConversationPresenter(this).getConversation()
+                }
             }
         }
         chatlist.adapter = homeListAdapter
@@ -229,7 +241,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView,View.OnCl
         chatlist2 = view.find(R.id.chatlist2)
         left = view.find(R.id.left)
         rigth = view.find(R.id.right)
-        easylayout=view.find(R.id.easylayout)
+        easylayout = view.find(R.id.easylayout)
         view.find<ImageView>(R.id.search).setOnClickListener(this)
         view.find<ImageView>(R.id.more).setOnClickListener(this)
     }

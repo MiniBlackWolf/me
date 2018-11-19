@@ -9,9 +9,16 @@ import study.kotin.my.baselibrary.common.BaseApplication
 object SendImgMsg {
 
     fun sendimgmsg(id: String, data: TIMMessage) {
-        val conversation = TIMManager.getInstance().getConversation(
-                TIMConversationType.C2C, //会话类型：单聊
-                id)
+        val conversation:TIMConversation
+        if(id.substring(0,5)=="@TGS#"){
+            conversation = TIMManager.getInstance().getConversation(
+                    TIMConversationType.Group, //会话类型：群聊
+                    id)
+        }else {
+            conversation = TIMManager.getInstance().getConversation(
+                    TIMConversationType.C2C, //会话类型：单聊
+                    id)
+        }
         //发送消息
         conversation.sendMessage(data, object : TIMValueCallBack<TIMMessage> {
             //发送消息回调

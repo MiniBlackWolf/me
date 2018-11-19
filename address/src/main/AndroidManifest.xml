@@ -6,6 +6,8 @@
             android:supportsRtl="true">
             <activity android:name=".ui.activity.AddressActivity">
             </activity>
+            <activity android:name=".ui.activity.AddGroupActivity"/>
+            <activity android:name=".ui.activity.PublicGroupActivity"/>
         </application>
 
 

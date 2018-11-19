@@ -38,6 +38,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
     override fun convert(helper: BaseViewHolder, item: Msg) {
         when (helper.itemViewType) {
             Msg.TYPE_RECEIVED -> {
+                helper.setText(R.id.myname,item.userInfoData.names)
                 when (item.datatype) {
                     1 -> {
                         initview(helper)
@@ -70,11 +71,11 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
 
             }
             Msg.TYPE_SENT -> {
+                helper.setText(R.id.chatnamebbb,item.userInfoData.names)
                 when (item.datatype) {
                     1 -> {
                         initview2(helper)
                         chatmsgs1.isVisible = true
-                        helper.setText(R.id.chatname, "gg")
                         helper.setText(R.id.chatmsgs1, item.content as String)
 
                     }

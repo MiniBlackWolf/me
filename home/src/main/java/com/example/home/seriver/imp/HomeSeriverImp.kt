@@ -4,11 +4,15 @@ import android.content.Context
 import android.util.Log
 import com.example.home.seriver.HomeSeriver
 import com.tencent.imsdk.*
+import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.message.TIMManagerExt
+import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.chatlayout.*
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.utils.FileUtil
+import java.io.IOException
 import javax.inject.Inject
 
 class HomeSeriverImp @Inject constructor() : HomeSeriver {
@@ -86,6 +90,46 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
                     }
                 })
             }
+            val conversationList = TIMManagerExt.getInstance().conversationList
+            for(l in conversationList){
+                TIMFriendshipManagerExt.getInstance().getFriendsProfile(arrayListOf(l.peer), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
+                    override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
+                        if(p0?.size==null)return
+                        try {
+                            val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                            edit.putString(l.peer+"fdname", p0.get(0).nickName)
+                            edit.putString(l.peer+"fdheadurl", p0.get(0).faceUrl)
+                            edit.apply()
+                        }catch (e:IOException){
+                            e.printStackTrace()
+                        }
+
+                    }
+
+                    override fun onError(p0: Int, p1: String?) {
+                    }
+
+                })
+            }
+            TIMFriendshipManager.getInstance().getSelfProfile(object : TIMValueCallBack<TIMUserProfile> {
+                override fun onSuccess(p0: TIMUserProfile?) {
+                    try {
+                        val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                        edit.putString("myname", p0!!.nickName)
+                        edit.putString("myheadurl", p0.faceUrl)
+                        edit.apply()
+                    }catch (e:IOException){
+                        e.printStackTrace()
+                    }
+
+                }
+
+                override fun onError(p0: Int, p1: String?) {
+                }
+
+            })
+
+
 
             emitter.onNext(true)
             emitter.onComplete()

@@ -69,6 +69,7 @@ dependencies {
     api project(':presentation')
     api project(':ui')
     api 'com.github.chrisbanes:PhotoView:2.0.0'
+    api    'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
 }
 noArg {
     annotation("study.kotin.my.baselibrary.common.Poko")

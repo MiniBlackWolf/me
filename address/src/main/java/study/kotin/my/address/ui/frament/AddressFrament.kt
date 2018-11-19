@@ -7,11 +7,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import com.alibaba.android.arouter.launcher.ARouter
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.tencent.imsdk.TIMUserProfile
 import com.tencent.imsdk.TIMValueCallBack
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
+import kotlinx.android.synthetic.main.addresshead.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.support.v4.startActivity
 import study.kotin.my.address.Addresslistadapter
 import study.kotin.my.address.Addresspersenter.Addresspresenter
 import study.kotin.my.address.R
@@ -19,15 +23,29 @@ import study.kotin.my.address.data.AddressListLv0
 import study.kotin.my.address.data.AddressListLv1
 import study.kotin.my.address.injection.commponent.DaggerAddressCommponent
 import study.kotin.my.address.injection.module.Addressmodule
+import study.kotin.my.address.ui.activity.AddressActivity
+import study.kotin.my.address.ui.activity.PublicGroupActivity
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import java.util.*
 
-class AddressFrament:BaseMVPFragmnet<Addresspresenter>() {
+class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener {
+    override fun onClick(v: View?) {
+        when (v!!.id) {
+            R.id.groupjojn -> startActivity<AddressActivity>()
+            R.id.Friendjoin -> {
+                ARouter.getInstance().build("/home/searchactivity").navigation()
+            }
+            R.id.publicgroupjoin -> {
+                startActivity<PublicGroupActivity>()
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         initinject()
         val view = inflater.inflate(R.layout.addresspasge, container, false)
-       // iniview(view)
+        // iniview(view)
         generateData()
         return view
     }
@@ -43,38 +61,54 @@ class AddressFrament:BaseMVPFragmnet<Addresspresenter>() {
 //
 //   }
 
-    private fun generateData(){
-        TIMFriendshipManagerExt.getInstance().getFriendList(object : TIMValueCallBack<MutableList<TIMUserProfile>>{
+    private fun generateData() {
+        TIMFriendshipManagerExt.getInstance().getFriendList(object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                val lv0Count = 3
-                val lv1Count =p0!!.size
+        //        val lv0Count = 3
+                val lv1Count = p0!!.size
                 val lv0name = arrayOf("我的好友", "其他好友", "设备")
                 val res = ArrayList<MultiItemEntity>()
-                for (i in 0 until lv0Count) {
-                    val lv0 = AddressListLv0(lv0name[i], p0.size)
-                    for (j in 0 until lv1Count) {
-                        val lv1 = AddressListLv1("", p0.get(j).nickName)
-                        lv0.addSubItem(lv1)
-                    }
-                    res.add(lv0)
+                //我的好友
+                val lv0 = AddressListLv0(lv0name[0], p0.size)
+                for (j in 0 until lv1Count) {
+                    val lv1 = AddressListLv1("", p0.get(j).nickName)
+                    lv0.addSubItem(lv1)
                 }
+                res.add(lv0)
+                //其他好友
+                val lv0_1 = AddressListLv0(lv0name[1], 0)
+                for (j in 0 until 0) {
+                    val lv1 = AddressListLv1("", p0.get(j).nickName)
+                    lv0_1.addSubItem(lv1)
+                }
+                res.add(lv0_1)
+                //设备
+                val lv0_2 = AddressListLv0(lv0name[2], 0)
+                for (j in 0 until 0) {
+                    val lv1 = AddressListLv1("", p0.get(j).nickName)
+                    lv0_2.addSubItem(lv1)
+                }
+                res.add(lv0_2)
                 showview(res)
             }
 
             override fun onError(p0: Int, p1: String?) {
-                Log.i("eeeeee",p1)
+                Log.i("eeeeee", p1)
             }
         })
 
 
     }
 
-fun showview(lsit:ArrayList<MultiItemEntity>){
-    val addresslistadapter = Addresslistadapter(lsit)
-    addresslistadapter.addHeaderView(activity!!.layoutInflater.inflate(R.layout.addresshead,null))
-    val recyclerView = view!!.find<RecyclerView>(R.id.addressgrouplist)
-    recyclerView.adapter=addresslistadapter
-    recyclerView.layoutManager=LinearLayoutManager(mpersenter.context)
-}
+    fun showview(lsit: ArrayList<MultiItemEntity>) {
+        val addresslistadapter = Addresslistadapter(lsit)
+        addresslistadapter.addHeaderView(activity!!.layoutInflater.inflate(R.layout.addresshead, null))
+        addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.groupjojn).setOnClickListener(this)
+        addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.Friendjoin).setOnClickListener(this)
+        addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.publicgroupjoin).setOnClickListener(this)
+        val recyclerView = view!!.find<RecyclerView>(R.id.addressgrouplist)
+        recyclerView.adapter = addresslistadapter
+        recyclerView.layoutManager = LinearLayoutManager(mpersenter.context)
+    }
 
 }

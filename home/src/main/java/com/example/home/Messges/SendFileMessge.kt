@@ -1,18 +1,22 @@
 package com.example.home.Messges
 
 import android.util.Log
-import com.tencent.imsdk.TIMConversationType
-import com.tencent.imsdk.TIMManager
-import com.tencent.imsdk.TIMMessage
-import com.tencent.imsdk.TIMValueCallBack
+import com.tencent.imsdk.*
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.common.BaseApplication
 
 object SendFileMessge {
    fun SendFileMessge(id: String, data: TIMMessage){
-       val conversation = TIMManager.getInstance().getConversation(
-               TIMConversationType.C2C, //会话类型：单聊
-               id)
+       val conversation:TIMConversation
+       if(id.substring(0,4)=="@TGS#"){
+            conversation = TIMManager.getInstance().getConversation(
+                   TIMConversationType.Group, //会话类型：群聊
+                   id)
+       }else {
+            conversation = TIMManager.getInstance().getConversation(
+                   TIMConversationType.C2C, //会话类型：单聊
+                   id)
+       }
        conversation.sendMessage(data, object : TIMValueCallBack<TIMMessage> {
            //发送消息回调
            override fun onError(code: Int, desc: String) {//发送消息失败

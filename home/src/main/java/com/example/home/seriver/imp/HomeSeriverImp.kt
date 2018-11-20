@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.example.home.seriver.HomeSeriver
 import com.tencent.imsdk.*
+import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.message.TIMManagerExt
@@ -104,6 +105,19 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
                             e.printStackTrace()
                         }
 
+                    }
+
+                    override fun onError(p0: Int, p1: String?) {
+                    }
+
+                })
+                TIMGroupManagerExt.getInstance().getGroupDetailInfo(arrayListOf(l.peer), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
+                    override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
+                        if(p0?.size==null)return
+                        val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                        edit.putString(l.peer+"Gname", p0.get(0).groupName)
+                        edit.putString(l.peer+"Gheadurl", p0.get(0).faceUrl)
+                        edit.apply()
                     }
 
                     override fun onError(p0: Int, p1: String?) {

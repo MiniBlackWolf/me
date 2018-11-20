@@ -79,7 +79,15 @@
             android:paddingRight="30dp"
             android:text="聊天"
             android:textColor="@color/text_normal" />
-        </LinearLayout>
+
+        <TextView
+            android:id="@+id/addmore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="更多"
+            android:textColor="@color/background" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/morePanel"

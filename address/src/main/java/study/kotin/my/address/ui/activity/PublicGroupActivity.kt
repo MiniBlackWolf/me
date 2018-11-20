@@ -31,6 +31,12 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
         TIMGroupManagerExt.getInstance().getGroupList(object : TIMValueCallBack<MutableList<TIMGroupBaseInfo>>{
             override fun onSuccess(p0: MutableList<TIMGroupBaseInfo>?) {
                 if(p0?.size==null)return
+                val iterator = p0.iterator()
+                while (iterator.hasNext()){
+                    if (iterator.next().groupType=="ChatRoom"){
+                        iterator.remove()
+                    }
+                }
                 val publicGroupAdapter = PublicGroupAdapter(p0)
                 mygroup.adapter= publicGroupAdapter
                 mygroup.layoutManager=LinearLayoutManager(this@PublicGroupActivity)

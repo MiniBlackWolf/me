@@ -2,8 +2,6 @@ package com.example.home.HomeAdapter
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.RecyclerView
-import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -12,14 +10,17 @@ import com.example.home.R
 import com.example.home.data.UserList
 import com.example.home.ui.activity.HomeActivity
 import org.jetbrains.anko.startActivity
-
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuickAdapter<UserList, BaseViewHolder>(R.layout.homechat, userList) {
     override fun convert(helper: BaseViewHolder?, item: UserList?) {
-        helper!!.setText(R.id.peername, item!!.Name)
-        helper.setText(R.id.lastmsg, item.msg)
-        helper.setText(R.id.lastmsgtime, item.lastmsgtime)
+      //  helper!!.setText(R.id.peername, item!!.Name)
+        helper!!.setText(R.id.lastmsg, item!!.msg)
+        val simpleDateFormat = SimpleDateFormat("MM月dd日 HH:mm")
+        val format = simpleDateFormat.format(Date(item.lastmsgtime.toLong()))
+        helper.setText(R.id.lastmsgtime, format)
         val noreadmsg = helper.getView<TextView>(R.id.noreadmsg)
         if (item.noreadmsg != 0) {
             noreadmsg.isVisible = true
@@ -33,6 +34,14 @@ class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuic
             context.startActivity<HomeActivity>("id" to item.Name)
 
         }
+        val name:String?
+        val sharedPreferences = context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
+        if (item.Name.substring(0, 5) == "@TGS#") {
+            name=sharedPreferences.getString("${item.Name}Gname","")
+        } else {
+            name=sharedPreferences.getString("${item.Name}fdname","")
+        }
+        helper.setText(R.id.peername,name)
     }
 
 }

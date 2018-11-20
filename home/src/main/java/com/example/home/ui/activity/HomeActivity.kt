@@ -2,7 +2,9 @@ package com.example.home.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -25,6 +27,7 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
@@ -51,6 +54,8 @@ import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import com.zhihu.matisse.filter.Filter
+import org.jetbrains.anko.AlertBuilder
+import org.jetbrains.anko.AlertBuilderFactory
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ext.getsoundtime
 import study.kotin.my.baselibrary.utils.EmoticonUtil
@@ -196,18 +201,46 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         }
         chatadapter.onItemChildClickListener = itemclickListener(chatrecyclerview, this@HomeActivity)
         //表情！！！！！！！！！！
-        val emojiadapter = emoji(EmoticonUtil.emoticonData.toList())
-        emoticon.adapter = emojiadapter
-        emojiadapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
-            override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                val text = adapter!!.getViewByPosition(emoticon, position, android.R.id.text1) as TextView
-                val index = chatsendview.editText.getSelectionStart()
-                val editable = chatsendview.editText.text
-                editable.insert(index, text.text.toString())
-            }
-        }
-        emoticon.layoutManager = GridLayoutManager(this@HomeActivity, 7)
+        Emoji()
         //加载更多
+        adddownmore()
+        //对话信息
+        topmsg()
+        addmore.setOnClickListener {
+            val popWindow =  PopupWindow(this)
+            popWindow.contentView=layoutInflater.inflate(R.layout.addmoreitem,null)//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
+            popWindow.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.touming)))
+            popWindow.setFocusable(true)//是否获取焦点，默认为ture
+            popWindow .setOutsideTouchable(true)//是否PopupWindow 以外触摸dissmiss
+            popWindow .showAsDropDown(addmore,0,10)//显示PopupWindow
+        }
+
+    }
+
+    private fun topmsg() {
+        TIMFriendshipManagerExt.getInstance().getFriendsProfile(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
+            override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
+                if (p0?.size == null) return
+                chatname.text = p0[0].nickName
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+            }
+
+        })
+        TIMGroupManagerExt.getInstance().getGroupDetailInfo(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
+            override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
+                if (p0?.size == null) return
+                chatname.text = p0[0].groupName
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+            }
+
+        })
+    }
+
+    private fun adddownmore() {
         morelayout.setRefreshHeadView(RefreshView(this@HomeActivity))
         morelayout.setLoadMoreModel(LoadModel.NONE)
         morelayout.addEasyEvent(object : EasyRefreshLayout.EasyEvent {
@@ -221,28 +254,20 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 }).run()
             }
         })
-        //对话信息
-        TIMFriendshipManagerExt.getInstance().getFriendsProfile(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
-            override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                if(p0?.size==null)return
-                chatname.text=p0[0].nickName
+    }
+
+    private fun Emoji() {
+        val emojiadapter = emoji(EmoticonUtil.emoticonData.toList())
+        emoticon.adapter = emojiadapter
+        emojiadapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
+            override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+                val text = adapter!!.getViewByPosition(emoticon, position, android.R.id.text1) as TextView
+                val index = chatsendview.editText.getSelectionStart()
+                val editable = chatsendview.editText.text
+                editable.insert(index, text.text.toString())
             }
-
-            override fun onError(p0: Int, p1: String?) {
-            }
-
-        })
-        TIMGroupManagerExt.getInstance().getGroupDetailInfo(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
-            override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
-                if(p0?.size==null)return
-                chatname.text=p0[0].groupName
-            }
-
-            override fun onError(p0: Int, p1: String?) {
-            }
-
-        })
-
+        }
+        emoticon.layoutManager = GridLayoutManager(this@HomeActivity, 7)
     }
 
     private fun UpdataReadMessage() {
@@ -559,32 +584,31 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 
 
     fun updataview(data: Any, Type: Int, datatype: Int) {
-        val name:String?
-        val fdheadurl:String?
+        val name: String?
+        val fdheadurl: String?
         val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
-        if(Type==SHOW_MSG_TYPE){
-            name = sharedPreferences.getString(id+"fdname", "")
-            fdheadurl = sharedPreferences.getString(id+"fdheadurl", "")
-
-        }else{
+        if (Type == SHOW_MSG_TYPE) {
+            name = sharedPreferences.getString(id + "fdname", "")
+            fdheadurl = sharedPreferences.getString(id + "fdheadurl", "")
+        } else {
             name = sharedPreferences.getString("myname", "")
             fdheadurl = sharedPreferences.getString("myheadurl", "")
         }
 
-                val msglists = ArrayList<Msg>()
-                msglists.add(Msg(data, Type, datatype,UserInfoData(fdheadurl!!,name!!)))
-                if (!trun) {
-                    chatadapter.addData(0, msglists)
-                    chatadapter.notifyDataSetChanged()
+        val msglists = ArrayList<Msg>()
+        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!)))
+        if (!trun) {
+            chatadapter.addData(0, msglists)
+            chatadapter.notifyDataSetChanged()
 
-                } else {
-                    chatadapter.addData(chatadapter.itemCount, msglists)
-                    chatadapter.notifyDataSetChanged()
-                }
-                if (!trun2) {
-                    chatrecyclerview.scrollToPosition(chatadapter.itemCount - 1)
-                }
-                morelayout.refreshComplete()
+        } else {
+            chatadapter.addData(chatadapter.itemCount, msglists)
+            chatadapter.notifyDataSetChanged()
+        }
+        if (!trun2) {
+            chatrecyclerview.scrollToPosition(chatadapter.itemCount - 1)
+        }
+        morelayout.refreshComplete()
     }
 
 

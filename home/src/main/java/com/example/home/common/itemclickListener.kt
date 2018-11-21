@@ -8,6 +8,7 @@ import android.media.MediaPlayer
 import android.os.CountDownTimer
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
@@ -18,8 +19,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.home.R
 import com.example.home.Utils.ImgUtils
 import com.example.home.data.Sounddata
+import com.example.home.ui.activity.HomeActivity
+import com.example.home.ui.activity.PersonalhomeActivity
 import com.tencent.imsdk.TIMCallBack
 import com.tencent.imsdk.TIMFileElem
+import com.tencent.imsdk.TIMManager
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.ext.getsoundtime
@@ -29,6 +34,8 @@ import java.io.File
 import java.io.FileInputStream
 
 class itemclickListener(val chatrecyclerview:RecyclerView,val context:Activity): BaseQuickAdapter.OnItemChildClickListener {
+    val SEND_MSG_TYPE = 1
+    val SHOW_MSG_TYPE = 0
     override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
 
             //全部数据
@@ -153,6 +160,15 @@ class itemclickListener(val chatrecyclerview:RecyclerView,val context:Activity):
 
                     }
                     builder.show()
+
+                }
+                R.id.ches->{
+                    if((data.get(position) as Msg).type==SEND_MSG_TYPE){
+                        context.startActivity<PersonalhomeActivity>("id" to TIMManager.getInstance().loginUser)
+                    }else
+                    {
+                        context.startActivity<PersonalhomeActivity>("id" to (data[position] as Msg).userInfoData.id)
+                    }
 
                 }
 

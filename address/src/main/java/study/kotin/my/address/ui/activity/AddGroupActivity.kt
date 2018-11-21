@@ -38,6 +38,7 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
                                 val edit = getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
                                 edit.putString(p0 + "Gname", p1.get(0).groupName)
                                 edit.putString(p0 + "Gheadurl", p1.get(0).faceUrl)
+                                edit.putString(p0+"Gtype",p1[0].groupType)
                                 edit.apply()
                             }
 

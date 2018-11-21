@@ -38,6 +38,7 @@ import android.widget.*
 import com.ajguan.library.EasyRefreshLayout
 import com.ajguan.library.LoadModel
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.home.HomeAdapter.emoji
 import com.example.home.Utils.GifSizeFilter
@@ -54,9 +55,7 @@ import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import com.zhihu.matisse.filter.Filter
-import org.jetbrains.anko.AlertBuilder
-import org.jetbrains.anko.AlertBuilderFactory
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import study.kotin.my.baselibrary.ext.getsoundtime
 import study.kotin.my.baselibrary.utils.EmoticonUtil
 import study.kotin.my.baselibrary.utils.FileUtil
@@ -206,14 +205,48 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         adddownmore()
         //对话信息
         topmsg()
-        addmore.setOnClickListener {
-            val popWindow =  PopupWindow(this)
-            popWindow.contentView=layoutInflater.inflate(R.layout.addmoreitem,null)//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
-            popWindow.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.touming)))
-            popWindow.setFocusable(true)//是否获取焦点，默认为ture
-            popWindow .setOutsideTouchable(true)//是否PopupWindow 以外触摸dissmiss
-            popWindow .showAsDropDown(addmore,0,10)//显示PopupWindow
+        val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
+        if (id.substring(0, 5) == "@TGS#") {
+            val Gtype=sharedPreferences.getString("${id}Gtype","")
+            if(Gtype=="Public"){
+                addmore.text="社团信息"
+            }
+            else{
+                addmore.text="更多"
+                addmore.setOnClickListener { it ->
+                    val popWindow =  PopupWindow(this)
+                    val view = layoutInflater.inflate(R.layout.addmoreitem, null)
+                    popWindow.contentView=view//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
+                    popWindow.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.touming)))
+                    popWindow.setFocusable(true)//是否获取焦点，默认为ture
+                    popWindow .setOutsideTouchable(true)//是否PopupWindow 以外触摸dissmiss
+                    popWindow .showAsDropDown(addmore,0,10)//显示PopupWindow
+                    view.find<TextView>(R.id.iniv).setOnClickListener {
+                       ARouter.getInstance().build("/address/FriendActivity").withString("type","iniv").withString("Gid",id).navigation()
+                        finish()
+                    }
+                    view.find<TextView>(R.id.diss).setOnClickListener {
+                        TIMGroupManager.getInstance().quitGroup(id,object: TIMCallBack{
+                            override fun onSuccess() {
+                                toast("退出成功")
+                                finish()
+                            }
+
+                            override fun onError(p0: Int, p1: String?) {
+                                toast("退出失败$p1")
+                            }
+                        })
+
+                    }
+                }
+            }
+        } else {
+            addmore.text="设置"
+            addmore.setOnClickListener {
+                startActivity<PersonalChatSettingActivity>("id" to id)
+            }
         }
+
 
     }
 
@@ -586,17 +619,20 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
     fun updataview(data: Any, Type: Int, datatype: Int) {
         val name: String?
         val fdheadurl: String?
+        val fdid:String?
         val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
         if (Type == SHOW_MSG_TYPE) {
             name = sharedPreferences.getString(id + "fdname", "")
             fdheadurl = sharedPreferences.getString(id + "fdheadurl", "")
+            fdid=sharedPreferences.getString(id + "fdid", "")
         } else {
             name = sharedPreferences.getString("myname", "")
             fdheadurl = sharedPreferences.getString("myheadurl", "")
+            fdid=TIMManager.getInstance().loginUser
         }
 
         val msglists = ArrayList<Msg>()
-        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!)))
+        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!,fdid!!)))
         if (!trun) {
             chatadapter.addData(0, msglists)
             chatadapter.notifyDataSetChanged()

@@ -21,7 +21,7 @@ import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.OnClickListener {
     override fun onClick(v: View?) {
         when(v!!.id){
-            R.id.newgroup->startActivity<FriendActivity>()
+            R.id.newgroup->startActivity<FriendActivity>("type" to "creat")
         }
     }
 
@@ -35,22 +35,27 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.On
         iniinject()
         mpersenter.ss()
         newgroup.setOnClickListener(this)
+        showmygrouplist()
+
+    }
+
+    private fun showmygrouplist() {
         TIMGroupManagerExt.getInstance().getGroupList(object : TIMValueCallBack<MutableList<TIMGroupBaseInfo>> {
             override fun onSuccess(p0: MutableList<TIMGroupBaseInfo>?) {
-                if(p0?.size==null)return
+                if (p0?.size == null) return
                 val iterator = p0.iterator()
-                while (iterator.hasNext()){
-                    if (iterator.next().groupType=="Public"){
+                while (iterator.hasNext()) {
+                    if (iterator.next().groupType == "Public") {
                         iterator.remove()
                     }
                 }
                 val publicGroupAdapter = PublicGroupAdapter(p0)
-                mygroup.adapter= publicGroupAdapter
-                mygroup.layoutManager= LinearLayoutManager(this@AddressActivity)
-                publicGroupAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener{
+                mygroup.adapter = publicGroupAdapter
+                mygroup.layoutManager = LinearLayoutManager(this@AddressActivity)
+                publicGroupAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
                     override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                        if(adapter?.data?.size==null)return
-                        ARouter.getInstance().build("/home/HomeActivity").withString("id",(adapter.data[position] as TIMGroupBaseInfo).groupId).navigation()
+                        if (adapter?.data?.size == null) return
+                        ARouter.getInstance().build("/home/HomeActivity").withString("id", (adapter.data[position] as TIMGroupBaseInfo).groupId).navigation()
                     }
                 }
             }
@@ -58,7 +63,6 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.On
             override fun onError(p0: Int, p1: String?) {
             }
         })
-
     }
 
     private fun iniinject() {
@@ -66,4 +70,8 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.On
         mpersenter.mView=this
     }
 
+    override fun onResume() {
+        super.onResume()
+        showmygrouplist()
+    }
 }

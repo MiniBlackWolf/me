@@ -38,6 +38,9 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
             R.id.publicgroupjoin -> {
                 startActivity<PublicGroupActivity>()
             }
+            R.id.add->{
+                ARouter.getInstance().build("/home/searchactivity").navigation()
+            }
         }
     }
 

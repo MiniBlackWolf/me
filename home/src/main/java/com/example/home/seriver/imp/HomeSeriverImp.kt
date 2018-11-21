@@ -100,6 +100,7 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
                             val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
                             edit.putString(l.peer+"fdname", p0.get(0).nickName)
                             edit.putString(l.peer+"fdheadurl", p0.get(0).faceUrl)
+                            edit.putString(l.peer+"fdid", p0.get(0).identifier)
                             edit.apply()
                         }catch (e:IOException){
                             e.printStackTrace()
@@ -117,6 +118,7 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
                         val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
                         edit.putString(l.peer+"Gname", p0.get(0).groupName)
                         edit.putString(l.peer+"Gheadurl", p0.get(0).faceUrl)
+                        edit.putString(l.peer+"Gtype",p0[0].groupType)
                         edit.apply()
                     }
 

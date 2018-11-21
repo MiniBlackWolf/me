@@ -28,22 +28,27 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
         setContentView(R.layout.publicgroup)
         newgroup.setOnClickListener(this)
         //自己的社团
-        TIMGroupManagerExt.getInstance().getGroupList(object : TIMValueCallBack<MutableList<TIMGroupBaseInfo>>{
+        showmygrouplist()
+    }
+
+    private fun showmygrouplist() {
+        TIMGroupManagerExt.getInstance().getGroupList(object : TIMValueCallBack<MutableList<TIMGroupBaseInfo>> {
             override fun onSuccess(p0: MutableList<TIMGroupBaseInfo>?) {
-                if(p0?.size==null)return
+                if (p0?.size == null) return
                 val iterator = p0.iterator()
-                while (iterator.hasNext()){
-                    if (iterator.next().groupType=="ChatRoom"){
+                while (iterator.hasNext()) {
+                    if (iterator.next().groupType == "Private") {
                         iterator.remove()
                     }
                 }
                 val publicGroupAdapter = PublicGroupAdapter(p0)
-                mygroup.adapter= publicGroupAdapter
-                mygroup.layoutManager=LinearLayoutManager(this@PublicGroupActivity)
-                publicGroupAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener{
+                mygroup.adapter = publicGroupAdapter
+                mygroup.layoutManager = LinearLayoutManager(this@PublicGroupActivity)
+                publicGroupAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
                     override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                        if(adapter?.data?.size==null)return
-                        ARouter.getInstance().build("/home/HomeActivity").withString("id",(adapter.data[position] as TIMGroupBaseInfo).groupId).navigation()
+                        if (adapter?.data?.size == null) return
+                        ARouter.getInstance().build("/home/HomeActivity").withString("id", (adapter.data[position] as TIMGroupBaseInfo).groupId).navigation()
+
                     }
                 }
             }
@@ -51,6 +56,12 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
             override fun onError(p0: Int, p1: String?) {
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showmygrouplist()
+
     }
 
 }

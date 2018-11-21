@@ -13,6 +13,7 @@ import com.example.home.R
 import com.example.home.common.Msg
 import com.example.home.data.Sounddata
 import com.tencent.imsdk.TIMFileElem
+import study.kotin.my.baselibrary.common.CircleImageView
 import java.math.BigDecimal
 
 class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMultiItemQuickAdapter<Msg, BaseViewHolder>(data) {
@@ -36,6 +37,8 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
     }
 
     override fun convert(helper: BaseViewHolder, item: Msg) {
+        val ches=helper.getView<CircleImageView>(R.id.ches)
+        helper.addOnClickListener(R.id.ches)
         when (helper.itemViewType) {
             Msg.TYPE_RECEIVED -> {
                 helper.setText(R.id.myname,item.userInfoData.names)

@@ -10,12 +10,13 @@ public class Msg implements MultiItemEntity {
     private int type;
     private int datatype;
     private UserInfoData UserInfoData;
-//datatype 1:文本 2:图片 3：语音 4：文件
+
+    //datatype 1:文本 2:图片 3：语音 4：文件
     public Msg(Object content, int type, int datatype, UserInfoData UserInfoData) {
         this.content = content;
         this.type = type;
-        this.datatype=datatype;
-        this.UserInfoData=UserInfoData;
+        this.datatype = datatype;
+        this.UserInfoData = UserInfoData;
     }
 
     public com.example.home.data.UserInfoData getUserInfoData() {

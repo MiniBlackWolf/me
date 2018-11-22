@@ -69,7 +69,7 @@ class ImgUtils(val bmp: Bitmap, val context: Activity) {
         val sName = fileName.substring(fileName.lastIndexOf("."))
 
         // /sdcard/myFolder/temp_cropped.jpg
-        val newFilePath = FileUtil.getSDPath()+"/madengFolder"+ "/" + mName + "_cropped" + sName
+        val newFilePath = FileUtil.getSDPath()+"/madengFolder"+ "/" + mName + bmp.generationId + sName
         file = File(newFilePath)
         try {
             file.createNewFile()

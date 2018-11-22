@@ -98,7 +98,11 @@ class HomeSeriverImp @Inject constructor() : HomeSeriver {
                         if(p0?.size==null)return
                         try {
                             val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
-                            edit.putString(l.peer+"fdname", p0.get(0).nickName)
+                            if(p0.get(0).remark==null){
+                                edit.putString(l.peer+"fdname", p0.get(0).nickName)
+                            }else{
+                                edit.putString(l.peer+"fdname", p0.get(0).remark)
+                            }
                             edit.putString(l.peer+"fdheadurl", p0.get(0).faceUrl)
                             edit.putString(l.peer+"fdid", p0.get(0).identifier)
                             edit.apply()

@@ -27,6 +27,7 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.net.Uri
@@ -35,6 +36,7 @@ import android.provider.MediaStore
 import android.support.v7.widget.GridLayoutManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.graphics.drawable.toDrawable
 import com.ajguan.library.EasyRefreshLayout
 import com.ajguan.library.LoadModel
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -152,6 +154,19 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chatlayout)
         initinject()
+        val Bgpath = getSharedPreferences("boolen", Context.MODE_PRIVATE).getString("BGpath", "")
+        if (Bgpath != "") {
+            //压缩bitmap
+            val options=BitmapFactory.Options()
+            options.inJustDecodeBounds=true
+            BitmapFactory.decodeFile(Bgpath,options)
+            val ratio =Math.max(options.outWidth*1.0/1024f, options.outHeight*1.0/1024f)
+            options.inSampleSize=Math.ceil(ratio).toInt()
+            options.inJustDecodeBounds=false
+            val photoImg=BitmapFactory.decodeFile(Bgpath,options)
+            chatrecyclerview.background=BitmapDrawable(photoImg)
+        }
+
         //用户名获取
         val extras = intent.extras
         id = extras!!.get("id") as String
@@ -207,26 +222,25 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         topmsg()
         val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
         if (id.substring(0, 5) == "@TGS#") {
-            val Gtype=sharedPreferences.getString("${id}Gtype","")
-            if(Gtype=="Public"){
-                addmore.text="社团信息"
-            }
-            else{
-                addmore.text="更多"
+            val Gtype = sharedPreferences.getString("${id}Gtype", "")
+            if (Gtype == "Public") {
+                addmore.text = "社团信息"
+            } else {
+                addmore.text = "更多"
                 addmore.setOnClickListener { it ->
-                    val popWindow =  PopupWindow(this)
+                    val popWindow = PopupWindow(this)
                     val view = layoutInflater.inflate(R.layout.addmoreitem, null)
-                    popWindow.contentView=view//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
+                    popWindow.contentView = view//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
                     popWindow.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.touming)))
                     popWindow.setFocusable(true)//是否获取焦点，默认为ture
-                    popWindow .setOutsideTouchable(true)//是否PopupWindow 以外触摸dissmiss
-                    popWindow .showAsDropDown(addmore,0,10)//显示PopupWindow
+                    popWindow.setOutsideTouchable(true)//是否PopupWindow 以外触摸dissmiss
+                    popWindow.showAsDropDown(addmore, 0, 10)//显示PopupWindow
                     view.find<TextView>(R.id.iniv).setOnClickListener {
-                       ARouter.getInstance().build("/address/FriendActivity").withString("type","iniv").withString("Gid",id).navigation()
+                        ARouter.getInstance().build("/address/FriendActivity").withString("type", "iniv").withString("Gid", id).navigation()
                         finish()
                     }
                     view.find<TextView>(R.id.diss).setOnClickListener {
-                        TIMGroupManager.getInstance().quitGroup(id,object: TIMCallBack{
+                        TIMGroupManager.getInstance().quitGroup(id, object : TIMCallBack {
                             override fun onSuccess() {
                                 toast("退出成功")
                                 finish()
@@ -241,7 +255,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 }
             }
         } else {
-            addmore.text="设置"
+            addmore.text = "设置"
             addmore.setOnClickListener {
                 startActivity<PersonalChatSettingActivity>("id" to id)
             }
@@ -254,7 +268,12 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         TIMFriendshipManagerExt.getInstance().getFriendsProfile(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
                 if (p0?.size == null) return
-                chatname.text = p0[0].nickName
+                if(p0[0].remark==null){
+                    chatname.text = p0[0].nickName
+                }else{
+                    chatname.text = p0[0].remark
+                }
+
             }
 
             override fun onError(p0: Int, p1: String?) {
@@ -619,20 +638,20 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
     fun updataview(data: Any, Type: Int, datatype: Int) {
         val name: String?
         val fdheadurl: String?
-        val fdid:String?
+        val fdid: String?
         val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
         if (Type == SHOW_MSG_TYPE) {
             name = sharedPreferences.getString(id + "fdname", "")
             fdheadurl = sharedPreferences.getString(id + "fdheadurl", "")
-            fdid=sharedPreferences.getString(id + "fdid", "")
+            fdid = sharedPreferences.getString(id + "fdid", "")
         } else {
             name = sharedPreferences.getString("myname", "")
             fdheadurl = sharedPreferences.getString("myheadurl", "")
-            fdid=TIMManager.getInstance().loginUser
+            fdid = TIMManager.getInstance().loginUser
         }
 
         val msglists = ArrayList<Msg>()
-        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!,fdid!!)))
+        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!, fdid!!)))
         if (!trun) {
             chatadapter.addData(0, msglists)
             chatadapter.notifyDataSetChanged()

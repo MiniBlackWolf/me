@@ -1,82 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
-        <com.ajguan.library.EasyRefreshLayout
+    <com.ajguan.library.EasyRefreshLayout
         android:id="@+id/morelayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/emoticon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chatrecyclerview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/emoticon"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/chatrecyclerview"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/emoticon"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
-
-            </android.support.v7.widget.RecyclerView>
-        </com.ajguan.library.EasyRefreshLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/emoticon"
-            android:layout_width="0dp"
-            android:layout_height="137dp"
-            android:background="@color/background_gray1"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/chatsendview"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
         </android.support.v7.widget.RecyclerView>
+    </com.ajguan.library.EasyRefreshLayout>
 
-        <com.tencent.qcloud.ui.ChatInput
-            android:id="@+id/chatsendview"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:focusable="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="282dp"
-            app:layout_constraintBottom_toTopOf="@+id/morePanel"
-            />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/emoticon"
+        android:layout_width="0dp"
+        android:layout_height="137dp"
+        android:background="@color/background_gray1"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/chatsendview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <com.tencent.qcloud.ui.ChatInput
+        android:id="@+id/chatsendview"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:focusable="false"
+        app:layout_constraintBottom_toTopOf="@+id/morePanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="282dp" />
 
     <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:background="@color/mainred"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/linearLayout5"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="@color/mainred"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/chatfh"
-                android:layout_width="5dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="25dp"
-                android:layout_weight="0.3"
-                android:background="@drawable/h7" />
+        <ImageView
+            android:id="@+id/chatfh"
+            android:layout_width="5dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.3"
+            android:background="@drawable/h7" />
 
         <TextView
             android:id="@+id/chatname"
             android:layout_width="wrap_content"
             android:layout_height="57dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="5"
             android:gravity="center"
-            android:paddingRight="30dp"
             android:text="聊天"
             android:textColor="@color/text_normal" />
 
@@ -84,6 +86,7 @@
             android:id="@+id/addmore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_weight="0.3"
             android:text="更多"
             android:textColor="@color/background" />

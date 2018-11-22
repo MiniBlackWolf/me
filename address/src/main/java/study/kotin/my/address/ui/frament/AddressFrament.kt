@@ -38,7 +38,7 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
             R.id.publicgroupjoin -> {
                 startActivity<PublicGroupActivity>()
             }
-            R.id.add->{
+            R.id.add -> {
                 ARouter.getInstance().build("/home/searchactivity").navigation()
             }
         }
@@ -67,14 +67,20 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
     private fun generateData() {
         TIMFriendshipManagerExt.getInstance().getFriendList(object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-        //        val lv0Count = 3
+                //        val lv0Count = 3
                 val lv1Count = p0!!.size
                 val lv0name = arrayOf("我的好友", "其他好友", "设备")
                 val res = ArrayList<MultiItemEntity>()
                 //我的好友
                 val lv0 = AddressListLv0(lv0name[0], p0.size)
                 for (j in 0 until lv1Count) {
-                    val lv1 = AddressListLv1("", p0.get(j).nickName)
+                    val lv1: AddressListLv1
+                    if (p0.get(j).remark == null) {
+                        lv1 = AddressListLv1("", p0.get(j).nickName)
+                    }
+                    else {
+                        lv1 = AddressListLv1("", p0.get(j).remark)
+                    }
                     lv0.addSubItem(lv1)
                 }
                 res.add(lv0)

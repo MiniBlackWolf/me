@@ -41,7 +41,7 @@ class BottomNavBar @JvmOverloads constructor(context: Context, attrs: AttributeS
 
 
         //我的
-        val userItem = BottomNavigationItem(R.drawable.a4_2, "我的")
+        val userItem = BottomNavigationItem(R.drawable.ppx, "我的")
                 .setInactiveIconResource(R.drawable.a4)
                 .setActiveColorResource(R.color.mainred)
                 .setInActiveColorResource(R.color.text_normal)

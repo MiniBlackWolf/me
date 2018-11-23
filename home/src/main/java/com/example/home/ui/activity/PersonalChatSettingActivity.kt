@@ -20,9 +20,8 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.example.home.R
 import com.example.home.Utils.GifSizeFilter
 import com.example.home.persenter.HomePersenter
-import com.tencent.imsdk.TIMCallBack
-import com.tencent.imsdk.TIMImageElem
-import com.tencent.imsdk.TIMValueCallBack
+import com.tencent.imsdk.*
+import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.sns.TIMDelFriendType
 import com.tencent.imsdk.ext.sns.TIMFriendResult
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
@@ -146,8 +145,33 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
                 })
                 builder.show()
             }
-            R.id.chf->{
+            R.id.chf -> {
                 finish()
+            }
+            R.id.cleanmsg -> {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("是否删除好友?")
+                builder.setPositiveButton("确定", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        val con = TIMManager.getInstance().getConversation(TIMConversationType.Group, id)
+                        TIMConversationExt(con).deleteLocalMessage(object : TIMCallBack {
+                            override fun onSuccess() {
+                                toast("清空消息成功!")
+                            }
+
+                            override fun onError(p0: Int, p1: String?) {
+                            }
+                        })
+                        dialog!!.dismiss()
+                    }
+                })
+                builder.setNegativeButton("取消", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        dialog!!.dismiss()
+                    }
+                })
+                builder.show()
+
             }
         }
     }
@@ -196,6 +220,7 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
         Remarks.setOnClickListener(this)
         delfd.setOnClickListener(this)
         chf.setOnClickListener(this)
+        cleanmsg.setOnClickListener(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

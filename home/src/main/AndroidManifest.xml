@@ -13,5 +13,6 @@
         <activity android:name=".ui.activity.PersonalhomeActivity"/>
         <activity android:name=".ui.activity.ChatRecordActivity"/>
         <activity android:name=".ui.activity.ChatFileActivity"/>
+        <activity android:name=".ui.activity.PublicGroupmsgActivity"/>
     </application>
 </manifest>

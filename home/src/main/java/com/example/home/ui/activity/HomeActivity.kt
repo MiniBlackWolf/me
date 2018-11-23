@@ -157,14 +157,14 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         val Bgpath = getSharedPreferences("boolen", Context.MODE_PRIVATE).getString("BGpath", "")
         if (Bgpath != "") {
             //压缩bitmap
-            val options=BitmapFactory.Options()
-            options.inJustDecodeBounds=true
-            BitmapFactory.decodeFile(Bgpath,options)
-            val ratio =Math.max(options.outWidth*1.0/1024f, options.outHeight*1.0/1024f)
-            options.inSampleSize=Math.ceil(ratio).toInt()
-            options.inJustDecodeBounds=false
-            val photoImg=BitmapFactory.decodeFile(Bgpath,options)
-            chatrecyclerview.background=BitmapDrawable(photoImg)
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            BitmapFactory.decodeFile(Bgpath, options)
+            val ratio = Math.max(options.outWidth * 1.0 / 1024f, options.outHeight * 1.0 / 1024f)
+            options.inSampleSize = Math.ceil(ratio).toInt()
+            options.inJustDecodeBounds = false
+            val photoImg = BitmapFactory.decodeFile(Bgpath, options)
+            chatrecyclerview.background = BitmapDrawable(photoImg)
         }
 
         //用户名获取
@@ -225,6 +225,10 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             val Gtype = sharedPreferences.getString("${id}Gtype", "")
             if (Gtype == "Public") {
                 addmore.text = "社团信息"
+                addmore.setOnClickListener {
+                    startActivity<PublicGroupmsgActivity>("id" to id)
+                }
+
             } else {
                 addmore.text = "更多"
                 addmore.setOnClickListener { it ->
@@ -268,9 +272,9 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         TIMFriendshipManagerExt.getInstance().getFriendsProfile(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
                 if (p0?.size == null) return
-                if(p0[0].remark==null){
+                if (p0[0].remark == null) {
                     chatname.text = p0[0].nickName
-                }else{
+                } else {
                     chatname.text = p0[0].remark
                 }
 

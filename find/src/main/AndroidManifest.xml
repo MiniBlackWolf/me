@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="study.kotin.my.find" >
+    package="study.kotin.my.find">
     <application
         android:allowBackup="false"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        >
         <activity android:name="study.kotin.my.find.ui.Activity.RecruitActivity"
            />
     </application>

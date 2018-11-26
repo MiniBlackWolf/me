@@ -22,7 +22,7 @@ class Addresslistadapter(data: List<MultiItemEntity>) : BaseMultiItemQuickAdapte
             TYPE_LEVEL_0 -> {
                 val lv0 = item as AddressListLv0
                 helper.setText(R.id.groupname, lv0.groupname)
-                helper.setText(R.id.fdcount,"共${lv0.fdcount}人")
+                helper.setText(R.id.fdcount, "共${lv0.fdcount}人")
                 helper.itemView.setOnClickListener {
                     val pos = helper.adapterPosition
                     Log.d(TAG, "Level 0 item pos: " + pos)
@@ -43,7 +43,7 @@ class Addresslistadapter(data: List<MultiItemEntity>) : BaseMultiItemQuickAdapte
             TYPE_LEVEL_1 -> {
                 val lv1 = item as AddressListLv1
                 helper.setText(R.id.fdname, lv1.name)
-
+                helper.addOnClickListener(R.id.thissd)
             }
         }
     }

@@ -94,11 +94,11 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
                 TIMElemType.Image -> lastmsg = "图片"
                 TIMElemType.Sound -> lastmsg = "语音"
                 TIMElemType.Video -> lastmsg = "视频"
-                TIMElemType.GroupTips -> return
+                TIMElemType.GroupTips -> lastmsg = "群消息"
                 //  return new GroupTipMessage(message);
                 TIMElemType.File -> lastmsg = "文件"
-                TIMElemType.UGC -> return
-                else -> return
+                TIMElemType.UGC -> {}
+                else -> {}
             }
             val unreadMessageNum = TIMConversationExt(lists).unreadMessageNum
             val user = UserList("", "", lists.peer, lastmsg, unreadMessageNum.toInt(), s.get(0).timestamp().toString())

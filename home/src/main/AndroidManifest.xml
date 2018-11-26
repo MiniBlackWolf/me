@@ -14,5 +14,8 @@
         <activity android:name=".ui.activity.ChatRecordActivity"/>
         <activity android:name=".ui.activity.ChatFileActivity"/>
         <activity android:name=".ui.activity.PublicGroupmsgActivity"/>
+        <activity android:name=".ui.activity.AddActivity"/>
+        <activity android:name=".ui.activity.PublicGroupFarment_3_Article_Activity"/>
+        <activity android:name=".ui.activity.PublicGroupFarment_3_Setting_Activity"/>
     </application>
 </manifest>

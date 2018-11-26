@@ -110,9 +110,13 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 
     }
 
-    //文本信息
     var msglist = ArrayList<Msg>()
+    //群消息
+    override fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem) {
+        updataview(TIMGroupTipsElem, SHOW_MSG_TYPE, 5)
+    }
 
+    //文本信息
     override fun showtextmsg(TIMTextElem: TIMTextElem) {
         updataview(TIMTextElem.text.toString(), SHOW_MSG_TYPE, 1)
     }
@@ -536,13 +540,17 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                         }
                         TIMElemType.Video -> {
                         }
-                        TIMElemType.GroupTips -> return
+                        TIMElemType.GroupTips -> {
+                            list.add(longtimedata((element as TIMGroupTipsElem), p0.get(i).timestamp(), 5, p0.get(i).isSelf))
+                        }
                         //  return new GroupTipMessage(message);
                         TIMElemType.File -> {
                             list.add(longtimedata((element as TIMFileElem), p0.get(i).timestamp(), 4, p0.get(i).isSelf))
                         }
-                        TIMElemType.UGC -> return
-                        else -> return
+                        TIMElemType.UGC -> {
+                        }
+                        else -> {
+                        }
                     }
 
                 }
@@ -626,6 +634,11 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                         if (datas.isseft) {
                             updataview(datas.data as TIMFileElem, SEND_MSG_TYPE, 4)
                         } else updataview(datas.data as TIMFileElem, SHOW_MSG_TYPE, 4)
+                    }
+                    5->{
+                        if (datas.isseft) {
+                            updataview(datas.data as TIMGroupTipsElem, SEND_MSG_TYPE, 5)
+                        } else updataview(datas.data as TIMGroupTipsElem, SHOW_MSG_TYPE, 5)
                     }
 
                 }

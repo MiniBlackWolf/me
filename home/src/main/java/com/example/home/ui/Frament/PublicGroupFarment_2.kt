@@ -10,11 +10,12 @@ import android.widget.TextView
 import com.example.home.HomeAdapter.PublicGroupFarment_2_adapter
 import com.example.home.R
 import com.example.home.persenter.HomePersenter
+import com.example.home.ui.activity.PersonalhomeActivity
 import com.tencent.imsdk.TIMGroupMemberInfo
 import com.tencent.imsdk.TIMValueCallBack
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
-import kotlinx.android.synthetic.main.publicgroupitem_2.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.support.v4.startActivity
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 
 class PublicGroupFarment_2 : BaseMVPFragmnet<HomePersenter>() {
@@ -28,6 +29,9 @@ class PublicGroupFarment_2 : BaseMVPFragmnet<HomePersenter>() {
                 if (p0 == null) return
                 AllMembers.text = "共${p0.size}人"
                 val publicGroupFarment_2_adapter = PublicGroupFarment_2_adapter(p0)
+                publicGroupFarment_2_adapter.setOnItemClickListener { adapter, view, position ->
+                    startActivity<PersonalhomeActivity>("id" to p0[position].user)
+                }
                 Memberlist.adapter=publicGroupFarment_2_adapter
                 Memberlist.layoutManager=LinearLayoutManager(activity)
             }

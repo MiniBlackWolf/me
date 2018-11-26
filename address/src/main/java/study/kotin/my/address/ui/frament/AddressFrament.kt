@@ -76,10 +76,10 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
                 for (j in 0 until lv1Count) {
                     val lv1: AddressListLv1
                     if (p0.get(j).remark == null) {
-                        lv1 = AddressListLv1("", p0.get(j).nickName)
+                        lv1 = AddressListLv1("", p0.get(j).nickName,p0[j].identifier)
                     }
                     else {
-                        lv1 = AddressListLv1("", p0.get(j).remark)
+                        lv1 = AddressListLv1("", p0.get(j).remark,p0[j].identifier)
                     }
                     lv0.addSubItem(lv1)
                 }
@@ -87,14 +87,14 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
                 //其他好友
                 val lv0_1 = AddressListLv0(lv0name[1], 0)
                 for (j in 0 until 0) {
-                    val lv1 = AddressListLv1("", p0.get(j).nickName)
+                    val lv1 = AddressListLv1("", p0.get(j).nickName,p0[j].identifier)
                     lv0_1.addSubItem(lv1)
                 }
                 res.add(lv0_1)
                 //设备
                 val lv0_2 = AddressListLv0(lv0name[2], 0)
                 for (j in 0 until 0) {
-                    val lv1 = AddressListLv1("", p0.get(j).nickName)
+                    val lv1 = AddressListLv1("", p0.get(j).nickName,p0[j].identifier)
                     lv0_2.addSubItem(lv1)
                 }
                 res.add(lv0_2)
@@ -111,6 +111,10 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
 
     fun showview(lsit: ArrayList<MultiItemEntity>) {
         val addresslistadapter = Addresslistadapter(lsit)
+        addresslistadapter.setOnItemChildClickListener { adapter, view, position ->
+           val fdid= ( adapter.data[position] as AddressListLv1).id
+            ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id",fdid).navigation()
+        }
         addresslistadapter.addHeaderView(activity!!.layoutInflater.inflate(R.layout.addresshead, null))
         addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.groupjojn).setOnClickListener(this)
         addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.Friendjoin).setOnClickListener(this)

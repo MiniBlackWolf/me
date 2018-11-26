@@ -206,7 +206,8 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
                         }
                         TIMElemType.Video -> {
                         }
-                        TIMElemType.GroupTips -> return
+                        TIMElemType.GroupTips -> list.add(longtimedata((element as TIMGroupTipsElem), p0.get(i).timestamp(), 5, p0.get(i).isSelf))
+
                         //  return new GroupTipMessage(message);
                         TIMElemType.File -> {
                             list.add(longtimedata((element as TIMFileElem), p0.get(i).timestamp(), 4, p0.get(i).isSelf))
@@ -272,7 +273,7 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
             datalist.sortWith(Comparator<longtimedata> { o1, o2 ->
                 o1.time.compareTo(o2.time)
             })
-     //       datalist.reverse()
+            //       datalist.reverse()
             trun = false
 
             //循环更新视图
@@ -315,7 +316,11 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
                             updataview(datas.data as TIMFileElem, SEND_MSG_TYPE, 4)
                         } else updataview(datas.data as TIMFileElem, SHOW_MSG_TYPE, 4)
                     }
-
+                    5->{
+                        if (datas.isseft) {
+                            updataview(datas.data as TIMGroupTipsElem, SEND_MSG_TYPE, 5)
+                        } else updataview(datas.data as TIMGroupTipsElem, SHOW_MSG_TYPE, 5)
+                    }
                 }
             }
 
@@ -347,6 +352,6 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
             chatadapter.addData(chatadapter.itemCount, msglists)
             chatadapter.notifyDataSetChanged()
         }
-            chatrecord.scrollToPosition(chatadapter.itemCount - 1)
+        chatrecord.scrollToPosition(chatadapter.itemCount - 1)
     }
 }

@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
@@ -29,9 +28,7 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import com.zhihu.matisse.filter.Filter
-import kotlinx.android.synthetic.main.chatlayout.*
 import kotlinx.android.synthetic.main.personalchatsettingslayout.*
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -63,10 +60,10 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
                 }
 
             }
-            R.id.ChatRecord -> {
+            R.id.publicgroupcat -> {
                 startActivity<ChatRecordActivity>("id" to id)
             }
-            R.id.chatfile -> {
+            R.id.s2 -> {
                 startActivity<ChatFileActivity>("id" to id)
 
             }
@@ -150,10 +147,10 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
             }
             R.id.cleanmsg -> {
                 val builder = AlertDialog.Builder(this)
-                builder.setTitle("是否删除好友?")
+                builder.setTitle("是否清空消息记录?")
                 builder.setPositiveButton("确定", object : DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
-                        val con = TIMManager.getInstance().getConversation(TIMConversationType.Group, id)
+                        val con = TIMManager.getInstance().getConversation(TIMConversationType.C2C, id)
                         TIMConversationExt(con).deleteLocalMessage(object : TIMCallBack {
                             override fun onSuccess() {
                                 toast("清空消息成功!")
@@ -214,8 +211,8 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
     private fun initview() {
         id = intent.extras?.getString("id")
         Messagenotification.setOnClickListener(this)
-        ChatRecord.setOnClickListener(this)
-        chatfile.setOnClickListener(this)
+        publicgroupcat.setOnClickListener(this)
+        s2.setOnClickListener(this)
         chatbg.setOnClickListener(this)
         Remarks.setOnClickListener(this)
         delfd.setOnClickListener(this)

@@ -1,6 +1,8 @@
 package com.example.home.ui.Frament
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,9 @@ import com.tencent.imsdk.ext.group.TIMGroupSelfInfo
 import io.reactivex.internal.operators.flowable.FlowableSequenceEqual
 import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
+import com.tencent.imsdk.TIMCallBack
+import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
+
 
 class PublicGroupFarment_1 : BaseMVPFragmnet<HomePersenter>() {
     val id by lazy { activity?.intent?.extras?.getString("id") }
@@ -33,12 +38,32 @@ class PublicGroupFarment_1 : BaseMVPFragmnet<HomePersenter>() {
         edoks.setOnClickListener {
             edtxs.isEnabled = false
             edoks.isVisible = false
+            val param = TIMGroupManagerExt.ModifyGroupInfoParam(id!!)
+            param.setNotification(edtxs.text.toString())
+            TIMGroupManagerExt.getInstance().modifyGroupInfo(param, object : TIMCallBack {
+                override fun onError(code: Int, desc: String) {
+
+                }
+
+                override fun onSuccess() {
+
+                }
+            })
         }
         TIMGroupManagerExt.getInstance().getSelfInfo(id!!, object : TIMValueCallBack<TIMGroupSelfInfo> {
             override fun onSuccess(p0: TIMGroupSelfInfo?) {
                 if (p0 == null) return
                 edits.isVisible = p0.role == TIMGroupMemberRoleType.Admin || p0.role == TIMGroupMemberRoleType.Owner
 
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+            }
+        })
+        TIMGroupManagerExt.getInstance().getGroupDetailInfo(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
+            override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
+                if (p0 == null) return
+                edtxs.text= SpannableStringBuilder(p0[0].groupNotification)
             }
 
             override fun onError(p0: Int, p1: String?) {

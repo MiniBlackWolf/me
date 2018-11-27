@@ -12,7 +12,7 @@ class addfriendActivity : BaseMVPActivity<HomePersenter>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addfriendlayout)
         sendfdmsg.setOnClickListener{
-            
+
         }
     }
 }

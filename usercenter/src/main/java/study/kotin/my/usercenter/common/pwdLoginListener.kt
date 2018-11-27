@@ -49,11 +49,13 @@ class PwdLoginListener @Inject constructor(val context: Activity) : TLSPwdLoginL
     override fun OnPwdLoginFail(p0: TLSErrInfo?) {
         /* 登录失败，比如说密码错误，用户帐号不存在等，通过errInfo.ErrCode, errInfo.Title, errInfo.Msg等可以得到更具体的错误信息*/
         context.toast("${p0!!.Msg}")
+        (context as RegisterActivity).hideLoading()
     }
 
     override fun OnPwdLoginTimeout(p0: TLSErrInfo?) {
 // 密码登录过程中任意一步都可以到达这里，顾名思义，网络超时，可能是用户网络环境不稳定
         context.toast("登陆失败请检查网络连接!")
+        (context as RegisterActivity).hideLoading()
 }
 
 }

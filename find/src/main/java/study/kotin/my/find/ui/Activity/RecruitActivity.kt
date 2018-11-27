@@ -7,6 +7,9 @@ import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.find.R
 
 import study.kotin.my.find.presenter.Findpresenter
+import android.webkit.JavascriptInterface
+
+
 
 class RecruitActivity:BaseMVPActivity<Findpresenter>() {
 
@@ -16,5 +19,17 @@ class RecruitActivity:BaseMVPActivity<Findpresenter>() {
         people.loadUrl("http://192.168.1.101:9002/admin/job/jobFind.html")
         people.webViewClient= WebViewClient()
         people.settings.javaScriptEnabled=true
+        people.addJavascriptInterface(JSInterface(),"")
+    }
+}
+
+class JSInterface {
+
+    @JavascriptInterface
+    fun methodA() {
+    }
+
+    @JavascriptInterface
+    fun methodB(webMessage: String) {
     }
 }

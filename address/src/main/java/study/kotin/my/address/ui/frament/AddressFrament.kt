@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.alibaba.android.arouter.launcher.ARouter
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.tencent.imsdk.TIMUserProfile
@@ -24,6 +25,7 @@ import study.kotin.my.address.data.AddressListLv1
 import study.kotin.my.address.injection.commponent.DaggerAddressCommponent
 import study.kotin.my.address.injection.module.Addressmodule
 import study.kotin.my.address.ui.activity.AddressActivity
+import study.kotin.my.address.ui.activity.NewFriendActivity
 import study.kotin.my.address.ui.activity.PublicGroupActivity
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import java.util.*
@@ -33,7 +35,7 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
         when (v!!.id) {
             R.id.groupjojn -> startActivity<AddressActivity>()
             R.id.Friendjoin -> {
-                ARouter.getInstance().build("/home/searchactivity").navigation()
+                startActivity<NewFriendActivity>()
             }
             R.id.publicgroupjoin -> {
                 startActivity<PublicGroupActivity>()
@@ -49,6 +51,7 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
         initinject()
         val view = inflater.inflate(R.layout.addresspasge, container, false)
         // iniview(view)
+        view.find<TextView>(R.id.add).setOnClickListener(this)
         generateData()
         return view
     }

@@ -23,9 +23,13 @@ import study.kotin.my.mycenter.ui.activity.MyActivity
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
 import android.view.Display
+import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.ActivityUtils
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
+import study.kotin.my.mycenter.ui.activity.AllSettingActivity
 import study.kotin.my.mycenter.ui.activity.MyClassActivity
+import study.kotin.my.mycenter.ui.activity.VersionCheckActivity
 
 
 class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener {
@@ -42,31 +46,35 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.m1 -> activity!!.startActivity<MyClassActivity>()
-//            R.id.m2 -> activity!!.startActivity<>()
+            R.id.m2 -> ARouter.getInstance().build("/address/PublicGroupActivity").navigation()
 //            R.id.m3 ->activity!!.startActivity<>()
-//            R.id.m4 ->activity!!.startActivity<>()
-//            R.id.m5 ->activity!!.startActivity<>()
+            R.id.m4 -> activity!!.startActivity<AllSettingActivity>()
+            R.id.m5 -> activity!!.startActivity<VersionCheckActivity>()
 //            R.id.m6 ->activity!!.startActivity<>()
             R.id.m7 -> switchid()
             R.id.m8 -> activity!!.startActivity<MyActivity>()
-//            R.id.m9 ->activity!!.startActivity<>()
-//            R.id.m10 ->activity!!.startActivity<>()
+            R.id.m9 -> ActivityUtils.finishAllActivities()
+            //          R.id.m10 -> ActivityUtils.finishAllActivities()
 
         }
 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         val View = inflater.inflate(R.layout.mylayout, container, false)
+        initdagger()
         initOnClickListener(View)
         changid()
 
         return View
     }
- fun initdagger(){
-     DaggerMyCommponent.builder().activityCommpoent(mActivityComponent).mymodule(Mymodule()).build().inject(this)
 
- }
+    fun initdagger() {
+        DaggerMyCommponent.builder().activityCommpoent(mActivityComponent).mymodule(Mymodule()).build().inject(this)
+
+    }
+
     fun changid() {
         Bus.observe<UpdateChangIdEvent>()
                 .subscribe { t: UpdateChangIdEvent ->

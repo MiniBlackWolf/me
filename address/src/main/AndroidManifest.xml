@@ -9,6 +9,7 @@
             <activity android:name=".ui.activity.AddGroupActivity"/>
             <activity android:name=".ui.activity.PublicGroupActivity"/>
             <activity android:name=".ui.activity.FriendActivity"/>
+            <activity android:name=".ui.activity.NewFriendActivity"/>
         </application>
 
 

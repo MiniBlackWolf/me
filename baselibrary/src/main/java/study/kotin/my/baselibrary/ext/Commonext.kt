@@ -54,3 +54,13 @@ fun MediaPlayer.getsoundtime(path: String): Long {
     val duration = mediaPlayer.duration
     return duration.toLong()
 }
+
+fun Activity.setuserstting(key:String,value:Boolean){
+    val edit = getSharedPreferences("UserSetting", Context.MODE_PRIVATE).edit()
+    edit.putBoolean(key, value)
+    edit.apply()
+}
+fun Activity.getuserstting(key:String):Boolean{
+    val edit = getSharedPreferences("UserSetting", Context.MODE_PRIVATE)
+    return edit.getBoolean(key,false)
+}

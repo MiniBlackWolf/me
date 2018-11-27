@@ -17,7 +17,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.home.R
-import com.example.home.Utils.GifSizeFilter
 import com.example.home.persenter.HomePersenter
 import com.tencent.imsdk.*
 import com.tencent.imsdk.ext.message.TIMConversationExt
@@ -32,7 +31,10 @@ import kotlinx.android.synthetic.main.personalchatsettingslayout.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import study.kotin.my.baselibrary.ext.getuserstting
+import study.kotin.my.baselibrary.ext.setuserstting
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
+import study.kotin.my.baselibrary.utils.*
 
 class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
     var id: String? = ""
@@ -170,6 +172,24 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
                 builder.show()
 
             }
+            R.id.a1->{
+                if(a1.isChecked){
+                    setuserstting("disturb",true)
+                }else{
+
+                    setuserstting("disturb",false)
+                }
+
+            }
+            R.id.a2->{
+                if(a2.isChecked){
+                    setuserstting("Shield",true)
+                }else{
+
+                    setuserstting("Shield",false)
+                }
+
+            }
         }
     }
 
@@ -206,6 +226,10 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
         //备注名
         val fdname = getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${id}fdname", "")
         Remarksshow.text = fdname
+
+        a1.isChecked=getuserstting("disturb")
+        a2.isChecked=getuserstting("Shield")
+
     }
 
     private fun initview() {
@@ -218,6 +242,8 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
         delfd.setOnClickListener(this)
         chf.setOnClickListener(this)
         cleanmsg.setOnClickListener(this)
+        a1.setOnClickListener(this)
+        a2.setOnClickListener(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

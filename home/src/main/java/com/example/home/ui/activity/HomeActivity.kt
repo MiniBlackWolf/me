@@ -2,9 +2,7 @@ package com.example.home.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -36,14 +34,13 @@ import android.provider.MediaStore
 import android.support.v7.widget.GridLayoutManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.core.graphics.drawable.toDrawable
 import com.ajguan.library.EasyRefreshLayout
 import com.ajguan.library.LoadModel
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.home.HomeAdapter.emoji
-import com.example.home.Utils.GifSizeFilter
+import study.kotin.my.baselibrary.utils.GifSizeFilter
 import com.example.home.Utils.RefreshView
 import com.example.home.common.itemclickListener
 import com.example.home.data.Sounddata

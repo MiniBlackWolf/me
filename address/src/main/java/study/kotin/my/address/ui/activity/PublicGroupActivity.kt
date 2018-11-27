@@ -16,6 +16,7 @@ import study.kotin.my.address.R
 import study.kotin.my.address.adapter.PublicGroupAdapter
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 
+@Route(path = "/address/PublicGroupActivity")
 class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListener {
     override fun onClick(v: View?) {
         when(v!!.id){

@@ -8,9 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity;
 import study.kotin.my.mycenter.R;
+import study.kotin.my.mycenter.persenter.Mypersenter;
 
-public class AddCourseActivity extends AppCompatActivity {
+public class AddCourseActivity extends BaseMVPActivity<Mypersenter> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,7 @@ public class AddCourseActivity extends AppCompatActivity {
                             Integer.valueOf(day), Integer.valueOf(start), Integer.valueOf(end));
                     Intent intent = new Intent(AddCourseActivity.this, MyClassActivity.class);
                     intent.putExtra("course", course);
-
-                    setResult(0, intent);
+                    setResult(1, intent);
                     finish();
                 }
             }

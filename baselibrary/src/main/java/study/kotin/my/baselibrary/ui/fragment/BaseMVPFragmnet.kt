@@ -1,10 +1,16 @@
 package study.kotin.my.baselibrary.ui.fragment
 
+import android.app.Activity
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import org.jetbrains.anko.support.v4.act
+import org.jetbrains.anko.support.v4.toast
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.injection.commponent.ActivityCommpoent
 import study.kotin.my.baselibrary.injection.commponent.DaggerActivityCommpoent
@@ -17,15 +23,27 @@ import javax.inject.Inject
 open class BaseMVPFragmnet<T: Basepersenter<*>>:BaseFragment(),BaseView {
 
     lateinit var mActivityComponent: ActivityCommpoent
-
+    val dialog = ZLoadingDialog(BaseApplication.context)
     override fun showLoading() {
-
+        dialog.setLoadingBuilder(Z_TYPE.LEAF_ROTATE)//设置类型
+                .setLoadingColor(Color.WHITE)//颜色
+                .setHintText("Loading...")
+                .setHintTextSize(16f) // 设置字体大小 dp
+                .setHintTextColor(Color.WHITE)  // 设置字体颜色
+                .setDurationTime(0.5) // 设置动画时间百分比 - 0.5倍
+                .setDialogBackgroundColor(Color.parseColor("#5B000000")) // 设置背景色，默认白色
+                .setCancelable(false)
+                .setCanceledOnTouchOutside(false)
+                .show()
     }
 
     override fun hideLoading() {
+        dialog.dismiss()
     }
 
     override fun onError(text:String) {
+        toast("网络错误")
+        dialog.dismiss()
     }
     open fun onKeyBackPressed(): Boolean {
         return false

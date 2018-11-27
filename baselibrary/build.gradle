@@ -69,7 +69,11 @@ dependencies {
     api project(':presentation')
     api project(':ui')
     api 'com.github.chrisbanes:PhotoView:2.0.0'
-    api    'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+    api 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+    api 'com.blankj:utilcode:1.22.0'
+    //加载动画
+    api  'com.zyao89:zloading:1.2.0'
+    api 'jsc.kit.datetimepicker:DateTimePickerLibrary:0.4.8'
 }
 noArg {
     annotation("study.kotin.my.baselibrary.common.Poko")

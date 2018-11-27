@@ -25,5 +25,6 @@ class Findfragment : BaseMVPFragmnet<Findpresenter>(), Findview {
         WebView.webViewClient= WebViewClient()
         WebView.loadUrl("http://www.baidu.com")
         return view
+
     }
 }

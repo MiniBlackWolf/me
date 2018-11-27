@@ -21,8 +21,8 @@ import com.tencent.imsdk.ext.group.TIMGroupSelfInfo
 import com.tencent.imsdk.ext.message.TIMConversationExt
 import org.jetbrains.anko.startActivity
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt
-
-
+import study.kotin.my.baselibrary.ext.getuserstting
+import study.kotin.my.baselibrary.ext.setuserstting
 
 
 class PublicGroupFarment_3_Setting_Activity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
@@ -68,7 +68,7 @@ class PublicGroupFarment_3_Setting_Activity : BaseMVPActivity<HomePersenter>(), 
             R.id.s2 -> {
                 startActivity<ChatRecordActivity>("id" to id)
             }
-            R.id.cleanmsg->{
+            R.id.cleanmsg -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("是否清空消息记录?")
                 builder.setPositiveButton("确定", object : DialogInterface.OnClickListener {
@@ -92,12 +92,11 @@ class PublicGroupFarment_3_Setting_Activity : BaseMVPActivity<HomePersenter>(), 
                 })
                 builder.show()
             }
-            R.id.stopck->{
+            R.id.stopck -> {
                 val param = TIMGroupManagerExt.ModifyMemberInfoParam(id!!, TIMManager.getInstance().loginUser)
-                if(stopck.isChecked){
+                if (stopck.isChecked) {
                     param.setReceiveMessageOpt(TIMGroupReceiveMessageOpt.NotReceive)
-                }
-                else{
+                } else {
                     param.setReceiveMessageOpt(TIMGroupReceiveMessageOpt.ReceiveAndNotify)
                 }
                 TIMGroupManagerExt.getInstance().modifyMemberInfo(param, object : TIMCallBack {
@@ -110,6 +109,28 @@ class PublicGroupFarment_3_Setting_Activity : BaseMVPActivity<HomePersenter>(), 
                     }
                 })
 
+            }
+            R.id.a1 -> {
+                if(a1.isChecked){
+                    setuserstting("disturb",true)
+                }else{
+                    setuserstting("disturb",false)
+                }
+
+            }
+            R.id.a2 -> {
+                if(a1.isChecked){
+                    setuserstting("stick",true)
+                }else{
+                    setuserstting("stick",false)
+                }
+            }
+            R.id.a3 -> {
+                if(a3.isChecked){
+                    setuserstting("showcard",true)
+                }else{
+                    setuserstting("showcard",false)
+                }
             }
             R.id.ctf -> {
                 finish()
@@ -126,10 +147,17 @@ class PublicGroupFarment_3_Setting_Activity : BaseMVPActivity<HomePersenter>(), 
         s2.setOnClickListener(this)
         cleanmsg.setOnClickListener(this)
         stopck.setOnClickListener(this)
-        TIMGroupManagerExt.getInstance().getSelfInfo(id!!,object: TIMValueCallBack<TIMGroupSelfInfo>{
+        a1.setOnClickListener(this)
+        a2.setOnClickListener(this)
+        a3.setOnClickListener(this)
+        a1.isChecked = getuserstting("disturb")
+        a2.isChecked = getuserstting("stick")
+        a3.isChecked = getuserstting("showcard")
+        TIMGroupManagerExt.getInstance().getSelfInfo(id!!, object : TIMValueCallBack<TIMGroupSelfInfo> {
             override fun onSuccess(p0: TIMGroupSelfInfo?) {
-               val s= p0!!.recvOpt
-                stopck.isChecked = s==TIMGroupReceiveMessageOpt.NotReceive
+                val s = p0!!.recvOpt
+                stopck.isChecked = s == TIMGroupReceiveMessageOpt.NotReceive
+                publicgroupcattext.text = p0.nameCard
             }
 
             override fun onError(p0: Int, p1: String?) {

@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import kotlinx.android.synthetic.main.myclass_main.*
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.mycenter.R
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
@@ -29,10 +29,12 @@ class MyClassActivity : BaseMVPActivity<Mypersenter>() {
         setContentView(R.layout.myclass_main)
         initinject()
         //工具条
-
         //从数据库读取数据
         loadData()
         createLeftView()
+        addclass.setOnClickListener {
+            startActivityForResult<AddCourseActivity>(1)
+        }
     }
 
     //从数据库加载数据
@@ -127,16 +129,16 @@ class MyClassActivity : BaseMVPActivity<Mypersenter>() {
                 true
             }
             v.setOnClickListener {
-                v.visibility = View.GONE//先隐藏
-                day!!.removeView(v)//再移除课程视图
+//                v.visibility = View.GONE//先隐藏
+//                day!!.removeView(v)//再移除课程视图
                 val intent = Intent(this, AddCourseActivity::class.java)
-                startActivityForResult(intent, 0)
+                startActivityForResult(intent, 1)
             }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 0 && resultCode == 0 && data != null) {
+        if (requestCode == 1 && resultCode == 1 && data != null) {
             val course = data.getSerializableExtra("course") as Course
             //创建课程表左边视图(节数)
             createLeftView()
@@ -156,7 +158,7 @@ class MyClassActivity : BaseMVPActivity<Mypersenter>() {
         when (item.itemId) {
             R.id.add_courses -> {
                 val intent = Intent(this, AddCourseActivity::class.java)
-                startActivityForResult(intent, 0)
+                startActivityForResult(intent, 1)
             }
 
         }

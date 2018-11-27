@@ -87,24 +87,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:text="照片墙"
             android:textColor="@color/common_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ss"
-            app:layout_constraintHorizontal_bias="0.519"
+            app:layout_constraintHorizontal_bias="0.466"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.511" />
 
         <ImageView
             android:id="@+id/ss"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.309"
@@ -144,24 +141,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:text="头像"
             android:textColor="@color/common_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sss"
-            app:layout_constraintHorizontal_bias="0.424"
+            app:layout_constraintHorizontal_bias="0.405"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.511" />
 
         <ImageView
             android:id="@+id/sss"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.309"
@@ -183,7 +177,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout3"
+        android:id="@+id/z1"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -208,12 +202,11 @@
             app:layout_constraintVertical_bias="0.511" />
 
         <TextView
+            android:id="@+id/z1_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:text="不明"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -240,7 +233,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout4"
+        android:id="@+id/z2"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -248,15 +241,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/z1">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="昵称"
-            android:textColor="@color/common_black"
+            android:text="昵称*"
+            android:textColor="@color/btn_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.09"
@@ -265,12 +257,11 @@
             app:layout_constraintVertical_bias="0.511" />
 
         <TextView
+            android:id="@+id/z2_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:text="不明"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -297,7 +288,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout5"
+        android:id="@+id/z3"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -305,7 +296,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/z2">
 
         <TextView
             android:layout_width="wrap_content"
@@ -322,12 +313,11 @@
             app:layout_constraintVertical_bias="0.511" />
 
         <TextView
+            android:id="@+id/z3_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:text="无"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -354,7 +344,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout6"
+        android:id="@+id/z4"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -362,7 +352,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/z3">
 
         <TextView
             android:layout_width="wrap_content"
@@ -379,12 +369,11 @@
             app:layout_constraintVertical_bias="0.511" />
 
         <TextView
+            android:id="@+id/z4_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:text="不明"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -411,7 +400,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout7"
+        android:id="@+id/z5"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -419,7 +408,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
+        app:layout_constraintTop_toBottomOf="@+id/z4">
 
         <TextView
             android:layout_width="wrap_content"
@@ -436,12 +425,11 @@
             app:layout_constraintVertical_bias="0.511" />
 
         <TextView
+            android:id="@+id/z5_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:text="不明"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -468,7 +456,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout8"
+        android:id="@+id/z6"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -476,15 +464,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
+        app:layout_constraintTop_toBottomOf="@+id/z5">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:text="学校*"
-            android:textColor="@color/common_black"
+            android:textColor="@color/btn_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.09"
@@ -493,12 +480,11 @@
             app:layout_constraintVertical_bias="0.511" />
 
         <TextView
+            android:id="@+id/z6_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:text="不明"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -525,7 +511,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout9"
+        android:id="@+id/z7"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -533,15 +519,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout8">
+        app:layout_constraintTop_toBottomOf="@+id/z6">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:text="邮箱*"
-            android:textColor="@color/common_black"
+            android:textColor="@color/btn_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.09"
@@ -550,12 +535,11 @@
             app:layout_constraintVertical_bias="0.511" />
 
         <TextView
+            android:id="@+id/z7_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:text="不明"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -582,6 +566,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/z8"
         android:layout_width="match_parent"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -589,7 +574,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout9">
+        app:layout_constraintTop_toBottomOf="@+id/z7">
 
         <TextView
             android:layout_width="wrap_content"
@@ -606,12 +591,11 @@
             app:layout_constraintVertical_bias="0.511" />
 
         <TextView
+            android:id="@+id/z8_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:text="不明"
             app:layout_constraintBottom_toBottomOf="parent"

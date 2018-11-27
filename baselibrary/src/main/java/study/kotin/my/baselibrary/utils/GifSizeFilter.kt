@@ -1,19 +1,20 @@
-package com.example.home.Utils
+package study.kotin.my.baselibrary.utils
 
 
 import android.content.Context
 import android.graphics.Point
-import com.example.home.R
+
 
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.filter.Filter
 import com.zhihu.matisse.internal.entity.IncapableCause
 import com.zhihu.matisse.internal.entity.Item
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils
+import study.kotin.my.baselibrary.R
 
 import java.util.HashSet
 
-internal class GifSizeFilter(private val mMinWidth: Int, private val mMinHeight: Int, private val mMaxSize: Int) : Filter() {
+open class GifSizeFilter(private val mMinWidth: Int, private val mMinHeight: Int, private val mMaxSize: Int) : Filter() {
 
     public override fun constraintTypes(): Set<MimeType> {
         return object : HashSet<MimeType>() {

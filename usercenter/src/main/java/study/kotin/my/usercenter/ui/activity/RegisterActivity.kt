@@ -72,6 +72,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             userInfo = tlsHelper.lastUserInfo
             val hasLogin = userInfo != null && !tlsHelper.needLogin(userInfo.identifier)
             if (hasLogin) {
+                showLoading()
                 usersig = tlsHelper.getUserSig(userInfo.identifier)
                 tlsHelper.TLSRefreshUserSig(userInfo.identifier, RefreshUserSigListener(userInfo.identifier,usersig,this@RegisterActivity))
 
@@ -109,7 +110,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
                 toast("用户名不能为空")
                 return@setOnClickListener
             }
-
+            showLoading()
             val passByte = passworld.text.toString().toByteArray(Charsets.UTF_8)
             tlsHelper.TLSPwdLogin("86-${username.text}", passByte, pwdLoginListener)
 

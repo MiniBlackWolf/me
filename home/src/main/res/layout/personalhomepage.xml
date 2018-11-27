@@ -58,12 +58,12 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textView21"
+            android:id="@+id/tsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="220dp"
-            android:text="asdasdsadasd"
+            android:text="未知"
             android:textColor="@color/background"
             app:layout_constraintBottom_toBottomOf="@+id/textView20"
             app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +72,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView20" />
 
         <study.kotin.my.baselibrary.common.CircleImageView
-            android:id="@+id/circleImageView"
+            android:id="@+id/thead"
             android:layout_width="127dp"
             android:layout_height="111dp"
             android:layout_marginStart="8dp"
@@ -88,24 +88,24 @@
             app:srcCompat="@drawable/a4_2" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="镇魂女孩"
+            android:text="未知"
             android:textColor="@color/black"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/circleImageView"
+            app:layout_constraintTop_toBottomOf="@+id/thead"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/tsex"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
@@ -115,22 +115,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/circleImageView"
+            app:layout_constraintStart_toEndOf="@+id/tname"
+            app:layout_constraintTop_toBottomOf="@+id/thead"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/women" />
+            app:srcCompat="@drawable/unkownsex" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/tsite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="重庆"
+            android:text="未知"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/tname" />
 
         <TextView
             android:id="@+id/textView11"
@@ -151,12 +151,12 @@
             app:layout_constraintVertical_bias="0.525" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/tmadengid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="54645654"
+            android:text="未知"
             android:textColor="@color/background"
             app:layout_constraintBottom_toBottomOf="@+id/textView11"
             app:layout_constraintEnd_toEndOf="parent"
@@ -165,12 +165,12 @@
             app:layout_constraintTop_toTopOf="@+id/textView11" />
 
         <TextView
-            android:id="@+id/textView18"
+            android:id="@+id/tage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="44"
+            android:text="未知"
             android:textColor="@color/background"
             app:layout_constraintBottom_toBottomOf="@+id/textView15"
             app:layout_constraintEnd_toEndOf="parent"
@@ -215,12 +215,12 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textView16"
+            android:id="@+id/twork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="无"
+            android:text="未知"
             android:textColor="@color/background"
             app:layout_constraintBottom_toBottomOf="@+id/textView17"
             app:layout_constraintEnd_toEndOf="parent"
@@ -240,20 +240,21 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/send"
             android:layout_width="148dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/selector_button_orange"
-            android:text="发消息"
+            android:text="添加好友"
             android:textColor="@color/background"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.761"
-            app:layout_constraintStart_toEndOf="@+id/button"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
@@ -267,9 +268,9 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/frame"
             android:text="看动态"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.132"
+            app:layout_constraintEnd_toStartOf="@+id/send"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />

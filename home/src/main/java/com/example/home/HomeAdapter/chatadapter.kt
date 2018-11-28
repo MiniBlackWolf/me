@@ -81,28 +81,52 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     5 -> {
                         initview(helper)
                         ches.isVisible = false
-                        grouptip.isVisible= true
+                        grouptip.isVisible = true
                         val TIMGroupTipsElem = (item.content as TIMGroupTipsElem)
                         var Modify = ""
-                        when (TIMGroupTipsElem.groupInfoList[0].type) {
-                            TIMGroupTipsGroupInfoType.ModifyFaceUrl -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}变更了群头像"
+                        when (TIMGroupTipsElem.tipsType) {
+                            TIMGroupTipsType.Join -> {
+                                Modify = "用户${TIMGroupTipsElem.opUser}加入了群"
                             }
-                            TIMGroupTipsGroupInfoType.ModifyName -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}变更了群名字"
+                            TIMGroupTipsType.Kick -> {
+                                Modify = "用户${TIMGroupTipsElem.opUser}被踢出了群"
                             }
-                            TIMGroupTipsGroupInfoType.ModifyIntroduction -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}变更了群简介"
+                            TIMGroupTipsType.Quit -> {
+                                Modify = "用户${TIMGroupTipsElem.opUser}退出了群"
                             }
-                            TIMGroupTipsGroupInfoType.ModifyNotification -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}变更了群介绍"
+                            TIMGroupTipsType.SetAdmin -> {
+                                Modify = "用户${TIMGroupTipsElem.opUser}成为了管理"
                             }
-                            TIMGroupTipsGroupInfoType.ModifyOwner -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}变更了群主"
+                            TIMGroupTipsType.CancelAdmin -> {
+                                Modify = "用户${TIMGroupTipsElem.opUser}被取消了管理"
+                            }
+                            TIMGroupTipsType.ModifyGroupInfo -> {
+                                if (TIMGroupTipsElem.groupInfoList.size != 0) {
+                                    when (TIMGroupTipsElem.groupInfoList[0].type) {
+                                        TIMGroupTipsGroupInfoType.ModifyFaceUrl -> {
+                                            Modify = "用户${TIMGroupTipsElem.opUser}变更了群头像"
+                                        }
+                                        TIMGroupTipsGroupInfoType.ModifyName -> {
+                                            Modify = "用户${TIMGroupTipsElem.opUser}变更了群名字"
+                                        }
+                                        TIMGroupTipsGroupInfoType.ModifyIntroduction -> {
+                                            Modify = "用户${TIMGroupTipsElem.opUser}变更了群简介"
+                                        }
+                                        TIMGroupTipsGroupInfoType.ModifyNotification -> {
+                                            Modify = "用户${TIMGroupTipsElem.opUser}变更了群介绍"
+                                        }
+                                        TIMGroupTipsGroupInfoType.ModifyOwner -> {
+                                            Modify = "用户${TIMGroupTipsElem.opUser}变更了群主"
+                                        }
+                                        else -> {
+                                        }
+                                    }
+                                }
                             }
                             else -> {
                             }
                         }
+
                         helper.setText(R.id.grouptip, Modify)
                     }
                 }
@@ -157,7 +181,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
         filesize = helper.getView(R.id.filesize)
         grouptip = helper.getView(R.id.grouptip)
         ches = helper.getView(R.id.ches)
-        grouptip.isVisible= false
+        grouptip.isVisible = false
         filepackage.isVisible = false
         showimgmsgs.isVisible = false
         chatmsg2.isVisible = false

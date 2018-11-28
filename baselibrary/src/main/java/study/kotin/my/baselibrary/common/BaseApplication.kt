@@ -1,8 +1,11 @@
 package study.kotin.my.baselibrary.common
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Bundle
+import android.os.Handler
 import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
 import android.util.Log
@@ -22,6 +25,7 @@ import study.kotin.my.baselibrary.R
 import study.kotin.my.baselibrary.injection.commponent.AppCommpoent
 import study.kotin.my.baselibrary.injection.commponent.DaggerAppCommpoent
 import study.kotin.my.baselibrary.injection.module.AppModule
+import study.kotin.my.baselibrary.utils.Foreground
 
 
 class BaseApplication : MultiDexApplication() {
@@ -46,7 +50,7 @@ class BaseApplication : MultiDexApplication() {
                 }
             }
         }
-
+        registerActivityLifecycleCallbacks(Foreground.get())
     }
 
     private fun initjection() {
@@ -56,8 +60,6 @@ class BaseApplication : MultiDexApplication() {
     companion object {
         lateinit var context: Context
     }
-
-
 
 
 }

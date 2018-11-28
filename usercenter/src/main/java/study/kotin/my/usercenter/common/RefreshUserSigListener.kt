@@ -5,7 +5,9 @@ import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.tencent.imsdk.TIMCallBack
 import com.tencent.imsdk.TIMManager
+import com.tencent.qcloud.presentation.event.MessageEvent
 import org.jetbrains.anko.toast
+import study.kotin.my.baselibrary.utils.PushUtil
 import study.kotin.my.usercenter.ui.activity.RegisterActivity
 import tencent.tls.platform.TLSErrInfo
 import tencent.tls.platform.TLSRefreshUserSigListener
@@ -16,6 +18,8 @@ class RefreshUserSigListener(val id:String,val usersig:String,val activity: Acti
     override fun OnRefreshUserSigSuccess(p0: TLSUserInfo?) {
         TIMManager.getInstance().login(id, usersig, object : TIMCallBack {
             override fun onSuccess() {
+                PushUtil.instance
+                MessageEvent.getInstance()
                 ARouter.getInstance().build("/App/Homepage").navigation()
                 (activity as RegisterActivity).hideLoading()
                 activity.finish()

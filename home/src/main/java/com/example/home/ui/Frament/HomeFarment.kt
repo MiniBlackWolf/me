@@ -32,6 +32,7 @@ import com.tencent.imsdk.ext.message.TIMManagerExt
 import com.tencent.qcloud.presentation.presenter.ConversationPresenter
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView
 import kotlinx.android.synthetic.main.chatlayout.*
+import kotlinx.android.synthetic.main.homemain_layout.*
 import org.jetbrains.anko.support.v4.startActivity
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
@@ -83,25 +84,34 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
                 continue
             }
             val s = TIMConversationExt(lists).getLastMsgs(1)
-            when (s.get(0)!!.getElement(0).type) {
-                TIMElemType.Text, TIMElemType.Face -> {
-                    lastmsg = (s.get(0).getElement(0) as TIMTextElem).text
-                    if (lastmsg.length > 10) {
-                        val substring = lastmsg.substring(0, 10)
-                        lastmsg = ("$substring....")
+            var timestamp: String
+            if (s.size == 0) {
+                lastmsg = ""
+                timestamp = ""
+            } else {
+                when (s.get(0).getElement(0).type) {
+                    TIMElemType.Text, TIMElemType.Face -> {
+                        lastmsg = (s.get(0).getElement(0) as TIMTextElem).text
+                        if (lastmsg.length > 10) {
+                            val substring = lastmsg.substring(0, 10)
+                            lastmsg = ("$substring....")
+                        }
+                    }
+                    TIMElemType.Image -> lastmsg = "图片"
+                    TIMElemType.Sound -> lastmsg = "语音"
+                    TIMElemType.Video -> lastmsg = "视频"
+                    TIMElemType.GroupTips -> lastmsg = "群消息"
+                    //  return new GroupTipMessage(message);
+                    TIMElemType.File -> lastmsg = "文件"
+                    TIMElemType.UGC -> {
+                    }
+                    else -> {
                     }
                 }
-                TIMElemType.Image -> lastmsg = "图片"
-                TIMElemType.Sound -> lastmsg = "语音"
-                TIMElemType.Video -> lastmsg = "视频"
-                TIMElemType.GroupTips -> lastmsg = "群消息"
-                //  return new GroupTipMessage(message);
-                TIMElemType.File -> lastmsg = "文件"
-                TIMElemType.UGC -> {}
-                else -> {}
+                timestamp = s.get(0).timestamp().toString()
             }
             val unreadMessageNum = TIMConversationExt(lists).unreadMessageNum
-            val user = UserList("", "", lists.peer, lastmsg, unreadMessageNum.toInt(), s.get(0).timestamp().toString())
+            val user = UserList("", "", lists.peer, lastmsg, unreadMessageNum.toInt(), timestamp)
             userlist.add(user)
         }
 
@@ -171,7 +181,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     //消息列表
     fun RecyclerViewset1(userlist: LinkedHashSet<UserList>) {
         var noReadAllCount: Int = 0
-        val homeListAdapter = HomeListAdapter(mpersenter.context,userlist.toList())
+        val homeListAdapter = HomeListAdapter(mpersenter.context, userlist.toList())
 //        homeListAdapter.onItemChildClickListener  = object : BaseQuickAdapter.OnItemChildClickListener {
 //            override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
 //                startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
@@ -214,26 +224,36 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         chatlist2.layoutManager = linearLayoutManager
         chatlist2.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            var isSlidingToLast = false
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                Log.i("iii", dx.toString())
-                super.onScrolled(recyclerView, dx, dy)
+                super.onScrolled(recyclerView, dx, dy);
+                //dx用来判断横向滑动方向，dy用来判断纵向滑动方向
+                // dx>0:向右滑动,dx<0:向左滑动
+                // dy>0:向下滑动,dy<0:向上滑动
+                isSlidingToLast = dy > 0
+
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                val down = chatlist2.canScrollHorizontally(-1)
-                val up = chatlist2.canScrollHorizontally(1)
-                if (!down) {
-                    left.isVisible = false
-                    rigth.isVisible = true
+                super.onScrollStateChanged(recyclerView, newState); //设置什么布局管理器,就获取什么的布局管理器
+                val manager = recyclerView.getLayoutManager() as LinearLayoutManager// 当停止滑动时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) { //获取最后一个完全显示的ItemPosition ,角标值
+                    val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
+                    //所有条目,数量值
+                    val totalItemCount = manager.getItemCount();// 判断是否滚动到底部，并且是向右滚动
+                    if (lastVisibleItem == (totalItemCount - 1)) {
+                        //加载更多功能的代码 }
+                        rigth.isVisible = false
+                        left.isVisible = true
+                    } else {
+                        rigth.isVisible = true
+                        left.isVisible = false
+                    }
+
                 }
-                if (!up) {
-                    left.isVisible = true
-                    rigth.isVisible = false
-                }
-                super.onScrollStateChanged(recyclerView, newState)
             }
         })
-
     }
 
     private fun initlayout(view: View) {

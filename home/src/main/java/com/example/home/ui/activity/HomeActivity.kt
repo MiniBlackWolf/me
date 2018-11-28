@@ -52,6 +52,7 @@ import com.tencent.imsdk.*
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import com.tencent.imsdk.ext.message.TIMConversationExt
+import com.tencent.imsdk.ext.message.TIMManagerExt
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import com.zhihu.matisse.filter.Filter
 import org.jetbrains.anko.*
@@ -248,6 +249,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                         TIMGroupManager.getInstance().quitGroup(id, object : TIMCallBack {
                             override fun onSuccess() {
                                 toast("退出成功")
+                                TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
                                 finish()
                             }
 

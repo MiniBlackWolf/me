@@ -18,8 +18,14 @@ class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuic
     override fun convert(helper: BaseViewHolder?, item: UserList?) {
       //  helper!!.setText(R.id.peername, item!!.Name)
         helper!!.setText(R.id.lastmsg, item!!.msg)
-        val simpleDateFormat = SimpleDateFormat("MM月dd日 HH:mm")
-        val format = simpleDateFormat.format(Date(item.lastmsgtime.toLong()*1000))
+        val format:String
+        format = if(item.lastmsgtime!=""){
+            val simpleDateFormat = SimpleDateFormat("MM月dd日 HH:mm")
+            simpleDateFormat.format(Date(item.lastmsgtime.toLong()*1000))
+        }else{
+            ""
+        }
+
         helper.setText(R.id.lastmsgtime, format)
         val noreadmsg = helper.getView<TextView>(R.id.noreadmsg)
         if (item.noreadmsg != 0) {

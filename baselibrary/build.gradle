@@ -74,6 +74,8 @@ dependencies {
     //加载动画
     api  'com.zyao89:zloading:1.2.0'
     api 'jsc.kit.datetimepicker:DateTimePickerLibrary:0.4.8'
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-15'
+    api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-15'
 }
 noArg {
     annotation("study.kotin.my.baselibrary.common.Poko")

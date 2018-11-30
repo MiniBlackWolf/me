@@ -408,6 +408,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             //构筑消息
             val timImageElem = TIMImageElem()
             timImageElem.path = obtainPathResult.get(0)
+            timImageElem.level=0
             trun = true
             trun2 = false
             mpersenter.sendmessge(id, timImageElem)

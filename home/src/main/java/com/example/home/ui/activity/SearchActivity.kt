@@ -17,6 +17,7 @@ import com.tencent.imsdk.TIMValueCallBack
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import kotlinx.android.synthetic.main.searchlayout.*
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
@@ -45,9 +46,12 @@ class SearchActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
                         })
 
                     } else {
-                        TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf("86-$input"), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
+                        TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(input), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
                             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                                updataview(searchdata(p0!![0],"U"))
+                                if(p0==null){
+                                    return
+                                }
+                                updataview(searchdata(p0[0],"U"))
                             }
 
                             override fun onError(p0: Int, p1: String?) {
@@ -68,7 +72,14 @@ class SearchActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
         val searchAdapter = SearchAdapter(arrayListOf(p0))
         searchAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener{
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-
+                val data = adapter!!.data as List<searchdata>
+                if(data[position].type=="G"){
+                  val  ids=data[position].data as TIMGroupDetailInfo
+               //     startActivity<PersonalhomeActivity>("id" to ids.identifier)
+                }else{
+                    val  ids=data[position].data as TIMUserProfile
+                    startActivity<PersonalhomeActivity>("id" to ids.identifier)
+                }
             }
         }
         searchlstview.adapter = searchAdapter

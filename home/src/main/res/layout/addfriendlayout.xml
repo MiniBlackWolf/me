@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <LinearLayout
         android:id="@+id/linearLayout11"
@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3">
+        app:layout_constraintTop_toBottomOf="@+id/Remark">
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/Remark"
         android:layout_width="0dp"
         android:layout_height="43dp"
         android:layout_marginTop="8dp"
@@ -54,7 +54,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/Wording" />
 
     <LinearLayout
         android:id="@+id/top"
@@ -80,7 +80,7 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="286dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
@@ -157,7 +157,7 @@
         app:layout_constraintTop_toBottomOf="@+id/top" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/Wording"
         android:layout_width="0dp"
         android:layout_height="106dp"
         android:layout_marginTop="8dp"

@@ -13,9 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.TimerTask;
 
+import study.kotin.my.baselibrary.utils.FileUtil;
+
 /**
  * 录音的 Service
- *
+ * <p>
  * Created by developerHaoz on 2017/8/12.
  */
 
@@ -79,15 +81,23 @@ public class RecordingService extends Service {
     public void setFileNameAndPath() {
         int count = 0;
         File f;
+        count++;
+        mFileName = getString(R.string.profile_id)
+                + "_" + (System.currentTimeMillis()) + ".mp4";
+        try {
+            String path= Environment.getExternalStorageDirectory().getCanonicalPath()+"/madeng";
+            f = new File(path);
+            boolean mkdirs = f.mkdirs();
+            mFilePath = Environment.getExternalStorageDirectory().getCanonicalPath() + "/madeng/" + mFileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //     mFilePath += "/SoundRecorder/" + mFileName;
 
-        do {
-            count++;
-            mFileName = getString(R.string.profile_id)
-                    + "_" + (System.currentTimeMillis()) + ".mp4";
-            mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-            mFilePath += "/SoundRecorder/" + mFileName;
-            f = new File(mFilePath);
-        } while (f.exists() && !f.isDirectory());
+        f = new File(mFilePath);
+        f.exists();
+
+
     }
 
     public void stopRecording() {

@@ -15,6 +15,7 @@ open class BaseObserver<T>: Observer<T> {
     }
 
     override fun onError(e: Throwable) {
+        e.printStackTrace()
     }
 
 

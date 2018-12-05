@@ -12,16 +12,22 @@ import android.widget.EditText
 import androidx.core.view.isVisible
 import com.tencent.qalsdk.QALSDKManager
 import com.tencent.qcloud.sdk.Constant
+import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
+import retrofit2.Response
 import study.kotin.my.baselibrary.ext.passverify
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import study.kotin.my.usercenter.R
 import study.kotin.my.usercenter.common.PwdRegListener
 import study.kotin.my.usercenter.common.TextWatchers
+import study.kotin.my.usercenter.data.protocol.registerdata
 import study.kotin.my.usercenter.injection.commponent.DaggerUserCommponent
 import study.kotin.my.usercenter.injection.module.UserModule
 import study.kotin.my.usercenter.persenter.registerPersenter
+import study.kotin.my.usercenter.persenter.view.registerView
 import study.kotin.my.usercenter.ui.activity.RegisterActivity
 import tencent.tls.platform.TLSHelper
 
@@ -29,7 +35,27 @@ import tencent.tls.platform.TLSHelper
 import javax.inject.Inject
 
 
-class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>() {
+class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>(), registerView {
+    override fun LoginResult(result: Response<BaseResp<String>>) {
+
+    }
+
+    override fun sendSms(result: BaseResp<String>) {
+        if (result.success) {
+            toast("发送验证码成功")
+        } else {
+            toast(result.message)
+        }
+    }
+
+    override fun RegistResult(result: BaseResp<String>) {
+        if (result.success) {
+            toast("注册成功")
+        } else {
+            toast(result.message)
+        }
+    }
+
     lateinit var tlsHelper: TLSHelper
     lateinit var registerbutton: Button
     lateinit var setpassworld: EditText
@@ -61,6 +87,7 @@ class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>
 
     private fun passverify(view: View) {
         var a = 0
+        //发送验证码
         fsyzm.setOnClickListener {
             a++
             object : CountDownTimer(60000, 1000) {
@@ -78,16 +105,15 @@ class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>
             fsyzm.isEnabled = false
             fsyzm.isClickable = false
             Log.i("iiiiiiiii", "$a")
-            tlsHelper.TLSPwdRegAskCode("86-${phonenmber.text}", pwdRegListener)
+            mpersenter.sendsms(phonenmber.text.toString())
         }
-        yzm.onFocusChangeListener = TextWatchers(tlsHelper, pwdRegListener, yzm, 1,mpersenter.context)
+//        yzm.onFocusChangeListener = TextWatchers(tlsHelper, pwdRegListener, yzm, 1,mpersenter.context)
+        //注册按钮!!
         registerbutton.setOnClickListener {
-
-
             if (it.passverify(setpassworld.text.toString(), activity)) {
                 if (okpassworld.text.toString() == setpassworld.text.toString()) {
                     view.find<Button>(R.id.button3).isVisible = true
-                    tlsHelper.TLSPwdRegCommit(okpassworld.text.toString(), pwdRegListener);
+                    mpersenter.Regist(registerdata(phonenmber.text.toString(), okpassworld.text.toString()), yzm.text.toString())
                 } else activity!!.toast("两次密码不正确")
             }
 
@@ -99,6 +125,7 @@ class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>
         QALSDKManager.getInstance().setEnv(0)
         QALSDKManager.getInstance().init(mpersenter.context, Constant.SDK_APPID)
         tlsHelper = TLSHelper.getInstance().init(mpersenter.context, Constant.SDK_APPID.toLong())
+        mpersenter.mView = this
     }
 }
 

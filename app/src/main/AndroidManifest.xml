@@ -29,7 +29,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
 
-        <activity android:name="study.kotin.my.kotinstudy.ui.activity.MainActivity"></activity>
+        <activity android:name="study.kotin.my.kotinstudy.ui.activity.MainActivity"/>
         <activity android:name="study.kotin.my.usercenter.ui.activity.RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,11 +41,11 @@
         <service
             android:name="com.tencent.qalsdk.service.QalService"
             android:exported="true"
-            android:process=":QALSERVICE"></service>
+            android:process=":QALSERVICE"/>
         <service
             android:name="com.tencent.qalsdk.service.QalAssistService"
             android:exported="false"
-            android:process=":QALSERVICE"></service>
+            android:process=":QALSERVICE"/>
 
         <!-- 【必须】 离线消息广播接收器 -->
         <receiver
@@ -75,7 +75,6 @@
                 <action android:name="com.tencent.qalsdk.service.TASK_REMOVED" />
             </intent-filter>
         </receiver>
-
         <service android:name="com.example.home.Utils.RecordingService" />
     </application>
 </manifest>

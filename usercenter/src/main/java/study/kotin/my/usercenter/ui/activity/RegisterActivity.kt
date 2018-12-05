@@ -1,6 +1,7 @@
 package study.kotin.my.usercenter.ui.activity
 
 
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
@@ -30,6 +31,12 @@ import com.tencent.qcloud.presentation.event.MessageEvent
 import com.tencent.qcloud.presentation.event.RefreshEvent
 import com.tencent.qcloud.sdk.Constant
 import com.tencent.qcloud.ui.NotifyDialog
+import org.json.JSONObject
+import retrofit2.Response
+import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.protocol.BaseResp
+import study.kotin.my.baselibrary.utils.Base64Utils
+import study.kotin.my.baselibrary.utils.PushUtil
 import study.kotin.my.usercenter.common.PwdLoginListener
 import study.kotin.my.usercenter.common.RefreshUserSigListener
 import study.kotin.my.usercenter.ui.fragment.ResetFrament
@@ -40,6 +47,13 @@ import tencent.tls.platform.TLSUserInfo
 
 
 class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
+    override fun RegistResult(result: BaseResp<String>) {
+    }
+
+    override fun sendSms(result: BaseResp<String>) {
+    }
+
+
     lateinit var userInfo: TLSUserInfo
     // val publickey = "nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEwPS+nyBWgVYxxUbNcI5bQtN33OZ\\n9JjpUbmotPfkfGty3R4I9j4KoiVLXfY2m986TTK5w1yWbB3AURvSVnPOtA=="
     lateinit var tlsHelper: TLSHelper
@@ -53,13 +67,43 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
     var usersig: String = ""
 
 
-
-    override fun LoginResult(result: Boolean) {
-        if (result) {
-            toast("my").show()
-
+    override fun LoginResult(result: Response<BaseResp<String>>) {
+        if(result.body()==null){
+            toast("账号和密码错误")
+            hideLoading()
+            return
         }
+        val edit = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).edit()
+        edit.putString("sig", Base64Utils.getBase64(result.body()!!.sig))
+        edit.putString("jwt", Base64Utils.getBase64(result.body()!!.jwt))
+        edit.apply()
+        val fromBase64 = Base64Utils.getFromBase64(result.body()!!.jwt)
+        val length = fromBase64.length
+        val indexOf = fromBase64.indexOf("user_name")
+        val substring = fromBase64.substring(fromBase64.indexOf("name")+7, fromBase64.indexOf("name") + 13)
+        TIMlogin(substring, result.body()!!.sig)
+    }
 
+    private fun TIMlogin(user: String, sig: String) {
+        TIMManager.getInstance().login(user, sig, object : TIMCallBack {
+            override fun onSuccess() {
+                val edit = BaseApplication.context.getSharedPreferences("UserAcc", Context.MODE_PRIVATE).edit()
+                edit.putString("user", Base64Utils.getBase64(user))
+                edit.putString("pass", Base64Utils.getBase64(passworld.text.toString()))
+                edit.apply()
+                PushUtil.instance
+                MessageEvent.getInstance()
+                ARouter.getInstance().build("/App/Homepage").navigation()
+                hideLoading()
+                finish()
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+                Log.i("iiiiiiii", "eeeeeee")
+                hideLoading()
+                toast("登录失败请重试")
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,25 +111,31 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         setContentView(R.layout.main_activity)
         injectactivity()
         navToHome()
-        //----------------------
-        try {
-            userInfo = tlsHelper.lastUserInfo
-            val hasLogin = userInfo != null && !tlsHelper.needLogin(userInfo.identifier)
-            if (hasLogin) {
-                showLoading()
-                usersig = tlsHelper.getUserSig(userInfo.identifier)
-                tlsHelper.TLSRefreshUserSig(userInfo.identifier, RefreshUserSigListener(userInfo.identifier,usersig,this@RegisterActivity))
-
-            }
-        } catch (e: IllegalStateException) {
-            Log.e("erorr", "userInfo is null")
-           val userConfig  = TIMUserConfig()
-                   .groupSettings
+        val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)
+        val user = sharedPreferences.getString("user", "")
+        val sig = sharedPreferences.getString("sig", "")
+        if (user != "" && sig != "") {
+            showLoading()
+            TIMlogin(Base64Utils.getFromBase64(user!!),Base64Utils.getFromBase64(sig))
         }
 
+        //----------------------
+//        try {
+//            userInfo = tlsHelper.lastUserInfo
+//            val hasLogin = userInfo != null && !tlsHelper.needLogin(userInfo.identifier)
+//            if (hasLogin) {
+//                showLoading()
+//                usersig = tlsHelper.getUserSig(userInfo.identifier)
+        //            tlsHelper.TLSRefreshUserSig(userInfo.identifier, RefreshUserSigListener(userInfo.identifier,usersig,this@RegisterActivity))
+//
+//            }
+//        } catch (e: IllegalStateException) {
+//            Log.e("erorr", "userInfo is null")
+//           val userConfig  = TIMUserConfig()
+//                   .groupSettings
+//        }
+        //tlsHelper.TLSRefreshUserSig("admin", RefreshUserSigListener("test","eJw1j8FygjAURf*FbTslCJHQHS3U4kgt1UHoJhPNi43UgBhngE7-vTYj23MW99wfa71YPbCmkZwyTd2WW48Wsu4Nhq6RLVAmNLRX7GCMJwiNVnJQWgppHONHqW7iLPdXksblc5JFNiKnbVGJzRxSBEF*l0-LxfD9Usenp1mBQxX37*ewJ5kdJl-hktS*Wwp4zfJP1R2qw9ZO3tZzkXqD2s*yFQ*Gj01XLKPoMo7xipr8-0APIQeTieffpJZHMOGeG-hk6ozpbLerL0pT3Tdg-v7*AQwrUBo_",this@RegisterActivity))
         // 获取所有已登录用户
-
-
         //----------------
         changFragment()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -111,8 +161,9 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
                 return@setOnClickListener
             }
             showLoading()
-            val passByte = passworld.text.toString().toByteArray(Charsets.UTF_8)
-            tlsHelper.TLSPwdLogin("86-${username.text}", passByte, pwdLoginListener)
+            //          val passByte = passworld.text.toString().toByteArray(Charsets.UTF_8)
+            mpersenter.Login(username.text.toString(), passworld.text.toString())
+//            tlsHelper.TLSPwdLogin("86-${username.text}", passByte, pwdLoginListener)
 
             //            mpersenter.mView=this
 //            mpersenter.Login(username.text.toString(),passworld.text.toString())
@@ -170,6 +221,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
 
 
     }
+
     fun navToHome() {
         //登录之前要初始化群和好友关系链缓存
         var userConfig = TIMUserConfig()

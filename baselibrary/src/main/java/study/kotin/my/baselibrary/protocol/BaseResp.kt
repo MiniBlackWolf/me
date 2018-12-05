@@ -1,4 +1,4 @@
 package study.kotin.my.baselibrary.protocol
 
-class BaseResp<out T>(val status:Int,val message:String,val data:T) {
+class BaseResp<out T>(val success:Boolean,val message:String,val jwt:T,val sig:String) {
 }

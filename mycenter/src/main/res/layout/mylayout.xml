@@ -51,7 +51,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <study.kotin.my.baselibrary.common.CircleImageView
             android:id="@+id/pot"
             android:layout_width="59dp"
             android:layout_height="57dp"

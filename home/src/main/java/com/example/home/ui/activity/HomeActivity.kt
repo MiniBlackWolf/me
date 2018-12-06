@@ -225,39 +225,88 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
         if (id.substring(0, 5) == "@TGS#") {
             val Gtype = sharedPreferences.getString("${id}Gtype", "")
-            if (Gtype == "Public") {
-                addmore.text = "社团信息"
-                addmore.setOnClickListener {
-                    startActivity<PublicGroupmsgActivity>("id" to id)
-                }
+            if (Gtype == "") {
+                TIMGroupManagerExt.getInstance().getGroupDetailInfo(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
+                    override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
+                        if (p0?.size == null) return
+                        if (p0[0].groupType == "Public") {
+                            addmore.text = "社团信息"
+                            addmore.setOnClickListener {
+                                startActivity<PublicGroupmsgActivity>("id" to id)
+                            }
 
-            } else {
-                addmore.text = "更多"
-                addmore.setOnClickListener { it ->
-                    val popWindow = PopupWindow(this)
-                    val view = layoutInflater.inflate(R.layout.addmoreitem, null)
-                    popWindow.contentView = view//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
-                    popWindow.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.touming)))
-                    popWindow.setFocusable(true)//是否获取焦点，默认为ture
-                    popWindow.setOutsideTouchable(true)//是否PopupWindow 以外触摸dissmiss
-                    popWindow.showAsDropDown(addmore, 0, 10)//显示PopupWindow
-                    view.find<TextView>(R.id.iniv).setOnClickListener {
-                        ARouter.getInstance().build("/address/FriendActivity").withString("type", "iniv").withString("Gid", id).navigation()
-                        finish()
+                        } else {
+                            addmore.text = "更多"
+                            addmore.setOnClickListener { it ->
+                                val popWindow = PopupWindow(this@HomeActivity)
+                                val view = layoutInflater.inflate(R.layout.addmoreitem, null)
+                                popWindow.contentView = view//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
+                                popWindow.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.touming)))
+                                popWindow.setFocusable(true)//是否获取焦点，默认为ture
+                                popWindow.setOutsideTouchable(true)//是否PopupWindow 以外触摸dissmiss
+                                popWindow.showAsDropDown(addmore, 0, 10)//显示PopupWindow
+                                view.find<TextView>(R.id.iniv).setOnClickListener {
+                                    ARouter.getInstance().build("/address/FriendActivity").withString("type", "iniv").withString("Gid", id).navigation()
+                                    finish()
+                                }
+                                view.find<TextView>(R.id.diss).setOnClickListener {
+                                    TIMGroupManager.getInstance().quitGroup(id, object : TIMCallBack {
+                                        override fun onSuccess() {
+                                            toast("退出成功")
+                                            TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
+                                            finish()
+                                        }
+
+                                        override fun onError(p0: Int, p1: String?) {
+                                            toast("退出失败$p1")
+                                        }
+                                    })
+
+                                }
+                            }
+                        }
+
                     }
-                    view.find<TextView>(R.id.diss).setOnClickListener {
-                        TIMGroupManager.getInstance().quitGroup(id, object : TIMCallBack {
-                            override fun onSuccess() {
-                                toast("退出成功")
-                                TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
-                                finish()
-                            }
 
-                            override fun onError(p0: Int, p1: String?) {
-                                toast("退出失败$p1")
-                            }
-                        })
+                    override fun onError(p0: Int, p1: String?) {
+                    }
 
+                })
+            } else {
+                if (Gtype == "Public") {
+                    addmore.text = "社团信息"
+                    addmore.setOnClickListener {
+                        startActivity<PublicGroupmsgActivity>("id" to id)
+                    }
+
+                } else {
+                    addmore.text = "更多"
+                    addmore.setOnClickListener { it ->
+                        val popWindow = PopupWindow(this)
+                        val view = layoutInflater.inflate(R.layout.addmoreitem, null)
+                        popWindow.contentView = view//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
+                        popWindow.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.touming)))
+                        popWindow.setFocusable(true)//是否获取焦点，默认为ture
+                        popWindow.setOutsideTouchable(true)//是否PopupWindow 以外触摸dissmiss
+                        popWindow.showAsDropDown(addmore, 0, 10)//显示PopupWindow
+                        view.find<TextView>(R.id.iniv).setOnClickListener {
+                            ARouter.getInstance().build("/address/FriendActivity").withString("type", "iniv").withString("Gid", id).navigation()
+                            finish()
+                        }
+                        view.find<TextView>(R.id.diss).setOnClickListener {
+                            TIMGroupManager.getInstance().quitGroup(id, object : TIMCallBack {
+                                override fun onSuccess() {
+                                    toast("退出成功")
+                                    TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
+                                    finish()
+                                }
+
+                                override fun onError(p0: Int, p1: String?) {
+                                    toast("退出失败$p1")
+                                }
+                            })
+
+                        }
                     }
                 }
             }
@@ -408,7 +457,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             //构筑消息
             val timImageElem = TIMImageElem()
             timImageElem.path = obtainPathResult.get(0)
-            timImageElem.level=0
+            timImageElem.level = 0
             trun = true
             trun2 = false
             mpersenter.sendmessge(id, timImageElem)
@@ -635,7 +684,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                             updataview(datas.data as TIMFileElem, SEND_MSG_TYPE, 4)
                         } else updataview(datas.data as TIMFileElem, SHOW_MSG_TYPE, 4)
                     }
-                    5->{
+                    5 -> {
                         if (datas.isseft) {
                             updataview(datas.data as TIMGroupTipsElem, SEND_MSG_TYPE, 5)
                         } else updataview(datas.data as TIMGroupTipsElem, SHOW_MSG_TYPE, 5)

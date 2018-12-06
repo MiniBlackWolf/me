@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,6 +70,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
      * 初始化界面或刷新界面
      */
     override fun initView(conversationList: MutableList<TIMConversation>?) {
+        hz.finishRefresh()
         Log.i("iiiiii", "初始化界面或刷新界面")
     }
 
@@ -176,6 +178,18 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         mpersenter.getdatas()
         val homeRefreshView = HomeRefreshView(mpersenter.context)
         homeRefreshView.initview(chatlist2, hz) { conversationPresenter.getConversation() }
+        val list = TIMManagerExt.getInstance().conversationList
+        if(list.size==0){
+            RecyclerViewset1(LinkedHashSet<UserList>())
+            RecyclerViewset2(LinkedHashSet<UserList>())
+            hz.setOnRefreshListener {
+                hz.finishRefresh()
+            }
+        }else {
+            hz.setOnRefreshListener {
+                conversationPresenter.getConversation()
+            }
+        }
         hz.setRefreshHeader(homeRefreshView)
         hz.setHeaderMaxDragRate(4f)
 
@@ -186,6 +200,10 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     fun RecyclerViewset1(userlist: LinkedHashSet<UserList>) {
         var noReadAllCount: Int = 0
         val homeListAdapter = HomeListAdapter(mpersenter.context, userlist.toList())
+        val textView = TextView(activity)
+        textView.text="没有更多消息了哦"
+        textView.gravity= Gravity.CENTER
+        homeListAdapter.emptyView = textView
 //        homeListAdapter.onItemChildClickListener  = object : BaseQuickAdapter.OnItemChildClickListener {
 //            override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
 //                startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
@@ -235,16 +253,21 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     //消息上方列表
     fun RecyclerViewset2(userlist: LinkedHashSet<UserList>) {
         val chatListAdapter = ChatListAdapter(userlist.toList())
+        val textView = TextView(activity)
+        textView.text="没有更多社团了哦"
+        chatListAdapter.emptyView = textView
         chatListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
                 startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
             }
         }
-        hz.chatlistrc.adapter = chatListAdapter
+        val view=layoutInflater.inflate(R.layout.homerefreshhead,null)
+        val chatlistrc=view.find<RecyclerView>(R.id.chatlistrc)
+        chatlistrc.adapter = chatListAdapter
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        hz.chatlistrc.layoutManager = linearLayoutManager
-        hz.chatlistrc.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        chatlistrc.layoutManager = linearLayoutManager
+        chatlistrc.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             var isSlidingToLast = false
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

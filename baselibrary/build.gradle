@@ -76,6 +76,8 @@ dependencies {
     api 'jsc.kit.datetimepicker:DateTimePickerLibrary:0.4.8'
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-15'
     api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-15'
+    //图片加载
+    api "com.github.bumptech.glide:glide:4.8.0"
 }
 noArg {
     annotation("study.kotin.my.baselibrary.common.Poko")

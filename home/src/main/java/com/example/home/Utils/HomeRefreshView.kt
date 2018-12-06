@@ -45,7 +45,7 @@ class HomeRefreshView(context: Context) : ConstraintLayout(context), RefreshHead
     val views: View = LayoutInflater.from(context).inflate(R.layout.homerefreshhead, null)
     lateinit var recyclerView: RecyclerView
     val test1 = views.find<TextView>(R.id.test1)
-    open val chatlistrc = views.find<RecyclerView>(R.id.chatlistrc)
+    val chatlistrc = views.find<RecyclerView>(R.id.chatlistrc)
     lateinit var smartRefreshLayout: SmartRefreshLayout
     lateinit var updataview: () -> Unit
     val sus = views.find<ImageView>(R.id.sus)

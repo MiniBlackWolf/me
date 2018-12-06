@@ -10,6 +10,7 @@
         <activity android:name=".ui.activity.AddCourseActivity"/>
         <activity android:name=".ui.activity.AllSettingActivity"/>
         <activity android:name=".ui.activity.VersionCheckActivity"/>
+        <activity android:name=".ui.activity.changepassActivity"/>
     </application>
 </manifest>
 

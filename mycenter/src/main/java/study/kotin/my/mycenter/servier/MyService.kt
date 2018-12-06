@@ -1,7 +1,8 @@
 package study.kotin.my.mycenter.servier
 
-interface MyService {
-     fun aa() {
+import io.reactivex.Observable
+import study.kotin.my.baselibrary.protocol.BaseResp
 
-    }
+interface MyService {
+     fun Logout(): Observable<BaseResp<String>>
 }

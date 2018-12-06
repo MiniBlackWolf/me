@@ -21,7 +21,9 @@ import android.os.Build
 import android.os.Parcelable
 import android.util.Log
 import androidx.core.widget.toast
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.EncodeUtils
 import com.tencent.imsdk.*
 import com.tencent.qalsdk.QALSDKManager
 import com.tencent.qcloud.presentation.business.LoginBusiness
@@ -31,6 +33,7 @@ import com.tencent.qcloud.presentation.event.MessageEvent
 import com.tencent.qcloud.presentation.event.RefreshEvent
 import com.tencent.qcloud.sdk.Constant
 import com.tencent.qcloud.ui.NotifyDialog
+import org.jetbrains.anko.startActivity
 import org.json.JSONObject
 import retrofit2.Response
 import study.kotin.my.baselibrary.common.BaseApplication
@@ -44,10 +47,12 @@ import tencent.tls.platform.TLSErrInfo
 import tencent.tls.platform.TLSHelper
 import tencent.tls.platform.TLSRefreshUserSigListener
 import tencent.tls.platform.TLSUserInfo
+import java.io.IOException
 
-
+@Route(path = "/usercenter/RegisterActivity")
 class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
     override fun RegistResult(result: BaseResp<String>) {
+
     }
 
     override fun sendSms(result: BaseResp<String>) {
@@ -68,7 +73,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
 
 
     override fun LoginResult(result: Response<BaseResp<String>>) {
-        if(result.body()==null){
+        if (result.body() == null) {
             toast("账号和密码错误")
             hideLoading()
             return
@@ -77,10 +82,16 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         edit.putString("sig", Base64Utils.getBase64(result.body()!!.sig))
         edit.putString("jwt", Base64Utils.getBase64(result.body()!!.jwt))
         edit.apply()
-        val fromBase64 = Base64Utils.getFromBase64(result.body()!!.jwt)
-        val length = fromBase64.length
-        val indexOf = fromBase64.indexOf("user_name")
-        val substring = fromBase64.substring(fromBase64.indexOf("name")+7, fromBase64.indexOf("name") + 13)
+        var substring = ""
+        try {
+            val fromBase64 = EncodeUtils.base64Decode(result.body()!!.jwt)
+            val from = String(fromBase64)
+            substring = from.substring(from.indexOf("name") + 7, from.indexOf("name") + 13)
+        } catch (e: IllegalArgumentException) {
+            toast("发生未知错误请重试")
+            hideLoading()
+            e.printStackTrace()
+        }
         TIMlogin(substring, result.body()!!.sig)
     }
 
@@ -116,7 +127,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         val sig = sharedPreferences.getString("sig", "")
         if (user != "" && sig != "") {
             showLoading()
-            TIMlogin(Base64Utils.getFromBase64(user!!),Base64Utils.getFromBase64(sig))
+            TIMlogin(Base64Utils.getFromBase64(user!!), Base64Utils.getFromBase64(sig))
         }
 
         //----------------------

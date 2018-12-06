@@ -23,6 +23,9 @@ class Addresslistadapter(data: List<MultiItemEntity>) : BaseMultiItemQuickAdapte
                 val lv0 = item as AddressListLv0
                 helper.setText(R.id.groupname, lv0.groupname)
                 helper.setText(R.id.fdcount, "共${lv0.fdcount}人")
+                if(lv0.fdcount==0){
+                    return
+                }
                 helper.itemView.setOnClickListener {
                     val pos = helper.adapterPosition
                     Log.d(TAG, "Level 0 item pos: " + pos)

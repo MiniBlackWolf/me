@@ -10,6 +10,10 @@ import study.kotin.my.baselibrary.common.baseurl
 import java.util.concurrent.TimeUnit
 import okhttp3.Cookie
 import android.R.attr.host
+import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import study.kotin.my.baselibrary.common.BaseApplication
 
 
 class RetrofitFactory private constructor() {
@@ -47,11 +51,25 @@ class RetrofitFactory private constructor() {
                 .readTimeout(10, TimeUnit.SECONDS)
                 .cookieJar(object : CookieJar {
                     override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {
+                        val gson = Gson()
+                        val toJson = gson.toJson(cookies)
+                        BaseApplication.context.getSharedPreferences("userCookie",Context.MODE_PRIVATE).edit().putString(url.host(),toJson).apply()
                         cookieStore.put(url.host(), cookies)
                     }
 
                     override fun loadForRequest(url: HttpUrl): MutableList<Cookie> {
-                        val cookies = cookieStore[url.host()]
+                        val cookies:List<Cookie>?
+                        if(cookieStore.size==0){
+                            val gson = Gson()
+                            val string = BaseApplication.context.getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString(url.host(), "")
+                            if(string==""){
+                                return ArrayList()
+                            }
+                            val list = gson.fromJson(string,object:TypeToken<List<Cookie>>(){}.type) as List<Cookie>
+                            cookies= list
+                        }else{
+                            cookies = cookieStore[url.host()]
+                        }
                         return cookies?.toMutableList() ?: ArrayList()
                     }
                 })

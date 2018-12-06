@@ -25,14 +25,24 @@ import android.opengl.ETC1.getWidth
 import android.view.Display
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ActivityUtils
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
+import study.kotin.my.mycenter.persenter.view.MyView
 import study.kotin.my.mycenter.ui.activity.AllSettingActivity
 import study.kotin.my.mycenter.ui.activity.MyClassActivity
 import study.kotin.my.mycenter.ui.activity.VersionCheckActivity
 
 
-class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener {
+class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
+    override fun Logoutreslut(t: BaseResp<String>) {
+        if(t.success){
+            activity!!.getSharedPreferences("UserAcc",Context.MODE_PRIVATE).edit().clear().apply()
+            ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
+            activity!!.finish()
+        }
+    }
+
     lateinit var m1: TextView
     lateinit var m2: TextView
     lateinit var m3: TextView
@@ -53,7 +63,9 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener {
 //            R.id.m6 ->activity!!.startActivity<>()
             R.id.m7 -> switchid()
             R.id.m8 -> activity!!.startActivity<MyActivity>()
-            R.id.m9 -> ActivityUtils.finishAllActivities()
+            R.id.m9 -> {
+                mpersenter.Logout()
+            }
             //          R.id.m10 -> ActivityUtils.finishAllActivities()
 
         }
@@ -72,6 +84,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener {
 
     fun initdagger() {
         DaggerMyCommponent.builder().activityCommpoent(mActivityComponent).mymodule(Mymodule()).build().inject(this)
+        mpersenter.mView=this
 
     }
 

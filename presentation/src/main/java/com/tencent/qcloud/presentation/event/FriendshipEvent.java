@@ -10,6 +10,7 @@ import com.tencent.imsdk.ext.sns.TIMFriendGroup;
 import com.tencent.imsdk.ext.sns.TIMFriendshipProxyListener;
 import com.tencent.imsdk.ext.sns.TIMUserConfigSnsExt;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
@@ -31,6 +32,16 @@ public class FriendshipEvent extends Observable implements TIMFriendshipProxyLis
 
     public TIMUserConfig init(TIMUserConfig userConfig){
         TIMFriendshipSettings settings = new TIMFriendshipSettings();
+//        settings.addCustomTag("Tag_Profile_Custom_work");
+//        settings.addCustomTag("Tag_Profile_Custom_school");
+//        settings.addCustomTag("Tag_Profile_Custom_email");
+//        settings.addCustomTag("Tag_Profile_Custom_Label");
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("Tag_Profile_Custom_work");
+        strings.add("Tag_Profile_Custom_school");
+        strings.add("Tag_Profile_Custom_email");
+        strings.add("Tag_Profile_Custom_Label");
+        settings.setCustomTags(strings);
         userConfig.setFriendshipSettings(settings);
         return new TIMUserConfigSnsExt(userConfig)
                 .enableFriendshipStorage(true)

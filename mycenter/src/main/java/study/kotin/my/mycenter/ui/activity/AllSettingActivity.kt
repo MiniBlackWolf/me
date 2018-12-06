@@ -20,6 +20,7 @@ import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import com.zhihu.matisse.filter.Filter
 import kotlinx.android.synthetic.main.allsetting.*
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ext.setuserstting
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
@@ -62,6 +63,7 @@ class AllSettingActivity : BaseMVPActivity<Mypersenter>(), View.OnClickListener 
 
             }
             R.id.s5 -> {
+                startActivity<changepassActivity>()
             }
             R.id.s6_1 -> {
                 if (s6_1.isChecked) {

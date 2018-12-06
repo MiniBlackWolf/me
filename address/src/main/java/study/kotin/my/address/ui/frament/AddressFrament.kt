@@ -70,11 +70,8 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
     private fun generateData() {
         TIMFriendshipManagerExt.getInstance().getFriendList(object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                if(p0==null){
-                    return
-                }
                 //        val lv0Count = 3
-                val lv1Count = p0.size
+                val lv1Count = p0!!.size
                 val lv0name = arrayOf("我的好友", "其他好友", "设备")
                 val res = ArrayList<MultiItemEntity>()
                 //我的好友

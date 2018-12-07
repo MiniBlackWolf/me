@@ -9,6 +9,11 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.home.R
 import com.example.home.data.UserList
 import com.example.home.ui.activity.HomeActivity
+import com.tencent.imsdk.TIMFriendshipManager
+import com.tencent.imsdk.TIMUserProfile
+import com.tencent.imsdk.TIMValueCallBack
+import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
+import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import org.jetbrains.anko.startActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +21,7 @@ import java.util.*
 
 class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuickAdapter<UserList, BaseViewHolder>(R.layout.homechat, userList) {
     override fun convert(helper: BaseViewHolder?, item: UserList?) {
-      //  helper!!.setText(R.id.peername, item!!.Name)
+//        helper!!.setText(R.id.peername, item!!.Name)
         helper!!.setText(R.id.lastmsg, item!!.msg)
         val format:String
         format = if(item.lastmsgtime!=""){
@@ -40,14 +45,30 @@ class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuic
             context.startActivity<HomeActivity>("id" to item.Name)
 
         }
-        val name:String?
-        val sharedPreferences = context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
-        if (item.Name.substring(0, 5) == "@TGS#") {
-            name=sharedPreferences.getString("${item.Name}Gname","")
-        } else {
-            name=sharedPreferences.getString("${item.Name}fdname","")
-        }
-        helper.setText(R.id.peername,name)
+        TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.Name),object: TIMValueCallBack<MutableList<TIMUserProfile>>{
+            override fun onError(p0: Int, p1: String?) {
+
+            }
+
+            override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
+                if(p0==null)return
+                if(p0[0].remark==""){
+                    helper.setText(R.id.peername,p0[0].nickName)
+                }else{
+                    helper.setText(R.id.peername,p0[0].remark)
+                }
+
+            }
+        })
+        TIMGroupManagerExt.getInstance().getGroupPublicInfo(arrayListOf(item.Name),object: TIMValueCallBack<MutableList<TIMGroupDetailInfo>>{
+            override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
+                if(p0==null)return
+                helper.setText(R.id.peername,p0[0].groupName)
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+            }
+        })
     }
 
 }

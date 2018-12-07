@@ -12,10 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.home.R
 import com.example.home.common.Msg
 import com.example.home.data.Sounddata
-import com.tencent.imsdk.TIMFileElem
-import com.tencent.imsdk.TIMGroupTipsElem
-import com.tencent.imsdk.TIMGroupTipsGroupInfoType
-import com.tencent.imsdk.TIMGroupTipsType
+import com.tencent.imsdk.*
 import study.kotin.my.baselibrary.common.CircleImageView
 import java.math.BigDecimal
 
@@ -46,7 +43,21 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
         helper.addOnClickListener(R.id.ches)
         when (helper.itemViewType) {
             Msg.TYPE_RECEIVED -> {
-                helper.setText(R.id.myname, item.userInfoData.names)
+                TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.userInfoData.id),object: TIMValueCallBack<MutableList<TIMUserProfile>> {
+                    override fun onError(p0: Int, p1: String?) {
+
+                    }
+
+                    override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
+                        if(p0==null)return
+                        if(p0[0].remark==""){
+                            helper.setText(R.id.myname,p0[0].nickName)
+                        }else{
+                            helper.setText(R.id.myname,p0[0].remark)
+                        }
+
+                    }
+                })
                 when (item.datatype) {
                     1 -> {
                         initview(helper)

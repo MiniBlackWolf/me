@@ -25,6 +25,7 @@ import android.opengl.ETC1.getWidth
 import android.view.Display
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ActivityUtils
+import org.jetbrains.anko.support.v4.toast
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
@@ -35,11 +36,16 @@ import study.kotin.my.mycenter.ui.activity.VersionCheckActivity
 
 
 class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
+    override fun changePasswordreslut(t: BaseResp<String>) {
+    }
+
     override fun Logoutreslut(t: BaseResp<String>) {
         if(t.success){
             activity!!.getSharedPreferences("UserAcc",Context.MODE_PRIVATE).edit().clear().apply()
             ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
             activity!!.finish()
+        }else{
+            toast(t.message)
         }
     }
 

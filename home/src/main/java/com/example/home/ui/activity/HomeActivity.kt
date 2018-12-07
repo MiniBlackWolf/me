@@ -433,7 +433,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 //                .gridExpectedSize(resources.getDimensionPixelSize(R.dimen.grid_expected_size))
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                         .thumbnailScale(0.85f)
-                        .imageEngine(GlideEngine())
+                        .imageEngine(study.kotin.my.baselibrary.common.GlideEngine())
                         .forResult(1)
             }
             R.id.btn_file -> {

@@ -84,10 +84,6 @@ class RetrofitFactory private constructor() {
         }
     }
 
-    private fun setcookie() {
-
-
-    }
 
     fun <T> creat(service: Class<T>): T {
         return retrofit.create(service)

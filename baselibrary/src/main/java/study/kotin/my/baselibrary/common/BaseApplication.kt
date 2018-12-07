@@ -1,5 +1,6 @@
 package study.kotin.my.baselibrary.common
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
@@ -26,6 +27,11 @@ import study.kotin.my.baselibrary.injection.commponent.AppCommpoent
 import study.kotin.my.baselibrary.injection.commponent.DaggerAppCommpoent
 import study.kotin.my.baselibrary.injection.module.AppModule
 import study.kotin.my.baselibrary.utils.Foreground
+import android.Manifest.permission
+import android.Manifest.permission.WRITE_CALENDAR
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import com.blankj.utilcode.util.ActivityUtils
 
 
 class BaseApplication : MultiDexApplication() {
@@ -51,6 +57,7 @@ class BaseApplication : MultiDexApplication() {
             }
         }
         registerActivityLifecycleCallbacks(Foreground.get())
+;
     }
 
     private fun initjection() {

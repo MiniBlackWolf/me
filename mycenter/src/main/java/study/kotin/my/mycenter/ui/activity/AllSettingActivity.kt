@@ -58,12 +58,12 @@ class AllSettingActivity : BaseMVPActivity<Mypersenter>(), View.OnClickListener 
 //                .gridExpectedSize(resources.getDimensionPixelSize(R.dimen.grid_expected_size))
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                         .thumbnailScale(0.85f)
-                        .imageEngine(GlideEngine())
+                        .imageEngine(study.kotin.my.baselibrary.common.GlideEngine())
                         .forResult(1)
 
             }
             R.id.s5 -> {
-                startActivity<changepassActivity>()
+                startActivity<ChangepassActivity>()
             }
             R.id.s6_1 -> {
                 if (s6_1.isChecked) {

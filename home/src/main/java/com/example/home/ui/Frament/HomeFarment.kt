@@ -70,6 +70,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
      * 初始化界面或刷新界面
      */
     override fun initView(conversationList: MutableList<TIMConversation>?) {
+        mpersenter.getdatas()
         hz.finishRefresh()
         Log.i("iiiiii", "初始化界面或刷新界面")
     }
@@ -175,7 +176,6 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         initlayout(view)
         val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
-        mpersenter.getdatas()
         val homeRefreshView = HomeRefreshView(mpersenter.context)
         homeRefreshView.initview(chatlist2, hz) { conversationPresenter.getConversation() }
         val list = TIMManagerExt.getInstance().conversationList
@@ -215,10 +215,10 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
             let {
                 val id = userlist.toList().get(position).Name
                 if (id.substring(0, 5) == "@TGS#") {
-                    TIMManagerExt.getInstance().deleteConversation(TIMConversationType.Group, id)
+                    TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
                     ConversationPresenter(this).getConversation()
                 } else {
-                    TIMManagerExt.getInstance().deleteConversation(TIMConversationType.C2C, id)
+                    TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, id)
                     ConversationPresenter(this).getConversation()
                 }
             }

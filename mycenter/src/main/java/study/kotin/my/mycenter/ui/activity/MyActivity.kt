@@ -1,5 +1,6 @@
 package study.kotin.my.mycenter.ui.activity
 
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
@@ -19,21 +20,25 @@ import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.mycenter.R
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
-import study.kotin.my.mycenter.persenter.Mypersenter
-import study.kotin.my.mycenter.persenter.view.MyView
-import javax.inject.Inject
 import jsc.kit.datetimepicker.widget.DateTimePicker
 import java.text.SimpleDateFormat
 import java.util.*
 import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.protocol.BaseResp
+import study.kotin.my.mycenter.persenter.ChangeInfoperserter
+import study.kotin.my.mycenter.persenter.view.ChangeInfoview
 import kotlin.collections.HashMap
 
 
-class MyActivity : BaseMVPActivity<Mypersenter>(), MyView, View.OnClickListener {
-    override fun Logoutreslut(t: BaseResp<String>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.OnClickListener {
+    override fun Synchronizeinfo(result: BaseResp<String>) {
+        if (result.success) {
+
+        } else {
+            Log.e("eeeeeeeeee", result.message)
+        }
     }
+
 
     override fun onClick(v: View?) {
         when (v!!.id) {
@@ -122,6 +127,9 @@ class MyActivity : BaseMVPActivity<Mypersenter>(), MyView, View.OnClickListener 
                 setdatadialog("修改个人标签", z8_1)
             }
             R.id.done -> {
+                if (z1_1.text==null) {
+                    z1_1.text=" "
+                }
                 if (z2_1.text.toString() == "" && z2_1.text.toString() == "不明") {
                     toast("请填写昵称")
                     return
@@ -153,6 +161,11 @@ class MyActivity : BaseMVPActivity<Mypersenter>(), MyView, View.OnClickListener 
                 TIMFriendshipManager.getInstance().modifyProfile(param, object : TIMCallBack {
                     override fun onSuccess() {
                         ARouter.getInstance().build("/App/Homepage").navigation()
+                        val jwt=getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt","")
+                        if(jwt==""){
+                            return
+                        }
+                        mpersenter.Synchronizeinfo("Bearer "+jwt!!)
                         toast("修改成功")
                     }
 
@@ -204,7 +217,7 @@ class MyActivity : BaseMVPActivity<Mypersenter>(), MyView, View.OnClickListener 
         TIMFriendshipManager.getInstance().getSelfProfile(object : TIMValueCallBack<TIMUserProfile> {
             override fun onSuccess(p0: TIMUserProfile?) {
                 if (p0 == null) return
-           //     Glide.with(this@MyActivity).load("").preload()
+                //     Glide.with(this@MyActivity).load("").preload()
                 z1_1.text = p0.selfSignature
                 z2_1.text = p0.nickName
                 when {
@@ -244,6 +257,7 @@ class MyActivity : BaseMVPActivity<Mypersenter>(), MyView, View.OnClickListener 
 
     fun initinject() {
         DaggerMyCommponent.builder().activityCommpoent(activityCommpoent).mymodule(Mymodule()).build().inject(this)
+        mpersenter.mView = this
     }
 
 }

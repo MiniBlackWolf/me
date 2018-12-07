@@ -80,7 +80,7 @@ public class ConversationPresenter implements Observer {
         List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
         List<TIMConversation> result = new ArrayList<>();
         for (TIMConversation conversation : list){
-            if (conversation.getType() == TIMConversationType.System) continue;
+          //  if (conversation.getType() == TIMConversationType.System) continue;
             result.add(conversation);
             TIMConversationExt conversationExt = new TIMConversationExt(conversation);
             conversationExt.getMessage(1, null, new TIMValueCallBack<List<TIMMessage>>() {

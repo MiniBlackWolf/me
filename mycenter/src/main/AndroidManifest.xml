@@ -6,11 +6,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
         <activity android:name=".ui.activity.MyActivity"/>
-        <activity android:name=".ui.activity.MyClassActivity"/>
+        <activity android:name=".ui.activity.MyClassActivity"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity android:name=".ui.activity.AddCourseActivity"/>
         <activity android:name=".ui.activity.AllSettingActivity"/>
         <activity android:name=".ui.activity.VersionCheckActivity"/>
-        <activity android:name=".ui.activity.changepassActivity"/>
+        <activity android:name=".ui.activity.ChangepassActivity"
+            android:windowSoftInputMode="adjustPan"
+            />
     </application>
 </manifest>
 

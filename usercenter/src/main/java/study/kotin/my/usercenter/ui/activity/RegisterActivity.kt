@@ -1,6 +1,7 @@
 package study.kotin.my.usercenter.ui.activity
 
 
+import android.Manifest
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -19,10 +20,12 @@ import javax.inject.Inject
 import android.view.WindowManager
 import android.os.Build
 import android.os.Parcelable
+import android.support.v4.app.ActivityCompat
 import android.util.Log
 import androidx.core.widget.toast
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.tencent.imsdk.*
 import com.tencent.qalsdk.QALSDKManager
@@ -79,8 +82,8 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             return
         }
         val edit = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).edit()
-        edit.putString("sig", Base64Utils.getBase64(result.body()!!.sig))
-        edit.putString("jwt", Base64Utils.getBase64(result.body()!!.jwt))
+        edit.putString("sig", result.body()!!.sig)
+        edit.putString("jwt", result.body()!!.jwt)
         edit.apply()
         var substring = ""
         try {
@@ -120,6 +123,8 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA), 1)
         injectactivity()
         navToHome()
         val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)
@@ -127,7 +132,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         val sig = sharedPreferences.getString("sig", "")
         if (user != "" && sig != "") {
             showLoading()
-            TIMlogin(Base64Utils.getFromBase64(user!!), Base64Utils.getFromBase64(sig))
+            TIMlogin(Base64Utils.getFromBase64(user!!), sig!!)
         }
 
         //----------------------

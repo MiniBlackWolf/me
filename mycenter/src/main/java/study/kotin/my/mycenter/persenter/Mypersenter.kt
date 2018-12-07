@@ -26,4 +26,18 @@ class Mypersenter @Inject constructor() : Basepersenter<MyView>() {
             }
         },lifecycleProvider)
     }
+
+    fun changePassword(jwt: String, oldepsd: String, newpsd: String){
+        myServiceimp.changePassword(jwt, oldepsd, newpsd).excute(object:BaseObserver<BaseResp<String>>(){
+            override fun onNext(t: BaseResp<String>) {
+                mView.changePasswordreslut(t)
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+                BaseApplication.context.toast("修改密码失败")
+            }
+        },lifecycleProvider)
+
+    }
 }

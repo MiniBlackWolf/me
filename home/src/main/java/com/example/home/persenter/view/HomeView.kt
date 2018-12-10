@@ -8,13 +8,14 @@ import study.kotin.my.baselibrary.presenter.view.BaseView
 import java.io.FileInputStream
 
 interface HomeView:BaseView {
-    fun showtextmsg(TIMTextElem: TIMTextElem)
-    fun showimgmsg(bitmap: Bitmap)
-    fun showSoundmsg(path:String,time:Long)
-    fun showFilemsg( TIMFileElem: TIMFileElem)
+    fun showtextmsg(TIMTextElem: TIMTextElem,id:String)
+    fun showimgmsg(bitmap: Bitmap,id:String)
+    fun showSoundmsg(path:String,time:Long,id:String)
+    fun showFilemsg( TIMFileElem: TIMFileElem,id:String)
+    fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem,id:String)
     fun sendmsg()
     fun sendSoundmsg()
-    fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem)
+
 
 
 }

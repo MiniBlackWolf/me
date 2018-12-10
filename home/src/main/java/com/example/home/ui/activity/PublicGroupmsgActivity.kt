@@ -15,16 +15,15 @@ import android.widget.EditText
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.ActivityUtils
 import com.example.home.R
 import com.example.home.persenter.HomePersenter
 import com.example.home.ui.Frament.PublicGroupFarment_1
 import com.example.home.ui.Frament.PublicGroupFarment_2
 import com.example.home.ui.Frament.PublicGroupFarment_3
 import com.example.home.ui.Frament.PublicGroupFarment_4
-import com.tencent.imsdk.TIMCallBack
-import com.tencent.imsdk.TIMFriendshipManager
-import com.tencent.imsdk.TIMGroupManager
-import com.tencent.imsdk.TIMValueCallBack
+import com.tencent.imsdk.*
 import com.tencent.imsdk.ext.group.TIMGroupBaseInfo
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
@@ -96,64 +95,98 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                 popWindow.showAsDropDown(more, 0, 5)//显示PopupWindow
             }
             R.id.addjoin -> {
-                if(addjoin.text.toString()=="申请加入"){
-                    val builder = AlertDialog.Builder(this)
-                    builder.setTitle("申请理由")
-                    val editText = EditText(this)
-                    builder.setView(editText)
-                    builder.setPositiveButton("确定",object: DialogInterface.OnClickListener{
-                        override fun onClick(dialog: DialogInterface, which: Int) {
-                            if(editText.text.toString()==""){
-                                toast("申请理由不能是空！")
-                                return
-                            }else{
-                                TIMGroupManager.getInstance().applyJoinGroup(id!!,editText.text.toString(),object : TIMCallBack{
+                when {
+                    addjoin.text.toString()=="申请加入" -> {
+                        val builder = AlertDialog.Builder(this)
+                        builder.setTitle("申请理由")
+                        val editText = EditText(this)
+                        builder.setView(editText)
+                        builder.setPositiveButton("确定",object: DialogInterface.OnClickListener{
+                            override fun onClick(dialog: DialogInterface, which: Int) {
+                                if(editText.text.toString()==""){
+                                    toast("申请理由不能是空！")
+                                    return
+                                }else{
+                                    TIMGroupManager.getInstance().applyJoinGroup(id!!,editText.text.toString(),object : TIMCallBack{
+                                        override fun onSuccess() {
+                                            toast("申请成功！")
+                                        }
+
+                                        override fun onError(p0: Int, p1: String?) {
+                                            Log.e("eeeeeeee",p1)
+                                            toast("申请失败！$p1")
+                                        }
+                                    })
+
+                                }
+                                dialog.dismiss()
+                            }
+                        })
+                        builder.setNegativeButton("取消",object: DialogInterface.OnClickListener{
+                            override fun onClick(dialog: DialogInterface, which: Int) {
+                                dialog.dismiss()
+                            }
+                        })
+                        builder.show()
+                    }
+                    addjoin.text.toString()=="解散该群" -> {
+                        val builder = AlertDialog.Builder(this)
+                        builder.setTitle("真的要解散吗？")
+                        builder.setPositiveButton("确定",object: DialogInterface.OnClickListener{
+                            override fun onClick(dialog: DialogInterface, which: Int) {
+                                TIMGroupManager.getInstance().deleteGroup(id!!,object : TIMCallBack{
                                     override fun onSuccess() {
-                                        toast("申请成功！")
+                                        toast("解散成功！")
+                                        addjoin.text="申请加入"
+                                        ARouter.getInstance().build("/App/Homepage").navigation()
+                                        ActivityUtils.finishActivity(HomeActivity::class.java)
+                                        finish()
+
                                     }
 
                                     override fun onError(p0: Int, p1: String?) {
-                                        Log.e("eeeeeeee",p1)
-                                        toast("申请失败！$p1")
+                                        toast("解散失败！错误$p1")
                                     }
                                 })
-
+                                dialog.dismiss()
                             }
-                            dialog.dismiss()
-                        }
-                    })
-                    builder.setNegativeButton("取消",object: DialogInterface.OnClickListener{
-                        override fun onClick(dialog: DialogInterface, which: Int) {
-                            dialog.dismiss()
-                        }
-                    })
-                    builder.show()
-                }else{
-                    val builder = AlertDialog.Builder(this)
-                    builder.setTitle("真的要退出吗？")
-                    builder.setPositiveButton("确定",object: DialogInterface.OnClickListener{
-                        override fun onClick(dialog: DialogInterface, which: Int) {
-                            TIMGroupManager.getInstance().quitGroup(id!!,object : TIMCallBack{
-                                override fun onSuccess() {
-                                    toast("退出成功！")
-                                    addjoin.text="申请加入"
-                                }
-
-                                override fun onError(p0: Int, p1: String?) {
-                                    toast("退出失败！错误$p1")
-                                }
-                            })
-                            dialog.dismiss()
-                        }
-                    })
-                    builder.setNegativeButton("取消",object: DialogInterface.OnClickListener{
-                        override fun onClick(dialog: DialogInterface, which: Int) {
-                            dialog.dismiss()
-                        }
-                    })
-                    builder.show()
+                        })
+                        builder.setNegativeButton("取消",object: DialogInterface.OnClickListener{
+                            override fun onClick(dialog: DialogInterface, which: Int) {
+                                dialog.dismiss()
+                            }
+                        })
+                        builder.show()
 
 
+                    }
+                    else -> {
+                        val builder = AlertDialog.Builder(this)
+                        builder.setTitle("真的要退出吗？")
+                        builder.setPositiveButton("确定",object: DialogInterface.OnClickListener{
+                            override fun onClick(dialog: DialogInterface, which: Int) {
+                                TIMGroupManager.getInstance().quitGroup(id!!,object : TIMCallBack{
+                                    override fun onSuccess() {
+                                        toast("退出成功！")
+                                        addjoin.text="申请加入"
+                                    }
+
+                                    override fun onError(p0: Int, p1: String?) {
+                                        toast("退出失败！错误$p1")
+                                    }
+                                })
+                                dialog.dismiss()
+                            }
+                        })
+                        builder.setNegativeButton("取消",object: DialogInterface.OnClickListener{
+                            override fun onClick(dialog: DialogInterface, which: Int) {
+                                dialog.dismiss()
+                            }
+                        })
+                        builder.show()
+
+
+                    }
                 }
 
             }
@@ -206,24 +239,30 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                 var count =0
                 for(p in p0){
                     count++
-                    if(p.groupId==id){
+                    if(p.selfInfo.role==TIMGroupMemberRoleType.Admin&&p.selfInfo.role==TIMGroupMemberRoleType.Normal){
                         count++
                         addjoin.text="退出该群"
                         more.isVisible=true
                     }
-                }
-                if(count==p0.size){
-                    more.isVisible=false
-                    addjoin.text="申请加入"
-                    l3.setOnClickListener {
-                        guset.isVisible=true
-
+                    if(p.selfInfo.role==TIMGroupMemberRoleType.Owner){
+                        addjoin.text="解散该群"
+                        more.isVisible=true
                     }
-                    l4.setOnClickListener {
+                    if(p.selfInfo.role==TIMGroupMemberRoleType.NotMember){
+                        more.isVisible=false
+                        addjoin.text="申请加入"
+                        l3.setOnClickListener {
+                            guset.isVisible=true
 
-                        guset.isVisible=true
+                        }
+                        l4.setOnClickListener {
+
+                            guset.isVisible=true
+                        }
                     }
+
                 }
+
             }
 
             override fun onError(p0: Int, p1: String?) {

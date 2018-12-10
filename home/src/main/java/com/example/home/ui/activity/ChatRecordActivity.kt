@@ -158,7 +158,7 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
                     val element = p0.get(i).getElement(0)
                     when (element.type) {
                         TIMElemType.Text, TIMElemType.Face -> {
-                            list.add(longtimedata((element as TIMTextElem).text, p0.get(i).timestamp(), 1, p0.get(i).isSelf))
+                            list.add(longtimedata((element as TIMTextElem).text,p0.get(i).sender, p0.get(i).timestamp(), 1, p0.get(i).isSelf))
                         }
                         TIMElemType.Image -> {
                             for (image in (element as TIMImageElem).imageList) {
@@ -173,7 +173,7 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
                                     override fun onSuccess() {//成功，参数为图片数据
                                         //doSomething
                                         val bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(uuid))
-                                        list.add(longtimedata(bitmap, p0.get(i).timestamp(), 2, p0.get(i).isSelf))
+                                        list.add(longtimedata(bitmap,p0.get(i).sender, p0.get(i).timestamp(), 2, p0.get(i).isSelf))
                                         Log.d("imgs--d", "getImage success.")
                                     }
                                 })
@@ -184,7 +184,7 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
                             val string = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMSoundElem).uuid, "")
                             if (string != "") {
                                 val getsoundtime = MediaPlayer().getsoundtime(string!!)
-                                list.add(longtimedata(Sounddata(string, getsoundtime), p0.get(i).timestamp(), 3, p0.get(i).isSelf))
+                                list.add(longtimedata(Sounddata(string, getsoundtime),p0.get(i).sender,  p0.get(i).timestamp(), 3, p0.get(i).isSelf))
                                 continue@loop
                             }
 
@@ -192,7 +192,7 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
                             (element as TIMSoundElem).getSoundToFile(tempAudio.absolutePath, object : TIMCallBack {
                                 override fun onSuccess() {
                                     val getsoundtime = MediaPlayer().getsoundtime(tempAudio.canonicalPath)
-                                    list.add(longtimedata(Sounddata(tempAudio.absolutePath, getsoundtime), p0.get(i).timestamp(), 3, p0.get(i).isSelf))
+                                    list.add(longtimedata(Sounddata(tempAudio.absolutePath, getsoundtime),p0.get(i).sender,p0.get(i).timestamp(), 3, p0.get(i).isSelf))
                                     val edit = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).edit()
                                     edit.putString(element.uuid, tempAudio.absolutePath)
                                     edit.apply()
@@ -206,11 +206,11 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
                         }
                         TIMElemType.Video -> {
                         }
-                        TIMElemType.GroupTips -> list.add(longtimedata((element as TIMGroupTipsElem), p0.get(i).timestamp(), 5, p0.get(i).isSelf))
+                        TIMElemType.GroupTips -> list.add(longtimedata((element as TIMGroupTipsElem),p0.get(i).sender,  p0.get(i).timestamp(), 5, p0.get(i).isSelf))
 
                         //  return new GroupTipMessage(message);
                         TIMElemType.File -> {
-                            list.add(longtimedata((element as TIMFileElem), p0.get(i).timestamp(), 4, p0.get(i).isSelf))
+                            list.add(longtimedata((element as TIMFileElem),p0.get(i).sender,  p0.get(i).timestamp(), 4, p0.get(i).isSelf))
                         }
                         TIMElemType.UGC -> return
                         else -> return

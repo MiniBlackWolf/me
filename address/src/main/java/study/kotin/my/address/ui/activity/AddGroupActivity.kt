@@ -3,6 +3,7 @@ package study.kotin.my.address.ui.activity
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import com.blankj.utilcode.util.ActivityUtils
 import com.tencent.imsdk.TIMGroupManager
 import com.tencent.imsdk.TIMGroupMemberInfo
 import com.tencent.imsdk.TIMManager
@@ -47,6 +48,7 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
 
                         })
                         finish()
+                        ActivityUtils.finishActivity(PublicGroupActivity::class.java)
                         startActivity<PublicGroupActivity>()
 
                     }

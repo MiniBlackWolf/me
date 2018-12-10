@@ -32,7 +32,7 @@ object ImgMessge {
                     override fun onSuccess() {//成功，参数为图片数据
                         //doSomething
                         val bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(uuid))
-                        mview.showimgmsg(bitmap)
+                        mview.showimgmsg(bitmap,message.sender)
                         Log.d("imgs--d", "getImage success.")
                     }
                 })

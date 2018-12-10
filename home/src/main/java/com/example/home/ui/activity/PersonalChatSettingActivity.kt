@@ -20,6 +20,7 @@ import com.example.home.R
 import com.example.home.persenter.HomePersenter
 import com.tencent.imsdk.*
 import com.tencent.imsdk.ext.message.TIMConversationExt
+import com.tencent.imsdk.ext.message.TIMManagerExt
 import com.tencent.imsdk.ext.sns.TIMDelFriendType
 import com.tencent.imsdk.ext.sns.TIMFriendResult
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
@@ -124,6 +125,12 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
                                 .setUsers(arrayListOf(id))
                         TIMFriendshipManagerExt.getInstance().delFriend(param, object : TIMValueCallBack<MutableList<TIMFriendResult>> {
                             override fun onSuccess(p0: MutableList<TIMFriendResult>?) {
+                                if(p0==null){
+                                    ARouter.getInstance().build("/App/Homepage").navigation()
+                                    finish()
+                                    return
+                                }
+                                TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C,p0[0].identifer)
                                 toast("删除成功")
                                 ARouter.getInstance().build("/App/Homepage").navigation()
                             }

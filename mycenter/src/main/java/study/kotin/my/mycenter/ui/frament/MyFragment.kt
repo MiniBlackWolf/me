@@ -43,7 +43,6 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
         if(t.success){
             activity!!.getSharedPreferences("UserAcc",Context.MODE_PRIVATE).edit().clear().apply()
             ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
-            activity!!.finish()
         }else{
             toast(t.message)
         }

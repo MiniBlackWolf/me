@@ -71,13 +71,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/mainred"
+        android:background="@drawable/textcat"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ches"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.98"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chatnamebbb">
 
@@ -92,9 +92,10 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="TextView"
+            android:textColor="@android:color/background_light"
             android:textIsSelectable="true"
             android:textSize="18sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
@@ -187,5 +188,17 @@
             app:layout_constraintTop_toBottomOf="@+id/filaename"
             app:layout_constraintVertical_bias="0.636" />
     </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/dd"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/a_1"
+        app:layout_constraintBottom_toBottomOf="@+id/ches"
+        app:layout_constraintEnd_toStartOf="@+id/ches"
+        app:layout_constraintTop_toBottomOf="@+id/chatnamebbb" />
 
 </android.support.constraint.ConstraintLayout>

@@ -32,6 +32,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
     lateinit var filesize: TextView
     lateinit var ches: CircleImageView
     lateinit var grouptip: TextView
+    lateinit var dd:ImageView
 
     init {
         addItemType(Msg.TYPE_RECEIVED, R.layout.chatitem2)
@@ -39,10 +40,19 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
     }
 
     override fun convert(helper: BaseViewHolder, item: Msg) {
-        val ches = helper.getView<CircleImageView>(R.id.ches)
+        ches = helper.getView(R.id.ches)
         helper.addOnClickListener(R.id.ches)
         when (helper.itemViewType) {
             Msg.TYPE_RECEIVED -> {
+                chatpaly = helper.getView(R.id.chatpaly)
+                chatpaly2 = helper.getView(R.id.chatpaly2)
+                chatmsg2 = helper.getView(R.id.chatmsg2)
+                showimgmsgs = helper.getView(R.id.showimgmsgs)
+                filepackage = helper.getView(R.id.filepackage)
+                filaename = helper.getView(R.id.filaename)
+                filesize = helper.getView(R.id.filesize)
+                grouptip = helper.getView(R.id.grouptip)
+                dd = helper.getView(R.id.dd)
                 TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.userInfoData.id),object: TIMValueCallBack<MutableList<TIMUserProfile>> {
                     override fun onError(p0: Int, p1: String?) {
 
@@ -62,6 +72,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     1 -> {
                         initview(helper)
                         chatmsg2.isVisible = true
+                        dd.isVisible=true
                         ches.isVisible = true
                         helper.setText(R.id.chatmsg2, item.content as String)
                     }
@@ -145,11 +156,21 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
 
             }
             Msg.TYPE_SENT -> {
+                dd = helper.getView(R.id.dd)
+                chatbg = helper.getView(R.id.chatbg)
+                chatmsgs3 = helper.getView(R.id.chatmsgs3)
+                chatmsgs2 = helper.getView(R.id.chatmsgs2)
+                chatmsgs1 = helper.getView(R.id.chatmsgs1)
+                soundanm = helper.getView(R.id.soundanm)
+                filepackage = helper.getView(R.id.filepackage)
+                filaename = helper.getView(R.id.filaename)
+                filesize = helper.getView(R.id.filesize)
                 helper.setText(R.id.chatnamebbb, item.userInfoData.names)
                 when (item.datatype) {
                     1 -> {
                         initview2(helper)
                         chatmsgs1.isVisible = true
+                        dd.isVisible=true
                         helper.setText(R.id.chatmsgs1, item.content as String)
 
                     }
@@ -183,38 +204,22 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
     }
 
     fun initview(helper: BaseViewHolder) {
-        chatpaly = helper.getView(R.id.chatpaly)
-        chatpaly2 = helper.getView(R.id.chatpaly2)
-        chatmsg2 = helper.getView(R.id.chatmsg2)
-        showimgmsgs = helper.getView(R.id.showimgmsgs)
-        filepackage = helper.getView(R.id.filepackage)
-        filaename = helper.getView(R.id.filaename)
-        filesize = helper.getView(R.id.filesize)
-        grouptip = helper.getView(R.id.grouptip)
-        ches = helper.getView(R.id.ches)
         grouptip.isVisible = false
         filepackage.isVisible = false
         showimgmsgs.isVisible = false
         chatmsg2.isVisible = false
         chatpaly.isVisible = false
         chatpaly2.isVisible = false
-
+        dd.isVisible = false
     }
 
     fun initview2(helper: BaseViewHolder) {
-        chatbg = helper.getView(R.id.chatbg)
-        chatmsgs3 = helper.getView(R.id.chatmsgs3)
-        chatmsgs2 = helper.getView(R.id.chatmsgs2)
-        chatmsgs1 = helper.getView(R.id.chatmsgs1)
-        soundanm = helper.getView(R.id.soundanm)
-        filepackage = helper.getView(R.id.filepackage)
-        filaename = helper.getView(R.id.filaename)
-        filesize = helper.getView(R.id.filesize)
         filepackage.isVisible = false
         soundanm.isVisible = false
         chatmsgs1.isVisible = false
         chatmsgs2.isVisible = false
         chatmsgs3.isVisible = false
+        dd.isVisible = false
 //        chatbg.isVisible = false
     }
 

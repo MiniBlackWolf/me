@@ -89,7 +89,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             trun2 = false
             mpersenter.sendmessge(id, TIMSoundElem)
             //--updataview
-            updataview(Sounddata(adpath!!, adtime), SEND_MSG_TYPE, 3)
+            updataview(Sounddata(adpath!!, adtime), TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 3)
 
         }
     }
@@ -103,29 +103,29 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         //----updataview
         trun = true
         trun2 = false
-        updataview(chatsendview.editText.text.toString(), SEND_MSG_TYPE, 1)
+        updataview(chatsendview.editText.text.toString(), TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 1)
         chatsendview.editText.setText("")
 
     }
 
     var msglist = ArrayList<Msg>()
     //群消息
-    override fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem) {
-        updataview(TIMGroupTipsElem, SHOW_MSG_TYPE, 5)
+    override fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem,id:String) {
+        updataview(TIMGroupTipsElem, id,SHOW_MSG_TYPE, 5)
     }
 
     //文本信息
-    override fun showtextmsg(TIMTextElem: TIMTextElem) {
-        updataview(TIMTextElem.text.toString(), SHOW_MSG_TYPE, 1)
+    override fun showtextmsg(TIMTextElem: TIMTextElem,id:String) {
+        updataview(TIMTextElem.text.toString(),id, SHOW_MSG_TYPE, 1)
     }
 
     //图片信息
-    override fun showimgmsg(bitmap: Bitmap) {
-        updataview(bitmap, SHOW_MSG_TYPE, 2)
+    override fun showimgmsg(bitmap: Bitmap,id:String) {
+        updataview(bitmap,id, SHOW_MSG_TYPE, 2)
     }
 
     //语音消息
-    override fun showSoundmsg(path: String, time: Long) {
+    override fun showSoundmsg(path: String, time: Long,id:String) {
 //        try {
 //            MediaUtil.getInstance().play(soundfile)
 //            MediaUtil.getInstance().setEventListener(object : MediaUtil.EventListener {
@@ -142,12 +142,12 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 //        msglist.add(Msg("1", 0, 2))
 //        chatadapter.addData(msglist)
 //        chatadapter.notifyDataSetChanged()
-        updataview(Sounddata(path, time), SHOW_MSG_TYPE, 3)
+        updataview(Sounddata(path, time),id, SHOW_MSG_TYPE, 3)
     }
 
     //文件消息
-    override fun showFilemsg(TIMFileElem: TIMFileElem) {
-        updataview(TIMFileElem, SHOW_MSG_TYPE, 4)
+    override fun showFilemsg(TIMFileElem: TIMFileElem,id:String) {
+        updataview(TIMFileElem,id, SHOW_MSG_TYPE, 4)
 
 
     }
@@ -321,10 +321,10 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
     }
 
     private fun topmsg() {
-        TIMFriendshipManagerExt.getInstance().getFriendsProfile(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
+        TIMFriendshipManager .getInstance().getUsersProfile (arrayListOf(id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
                 if (p0?.size == null) return
-                if (p0[0].remark == null) {
+                if (p0[0].remark == "") {
                     chatname.text = p0[0].nickName
                 } else {
                     chatname.text = p0[0].remark
@@ -462,7 +462,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             trun2 = false
             mpersenter.sendmessge(id, timImageElem)
             //显示界面
-            updataview(bitmap, SEND_MSG_TYPE, 2)
+            updataview(bitmap,TIMManager.getInstance().loginUser, SEND_MSG_TYPE, 2)
             Log.d("Matisse", "mSelected: $obtainPathResult")
         }
         if (resultCode == Activity.RESULT_CANCELED) {
@@ -483,7 +483,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             trun = true
             trun2 = false
             mpersenter.sendmessge(id, timimgElem)
-            updataview(bitmap, SEND_MSG_TYPE, 2)
+            updataview(bitmap, TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 2)
         }
 
         if (requestCode == 99) {
@@ -505,7 +505,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             trun = true
             trun2 = false
             mpersenter.sendmessge(id, TIMFileElem)
-            updataview(TIMFileElem, SEND_MSG_TYPE, 4)
+            updataview(TIMFileElem, TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 4)
             Toast.makeText(this, file.toString(), Toast.LENGTH_SHORT).show()
         }
     }
@@ -541,7 +541,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                     val element = p0.get(i).getElement(0)
                     when (element.type) {
                         TIMElemType.Text, TIMElemType.Face -> {
-                            list.add(longtimedata((element as TIMTextElem).text, p0.get(i).timestamp(), 1, p0.get(i).isSelf))
+                            list.add(longtimedata((element as TIMTextElem).text,p0.get(i).sender, p0.get(i).timestamp(), 1, p0.get(i).isSelf))
                         }
                         TIMElemType.Image -> {
                             for (image in (element as TIMImageElem).imageList) {
@@ -556,7 +556,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                                     override fun onSuccess() {//成功，参数为图片数据
                                         //doSomething
                                         val bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(uuid))
-                                        list.add(longtimedata(bitmap, p0.get(i).timestamp(), 2, p0.get(i).isSelf))
+                                        list.add(longtimedata(bitmap,p0.get(i).sender, p0.get(i).timestamp(), 2, p0.get(i).isSelf))
                                         Log.d("imgs--d", "getImage success.")
                                     }
                                 })
@@ -567,7 +567,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                             val string = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMSoundElem).uuid, "")
                             if (string != "") {
                                 val getsoundtime = MediaPlayer().getsoundtime(string!!)
-                                list.add(longtimedata(Sounddata(string, getsoundtime), p0.get(i).timestamp(), 3, p0.get(i).isSelf))
+                                list.add(longtimedata(Sounddata(string, getsoundtime),p0.get(i).sender, p0.get(i).timestamp(), 3, p0.get(i).isSelf))
                                 continue@loop
                             }
 
@@ -575,7 +575,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                             (element as TIMSoundElem).getSoundToFile(tempAudio.absolutePath, object : TIMCallBack {
                                 override fun onSuccess() {
                                     val getsoundtime = MediaPlayer().getsoundtime(tempAudio.canonicalPath)
-                                    list.add(longtimedata(Sounddata(tempAudio.absolutePath, getsoundtime), p0.get(i).timestamp(), 3, p0.get(i).isSelf))
+                                    list.add(longtimedata(Sounddata(tempAudio.absolutePath, getsoundtime),p0.get(i).sender, p0.get(i).timestamp(), 3, p0.get(i).isSelf))
                                     val edit = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).edit()
                                     edit.putString(element.uuid, tempAudio.absolutePath)
                                     edit.apply()
@@ -590,11 +590,11 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                         TIMElemType.Video -> {
                         }
                         TIMElemType.GroupTips -> {
-                            list.add(longtimedata((element as TIMGroupTipsElem), p0.get(i).timestamp(), 5, p0.get(i).isSelf))
+                            list.add(longtimedata((element as TIMGroupTipsElem), p0.get(i).sender,p0.get(i).timestamp(), 5, p0.get(i).isSelf))
                         }
                         //  return new GroupTipMessage(message);
                         TIMElemType.File -> {
-                            list.add(longtimedata((element as TIMFileElem), p0.get(i).timestamp(), 4, p0.get(i).isSelf))
+                            list.add(longtimedata((element as TIMFileElem), p0.get(i).sender,p0.get(i).timestamp(), 4, p0.get(i).isSelf))
                         }
                         TIMElemType.UGC -> {
                         }
@@ -665,29 +665,29 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 when (datas.type) {
                     1 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as String, SEND_MSG_TYPE, 1)
-                        } else updataview(datas.data as String, SHOW_MSG_TYPE, 1)
+                            updataview(datas.data as String,datas.id, SEND_MSG_TYPE, 1)
+                        } else updataview(datas.data as String,datas.id, SHOW_MSG_TYPE, 1)
 
                     }
                     2 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as Bitmap, SEND_MSG_TYPE, 2)
-                        } else updataview(datas.data as Bitmap, SHOW_MSG_TYPE, 2)
+                            updataview(datas.data as Bitmap,datas.id, SEND_MSG_TYPE, 2)
+                        } else updataview(datas.data as Bitmap,datas.id, SHOW_MSG_TYPE, 2)
                     }
                     3 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as Sounddata, SEND_MSG_TYPE, 3)
-                        } else updataview(datas.data as Sounddata, SHOW_MSG_TYPE, 3)
+                            updataview(datas.data as Sounddata,datas.id, SEND_MSG_TYPE, 3)
+                        } else updataview(datas.data as Sounddata,datas.id, SHOW_MSG_TYPE, 3)
                     }
                     4 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as TIMFileElem, SEND_MSG_TYPE, 4)
-                        } else updataview(datas.data as TIMFileElem, SHOW_MSG_TYPE, 4)
+                            updataview(datas.data as TIMFileElem,datas.id, SEND_MSG_TYPE, 4)
+                        } else updataview(datas.data as TIMFileElem,datas.id, SHOW_MSG_TYPE, 4)
                     }
                     5 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as TIMGroupTipsElem, SEND_MSG_TYPE, 5)
-                        } else updataview(datas.data as TIMGroupTipsElem, SHOW_MSG_TYPE, 5)
+                            updataview(datas.data as TIMGroupTipsElem,datas.id, SEND_MSG_TYPE, 5)
+                        } else updataview(datas.data as TIMGroupTipsElem,datas.id, SHOW_MSG_TYPE, 5)
                     }
 
                 }
@@ -701,7 +701,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
     }
 
 
-    fun updataview(data: Any, Type: Int, datatype: Int) {
+    fun updataview(data: Any,id:String, Type: Int, datatype: Int) {
         val name: String?
         val fdheadurl: String?
         val fdid: String?
@@ -709,15 +709,14 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         if (Type == SHOW_MSG_TYPE) {
             name = sharedPreferences.getString(id + "fdname", "")
             fdheadurl = sharedPreferences.getString(id + "fdheadurl", "")
-            fdid = sharedPreferences.getString(id + "fdid", "")
+       //     fdid = sharedPreferences.getString(id + "fdid", "")
         } else {
             name = sharedPreferences.getString("myname", "")
             fdheadurl = sharedPreferences.getString("myheadurl", "")
-            fdid = TIMManager.getInstance().loginUser
+       //     fdid = TIMManager.getInstance().loginUser
         }
-
         val msglists = ArrayList<Msg>()
-        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!, fdid!!)))
+        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!, id)))
         if (!trun) {
             chatadapter.addData(0, msglists)
             chatadapter.notifyDataSetChanged()

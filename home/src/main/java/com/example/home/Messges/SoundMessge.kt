@@ -22,7 +22,7 @@ object SoundMessge {
                     mediaPlayer.setDataSource(tempAudio.canonicalPath)
                     mediaPlayer.prepare()
                     val duration= mediaPlayer.duration
-                    mview.showSoundmsg(tempAudio.canonicalPath,duration.toLong())
+                    mview.showSoundmsg(tempAudio.canonicalPath,duration.toLong(),message.sender)
                 }
 
                 override fun onError(p0: Int, p1: String?) {

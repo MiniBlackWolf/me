@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
-import com.ashokvarma.bottomnavigation.ShapeBadgeItem
 import com.ashokvarma.bottomnavigation.TextBadgeItem
 import study.kotin.my.baselibrary.R
 

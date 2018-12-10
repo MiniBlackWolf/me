@@ -72,7 +72,7 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
                 //        val lv0Count = 3
                 val lv1Count = p0!!.size
-                val lv0name = arrayOf("我的好友", "其他好友", "设备")
+                val lv0name = arrayOf("我的好友")
                 val res = ArrayList<MultiItemEntity>()
                 //我的好友
                 val lv0 = AddressListLv0(lv0name[0], p0.size)
@@ -87,20 +87,6 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
                     lv0.addSubItem(lv1)
                 }
                 res.add(lv0)
-                //其他好友
-                val lv0_1 = AddressListLv0(lv0name[1], 0)
-                for (j in 0 until 0) {
-                    val lv1 = AddressListLv1("", p0.get(j).nickName,p0[j].identifier)
-                    lv0_1.addSubItem(lv1)
-                }
-                res.add(lv0_1)
-                //设备
-                val lv0_2 = AddressListLv0(lv0name[2], 0)
-                for (j in 0 until 0) {
-                    val lv1 = AddressListLv1("", p0.get(j).nickName,p0[j].identifier)
-                    lv0_2.addSubItem(lv1)
-                }
-                res.add(lv0_2)
                 showview(res)
             }
 
@@ -118,6 +104,7 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
            val fdid= ( adapter.data[position] as AddressListLv1).id
             ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id",fdid).navigation()
         }
+        addresslistadapter.expandAll()
         addresslistadapter.addHeaderView(activity!!.layoutInflater.inflate(R.layout.addresshead, null))
         addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.groupjojn).setOnClickListener(this)
         addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.Friendjoin).setOnClickListener(this)

@@ -21,6 +21,7 @@ class NewFriendActivity : BaseMVPActivity<Addresspresenter>(),View.OnClickListen
             R.id.adds -> {
                 ARouter.getInstance().build("/home/searchactivity").navigation()
             }
+            R.id.fh->finish()
         }
     }
 
@@ -28,6 +29,7 @@ class NewFriendActivity : BaseMVPActivity<Addresspresenter>(),View.OnClickListen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.newfriend)
         adds.setOnClickListener(this)
+        fh.setOnClickListener(this)
         TIMFriendshipManagerExt.getInstance().getFutureFriends(TIMFriendshipManager.TIM_PROFILE_FLAG_NICK.toLong(),
                 TIMFriendshipManagerExt.TIM_FUTURE_FRIEND_PENDENCY_IN_TYPE.toLong(), null, TIMFriendFutureMeta(),
                 object : TIMValueCallBack<TIMGetFriendFutureListSucc> {

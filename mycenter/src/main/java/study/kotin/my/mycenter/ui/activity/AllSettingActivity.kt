@@ -121,6 +121,7 @@ class AllSettingActivity : BaseMVPActivity<Mypersenter>(), View.OnClickListener 
 
 
             }
+            R.id.chf->finish()
         }
     }
 
@@ -137,6 +138,7 @@ class AllSettingActivity : BaseMVPActivity<Mypersenter>(), View.OnClickListener 
         s8_1.setOnClickListener(this)
         s9_1.setOnClickListener(this)
         cleanmsg.setOnClickListener(this)
+        chf.setOnClickListener(this)
         //背景略缩图
         val Bgpath = getSharedPreferences("boolen", Context.MODE_PRIVATE).getString("BGpath", "")
         if (Bgpath != "") {

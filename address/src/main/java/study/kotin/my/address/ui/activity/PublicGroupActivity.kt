@@ -21,6 +21,7 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.newgroup->startActivity<AddGroupActivity>()
+            R.id.fh->finish()
         }
     }
 
@@ -28,6 +29,7 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.publicgroup)
         newgroup.setOnClickListener(this)
+        fh.setOnClickListener(this)
         //自己的社团
         showmygrouplist()
     }

@@ -18,6 +18,7 @@ class addfriendActivity : BaseMVPActivity<HomePersenter>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addfriendlayout)
+        chatfh.setOnClickListener{finish()}
         sendfdmsg.setOnClickListener {
             val users = ArrayList<TIMAddFriendRequest>()
             val timAddFriendRequest = TIMAddFriendRequest(id!!)

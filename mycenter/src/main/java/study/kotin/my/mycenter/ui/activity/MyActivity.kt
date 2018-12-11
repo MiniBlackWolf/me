@@ -174,6 +174,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                     }
                 })
             }
+            R.id.fh->finish()
 
         }
 
@@ -214,6 +215,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
         z7.setOnClickListener(this)
         z8.setOnClickListener(this)
         done.setOnClickListener(this)
+        fh.setOnClickListener(this)
         TIMFriendshipManager.getInstance().getSelfProfile(object : TIMValueCallBack<TIMUserProfile> {
             override fun onSuccess(p0: TIMUserProfile?) {
                 if (p0 == null) return

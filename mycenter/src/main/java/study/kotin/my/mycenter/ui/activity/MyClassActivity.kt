@@ -9,6 +9,8 @@ import kotlinx.android.synthetic.main.myclass_main.*
 import org.jetbrains.anko.startActivityForResult
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.mycenter.R
+import study.kotin.my.mycenter.common.DatabaseHelper
+import study.kotin.my.mycenter.data.Course
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
 import study.kotin.my.mycenter.persenter.Mypersenter
@@ -27,6 +29,7 @@ class MyClassActivity : BaseMVPActivity<Mypersenter>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.myclass_main)
+        fh.setOnClickListener{finish()}
         initinject()
         //工具条
         //从数据库读取数据

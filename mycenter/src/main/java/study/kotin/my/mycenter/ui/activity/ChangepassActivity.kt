@@ -36,6 +36,7 @@ class ChangepassActivity : BaseMVPActivity<Mypersenter>(), MyView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.changepasslayout)
         initinject()
+        chf.setOnClickListener { finish() }
         ok.setOnClickListener {
             val oldpass = oldpass.text.toString()
             val newpass = newpass.text.toString()

@@ -1,37 +1,21 @@
 package study.kotin.my.baselibrary.common
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Application
+
 import android.content.Context
-import android.os.Bundle
-import android.os.Handler
 import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
-import com.tencent.bugly.imsdk.Bugly.applicationContext
 import com.tencent.imsdk.*
 import com.tencent.qalsdk.sdk.MsfSdkUtils
 import com.tencent.qcloud.presentation.business.InitBusiness
-import com.tencent.qcloud.presentation.event.FriendshipEvent
-import com.tencent.qcloud.presentation.event.GroupEvent
-import com.tencent.qcloud.presentation.event.MessageEvent
-import com.tencent.qcloud.presentation.event.RefreshEvent
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness
-import com.tencent.qcloud.tlslibrary.service.TlsBusiness.logout
-import com.tencent.qcloud.ui.NotifyDialog
 import study.kotin.my.baselibrary.R
 import study.kotin.my.baselibrary.injection.commponent.AppCommpoent
 import study.kotin.my.baselibrary.injection.commponent.DaggerAppCommpoent
 import study.kotin.my.baselibrary.injection.module.AppModule
 import study.kotin.my.baselibrary.utils.Foreground
-import android.Manifest.permission
-import android.Manifest.permission.WRITE_CALENDAR
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import com.blankj.utilcode.util.ActivityUtils
+import com.tencent.smtt.sdk.QbSdk
 
 
 class BaseApplication : MultiDexApplication() {
@@ -57,7 +41,19 @@ class BaseApplication : MultiDexApplication() {
             }
         }
         registerActivityLifecycleCallbacks(Foreground.get())
-;
+        QbSdk.initX5Environment(this,object: QbSdk.PreInitCallback{
+            override fun onCoreInitFinished() {
+
+            }
+
+            override fun onViewInitFinished(p0: Boolean) {
+                if(p0){
+                    Log.i("X5初始化","成功")
+                }else{
+                    Log.i("X5初始化","失败")
+                }
+            }
+        })
     }
 
     private fun initjection() {

@@ -1,4 +1,4 @@
-package study.kotin.my.mycenter.ui.activity;
+package study.kotin.my.mycenter.common;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

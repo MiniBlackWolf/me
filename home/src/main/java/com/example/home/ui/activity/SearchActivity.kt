@@ -28,6 +28,9 @@ class SearchActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
+            R.id.fh->{
+                finish()
+            }
             R.id.startsearch -> {
                 textlist.isVisible = true
                 val input = contentview.text.toString()
@@ -84,6 +87,7 @@ class SearchActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
         }
         searchlstview.adapter = searchAdapter
         searchlstview.layoutManager = LinearLayoutManager(this@SearchActivity)
+        fh.setOnClickListener(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

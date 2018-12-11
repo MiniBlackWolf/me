@@ -1,4 +1,4 @@
-package study.kotin.my.mycenter.ui.activity;
+package study.kotin.my.mycenter.data;
 
 
 import java.io.Serializable;

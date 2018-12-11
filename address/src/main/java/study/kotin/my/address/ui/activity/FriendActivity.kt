@@ -26,6 +26,7 @@ class FriendActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListener
     var type: String? = ""
     override fun onClick(v: View?) {
         when (v!!.id) {
+            R.id.fh->finish()
             R.id.inifd -> {
                 val userlist = ArrayList<TIMGroupMemberInfo>()
                 for (i in 0 until ap.data.size) {
@@ -81,6 +82,7 @@ class FriendActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.friendlistlayout)
         type = intent.extras?.getString("type")
+        fh.setOnClickListener(this)
         TIMFriendshipManagerExt.getInstance().getFriendList(object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
                 val list = ArrayList<UserInfoData>()

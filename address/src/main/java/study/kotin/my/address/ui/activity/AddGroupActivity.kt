@@ -58,6 +58,9 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
                     }
                 })
             }
+            R.id.fh->{
+                finish()
+            }
         }
     }
 
@@ -66,6 +69,6 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
         setContentView(R.layout.addgrouplayout)
         newgroupbutton.setOnClickListener(this)
         grouphead.setOnClickListener(this)
-
+        fh.setOnClickListener(this)
     }
 }

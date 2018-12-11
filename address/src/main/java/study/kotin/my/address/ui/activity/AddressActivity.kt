@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.tencent.imsdk.TIMValueCallBack
 import com.tencent.imsdk.ext.group.TIMGroupBaseInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
-import kotlinx.android.synthetic.main.publicgroup.*
+import kotlinx.android.synthetic.main.grouplayout.*
 import org.jetbrains.anko.startActivity
 import study.kotin.my.address.Addresspersenter.Addresspresenter
 import study.kotin.my.address.Addresspersenter.view.AddressView
@@ -22,6 +22,7 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.On
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.newgroup->startActivity<FriendActivity>("type" to "creat")
+            R.id.fh->finish()
         }
     }
 
@@ -36,7 +37,7 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.On
         mpersenter.ss()
         newgroup.setOnClickListener(this)
         showmygrouplist()
-
+        fh.setOnClickListener(this)
     }
 
     private fun showmygrouplist() {

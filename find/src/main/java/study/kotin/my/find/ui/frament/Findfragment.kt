@@ -6,8 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.*
 import android.widget.LinearLayout
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler
+import com.tencent.smtt.export.external.interfaces.WebResourceError
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse
+import com.tencent.smtt.sdk.WebChromeClient
+import com.tencent.smtt.sdk.WebView
+import com.tencent.smtt.sdk.WebViewClient
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.startActivity
 import study.kotin.my.baselibrary.common.baseurl.Companion.url
@@ -33,12 +39,12 @@ class Findfragment : BaseMVPFragmnet<Findpresenter>(), Findview {
         settings.setAppCacheEnabled(true);//是否使用缓存
         settings.setDomStorageEnabled(true);//DOM Storage
         //该方法解决的问题是打开浏览器不调用系统浏览器，直接用webview打开
-        WebView.webChromeClient =WebChromeClient()
-        WebView.webViewClient=object :WebViewClient(){
+        WebView.webChromeClient = WebChromeClient()
+        WebView.webViewClient=object : WebViewClient(){
             override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
                 super.onReceivedHttpError(view, request, errorResponse)
             }
-            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, p2: com.tencent.smtt.export.external.interfaces.SslError?) {
                 handler!!.proceed()
               //  super.onReceivedSslError(view, handler, error)
             }

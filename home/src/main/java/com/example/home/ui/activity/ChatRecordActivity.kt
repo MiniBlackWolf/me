@@ -127,6 +127,10 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
             chatadapter.data.clear()
             chatrecord.removeAllViewsInLayout()
             timeset(datalist)
+
+        }
+        ctf.setOnClickListener{
+            finish()
         }
     }
 

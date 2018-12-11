@@ -73,7 +73,7 @@
         app:srcCompat="@drawable/h1" />
 
     <TextView
-        android:id="@+id/search2"
+        android:id="@+id/fh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"

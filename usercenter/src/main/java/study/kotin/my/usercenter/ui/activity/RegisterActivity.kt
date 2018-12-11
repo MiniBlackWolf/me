@@ -95,6 +95,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             hideLoading()
             e.printStackTrace()
         }
+       // ARouter.getInstance().build("/App/Homepage").navigation()
         TIMlogin(substring, result.body()!!.sig)
     }
 

@@ -4,21 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:layerType="hardware"
-    >
+    android:background="@color/background">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="28dp"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10">
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <ImageView
             android:id="@+id/imageView4"
@@ -38,10 +37,9 @@
 
         <ImageView
             android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="15dp"
+            android:layout_height="30dp"
             android:layout_marginRight="15dp"
-            android:layout_weight="0.1"
             app:srcCompat="@drawable/h6" />
     </LinearLayout>
 
@@ -49,7 +47,8 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,10 +74,9 @@
 
         <ImageView
             android:id="@+id/imageView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="15dp"
+            android:layout_height="30dp"
             android:layout_marginRight="15dp"
-            android:layout_weight="0.1"
             app:srcCompat="@drawable/h6" />
     </LinearLayout>
 
@@ -86,7 +84,8 @@
         android:id="@+id/people"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,10 +108,9 @@
             android:text="人才网" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="15dp"
+            android:layout_height="30dp"
             android:layout_marginRight="15dp"
-            android:layout_weight="0.1"
             app:srcCompat="@drawable/h6" />
     </LinearLayout>
 
@@ -184,28 +182,11 @@
         app:layout_constraintTop_toTopOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="0dp"
-        android:layout_height="185dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/Friendjoin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/timg" />
-
     <com.tencent.smtt.sdk.WebView
         android:id="@+id/webview"
-        android:layerType="software"
-        android:layout_width="368dp"
-        android:layout_height="121dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

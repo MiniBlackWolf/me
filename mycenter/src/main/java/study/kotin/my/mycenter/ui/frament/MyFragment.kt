@@ -19,7 +19,6 @@ import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import study.kotin.my.mycenter.R
 import study.kotin.my.mycenter.common.UpdateChangIdEvent
 import study.kotin.my.mycenter.persenter.Mypersenter
-import study.kotin.my.mycenter.ui.activity.MyActivity
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
 import android.view.Display
@@ -30,9 +29,7 @@ import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
 import study.kotin.my.mycenter.persenter.view.MyView
-import study.kotin.my.mycenter.ui.activity.AllSettingActivity
-import study.kotin.my.mycenter.ui.activity.MyClassActivity
-import study.kotin.my.mycenter.ui.activity.VersionCheckActivity
+import study.kotin.my.mycenter.ui.activity.*
 
 
 class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
@@ -58,11 +55,12 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
     lateinit var m8: TextView
     lateinit var m9: TextView
     lateinit var m10: TextView
+    lateinit var m11: TextView
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.m1 -> activity!!.startActivity<MyClassActivity>()
             R.id.m2 -> ARouter.getInstance().build("/address/PublicGroupActivity").navigation()
-//            R.id.m3 ->activity!!.startActivity<>()
+            R.id.m3 ->activity!!.startActivity<ResumeActivity>()
             R.id.m4 -> activity!!.startActivity<AllSettingActivity>()
             R.id.m5 -> activity!!.startActivity<VersionCheckActivity>()
 //            R.id.m6 ->activity!!.startActivity<>()
@@ -71,6 +69,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
             R.id.m9 -> {
                 mpersenter.Logout()
             }
+            R.id.m11->activity!!.startActivity<PersonnelActivity>()
             //          R.id.m10 -> ActivityUtils.finishAllActivities()
 
         }
@@ -122,6 +121,8 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
         m9.setOnClickListener(this)
         m10 = View.find(R.id.m10)
         m10.setOnClickListener(this)
+        m11 = View.find(R.id.m11)
+        m11.setOnClickListener(this)
     }
 
     private fun switchid() {

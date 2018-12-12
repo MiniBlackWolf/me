@@ -22,7 +22,7 @@ class PersonnelActivity:BaseMVPActivity<Mypersenter>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.personnellayout)
         webview.webViewClient= object : WebViewClient() {
-            override fun onPageFinished(p0: WebView?, p1: String?) {
+            override fun onPageFinished(p0: WebView?, p1: String) {
                 if (trun) {
                     val httpUrl= HttpUrl.get(p1)
                     val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")

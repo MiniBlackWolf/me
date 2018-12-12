@@ -22,6 +22,7 @@ import study.kotin.my.baselibrary.utils.MyWebViewSettings
 import study.kotin.my.find.R
 import study.kotin.my.find.presenter.Findpresenter
 import study.kotin.my.find.presenter.view.Findview
+import study.kotin.my.find.ui.Activity.FriendDtActivity
 import study.kotin.my.find.ui.Activity.RecruitActivity
 
 class Findfragment : BaseMVPFragmnet<Findpresenter>(), Findview {
@@ -34,6 +35,9 @@ class Findfragment : BaseMVPFragmnet<Findpresenter>(), Findview {
         initWeb.loadUrl("http://www.baidu.com")
         view.find<LinearLayout>(R.id.people).setOnClickListener {
             startActivity<RecruitActivity>()
+        }
+        view.find<LinearLayout>(R.id.frienddt).setOnClickListener {
+            startActivity<FriendDtActivity>()
         }
         return view
 

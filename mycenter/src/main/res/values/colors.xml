@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="hui">#e5e5e5</color>
+    <color name="classbg">#a2ab96c5</color>
+    <color name="classbgs">#8dab96c5</color>
 </resources>

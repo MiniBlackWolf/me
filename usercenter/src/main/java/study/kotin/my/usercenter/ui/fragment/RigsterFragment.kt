@@ -51,6 +51,10 @@ class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>
     override fun RegistResult(result: BaseResp<String>) {
         if (result.success) {
             toast("注册成功")
+            val Transaction = activity!!.supportFragmentManager.beginTransaction()
+            Transaction.hide(this)
+            Transaction.commit()
+            activity!!.loginbutton.isVisible=true
         } else {
             toast(result.message)
         }

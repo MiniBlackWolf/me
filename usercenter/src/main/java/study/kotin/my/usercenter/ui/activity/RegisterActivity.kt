@@ -22,6 +22,8 @@ import android.os.Build
 import android.os.Parcelable
 import android.support.v4.app.ActivityCompat
 import android.util.Log
+import android.widget.Button
+import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
@@ -36,6 +38,7 @@ import com.tencent.qcloud.presentation.event.MessageEvent
 import com.tencent.qcloud.presentation.event.RefreshEvent
 import com.tencent.qcloud.sdk.Constant
 import com.tencent.qcloud.ui.NotifyDialog
+import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
 import org.json.JSONObject
 import retrofit2.Response
@@ -72,6 +75,8 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
     lateinit var ResetFrament: ResetFrament
     @Inject
     lateinit var pwdLoginListener: PwdLoginListener
+
+    val loginbutton by lazy{find<Button>(R.id.loginbutton)}
     var usersig: String = ""
 
 
@@ -136,6 +141,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             TIMlogin(Base64Utils.getFromBase64(user!!), sig!!)
         }
 
+
         //----------------------
 //        try {
 //            userInfo = tlsHelper.lastUserInfo
@@ -164,8 +170,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             val Transaction = supportFragmentManager.beginTransaction()
             Transaction.show(RigsterFragment)
             Transaction.commit()
-            loginbutton.visibility = View.INVISIBLE
-
+            loginbutton.isVisible=false
         }
         //登陆方法
         loginbutton.setOnClickListener {
@@ -189,7 +194,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         }
 
         romve.setOnClickListener {
-            loginbutton.visibility = View.INVISIBLE
+            loginbutton.isVisible=false
             val Transaction = supportFragmentManager.beginTransaction()
             Transaction.hide(RigsterFragment)
             Transaction.show(ResetFrament)
@@ -231,7 +236,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
                 Transaction.hide(RigsterFragment)
                 Transaction.hide(ResetFrament)
                 Transaction.commit()
-                loginbutton.visibility = View.VISIBLE
+                loginbutton.isVisible=true
             }
 
         }

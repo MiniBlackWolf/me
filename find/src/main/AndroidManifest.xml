@@ -4,8 +4,9 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         >
-        <activity android:name="study.kotin.my.find.ui.Activity.RecruitActivity"
-           />
+        <activity android:name="study.kotin.my.find.ui.Activity.RecruitActivity" />
+        <activity android:name=".ui.Activity.FriendDtActivity"/>
+        <activity android:name=".ui.Activity.AddFriendDtActivity"/>
     </application>
 
 

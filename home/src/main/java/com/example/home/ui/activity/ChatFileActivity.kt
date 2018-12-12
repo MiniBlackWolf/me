@@ -80,7 +80,8 @@ class ChatFileActivity : BaseMVPActivity<HomePersenter>() {
         val listFiles = path.listFiles()
         AllfileList.addAll(listFiles)
         val listFiles2 = path2.listFiles()
-        AllfileList.addAll(listFiles2)
+        if(listFiles2!=null){
+            AllfileList.addAll(listFiles2)}
         for (list in AllfileList) {
             val filetype = list.name.substring(list.name.lastIndexOf(".") + 1, list.name.length)
             if (filetype == "jpg" || filetype == "png" || filetype == "gif" || filetype == "jpeg" || filetype == "bmp") {

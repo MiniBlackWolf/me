@@ -168,7 +168,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     lateinit var rigth: ImageView
     lateinit var hz: SmartRefreshLayout
     //  lateinit var easylayout: EasyRefreshLayout
-
+    lateinit var homeRefreshView:HomeRefreshView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
@@ -176,7 +176,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         initlayout(view)
         val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
-        val homeRefreshView = HomeRefreshView(mpersenter.context)
+         homeRefreshView = HomeRefreshView(mpersenter.context)
         homeRefreshView.initview(chatlist2, hz) { conversationPresenter.getConversation() }
         val list = TIMManagerExt.getInstance().conversationList
         if(list.size==0){
@@ -262,7 +262,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
             }
         }
         val view=layoutInflater.inflate(R.layout.homerefreshhead,null)
-        val chatlistrc=view.find<RecyclerView>(R.id.chatlistrc)
+        val chatlistrc=homeRefreshView.chatlistrc
         chatlistrc.adapter = chatListAdapter
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL

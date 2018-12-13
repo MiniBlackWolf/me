@@ -32,9 +32,7 @@
         tools:replace="android:allowBackup">
 
         <activity android:name="study.kotin.my.kotinstudy.ui.activity.MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            />
-        <activity android:name="study.kotin.my.usercenter.ui.activity.RegisterActivity">
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -88,11 +88,12 @@ class ImgUtils(val bmp: Bitmap, val context: Activity) {
     fun getImageView(bmp: Bitmap): PhotoView {
         val iv = PhotoView(context)
         //宽高
-        iv.setLayoutParams(RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        iv.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         //设置Padding
         iv.setPadding(20, 20, 20, 20);
         //imageView设置图片
         iv.setImageBitmap(bmp)
+        iv.setBackgroundColor(context.resources.getColor(R.color.white))
         return iv
     }
 }

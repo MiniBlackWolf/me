@@ -35,9 +35,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     kapt 'com.google.dagger:dagger-compiler:2.16'
     implementation project(':provider')
-    if (isUserModule.toBoolean()) {
-        implementation project(':usercenter')
-    }
+    implementation project(':usercenter')
     kapt 'com.alibaba:arouter-compiler:1.2.1'
     implementation project(':home')
     implementation project(':find')

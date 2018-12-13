@@ -1,6 +1,7 @@
 package com.example.home.ui.Frament
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,6 +15,8 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import com.ajguan.library.EasyRefreshLayout
 import com.ajguan.library.LoadModel
+import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.ActivityUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.eightbitlab.rxbus.Bus
 import com.example.home.HomeAdapter.ChatListAdapter
@@ -44,17 +47,25 @@ import kotlinx.android.synthetic.main.chatlayout.*
 import kotlinx.android.synthetic.main.homemain_layout.*
 import kotlinx.android.synthetic.main.homerefreshhead.view.*
 import org.jetbrains.anko.support.v4.startActivity
+import org.jetbrains.anko.support.v4.toast
 import study.kotin.my.baselibrary.utils.HeadZoomScrollView
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashSet
 
 
 class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnClickListener {
     override fun onClick(v: View?) {
+        if(TIMManager.getInstance().loginUser==""){
+        toast("请先登录")
+        ARouter.getInstance().build("/usercenter/RegisterActivity").navigation(activity as Activity)
+            return
+    }
         when (v!!.id) {
             R.id.search -> {
+
                 startActivity<SearchActivity>()
             }
             R.id.more -> {
@@ -70,8 +81,16 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
      * 初始化界面或刷新界面
      */
     override fun initView(conversationList: MutableList<TIMConversation>?) {
+        homeRefreshView = HomeRefreshView(mpersenter.context)
         mpersenter.getdatas()
         hz.finishRefresh()
+        if(TIMManager.getInstance().loginUser==""){
+            RecyclerViewset1(LinkedHashSet<UserList>())
+            RecyclerViewset2(LinkedHashSet<UserList>())
+            hz.setOnRefreshListener {
+                hz.finishRefresh()
+            }
+        }
         Log.i("iiiiii", "初始化界面或刷新界面")
     }
 
@@ -83,6 +102,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     override fun updateMessage(message: TIMMessage?) {
 
         val userlist = LinkedHashSet<UserList>()
+        val userlist2 = LinkedHashSet<UserList>()
         Log.i("iiiiii", "更新最新消息显示")
         val list = TIMManagerExt.getInstance().conversationList
         for (lists in list) {
@@ -120,16 +140,20 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
                     }
                 }
                 timestamp = s.get(0).timestamp().toString()
+
             }
             val unreadMessageNum = TIMConversationExt(lists).unreadMessageNum
             val user = UserList("", "", lists.peer, lastmsg, unreadMessageNum.toInt(), timestamp)
+            if (lists.peer.substring(0, 5) == "@TGS#") {
+                userlist2.add(user)
+            }
             userlist.add(user)
 
 
         }
 
         RecyclerViewset1(userlist)
-        RecyclerViewset2(userlist)
+        RecyclerViewset2(userlist2)
         hz.finishRefresh()
     }
 
@@ -158,6 +182,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
      * 刷新
      */
     override fun refresh() {
+
         Log.i("iiiiii", "刷新")
     }
 
@@ -168,7 +193,8 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     lateinit var rigth: ImageView
     lateinit var hz: SmartRefreshLayout
     //  lateinit var easylayout: EasyRefreshLayout
-    lateinit var homeRefreshView:HomeRefreshView
+    lateinit var homeRefreshView: HomeRefreshView
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
@@ -176,16 +202,15 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         initlayout(view)
         val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
-         homeRefreshView = HomeRefreshView(mpersenter.context)
         homeRefreshView.initview(chatlist2, hz) { conversationPresenter.getConversation() }
         val list = TIMManagerExt.getInstance().conversationList
-        if(list.size==0){
+        if (list.size == 0) {
             RecyclerViewset1(LinkedHashSet<UserList>())
             RecyclerViewset2(LinkedHashSet<UserList>())
             hz.setOnRefreshListener {
                 hz.finishRefresh()
             }
-        }else {
+        } else {
             hz.setOnRefreshListener {
                 conversationPresenter.getConversation()
             }
@@ -201,8 +226,8 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         var noReadAllCount: Int = 0
         val homeListAdapter = HomeListAdapter(mpersenter.context, userlist.toList())
         val textView = TextView(activity)
-        textView.text="没有更多消息了哦"
-        textView.gravity= Gravity.CENTER
+        textView.text = "没有更多消息了哦"
+        textView.gravity = Gravity.CENTER
         homeListAdapter.emptyView = textView
 //        homeListAdapter.onItemChildClickListener  = object : BaseQuickAdapter.OnItemChildClickListener {
 //            override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
@@ -252,17 +277,18 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
 
     //消息上方列表
     fun RecyclerViewset2(userlist: LinkedHashSet<UserList>) {
-        val chatListAdapter = ChatListAdapter(userlist.toList())
+        val chatListAdapter = ChatListAdapter(activity as Activity,userlist.toList())
         val textView = TextView(activity)
-        textView.text="没有更多社团了哦"
+        textView.text = "没有更多社团了哦"
+        textView.gravity=Gravity.TOP.and(Gravity.CENTER)
         chatListAdapter.emptyView = textView
         chatListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
                 startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
             }
         }
-        val view=layoutInflater.inflate(R.layout.homerefreshhead,null)
-        val chatlistrc=homeRefreshView.chatlistrc
+        val view = layoutInflater.inflate(R.layout.homerefreshhead, null)
+        val chatlistrc = homeRefreshView.chatlistrc
         chatlistrc.adapter = chatListAdapter
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL

@@ -14,12 +14,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.alibaba.android.arouter.launcher.ARouter
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.tencent.imsdk.TIMManager
 import com.tencent.imsdk.TIMUserProfile
 import com.tencent.imsdk.TIMValueCallBack
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import kotlinx.android.synthetic.main.addresshead.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.startActivity
+import org.jetbrains.anko.support.v4.toast
 import study.kotin.my.address.Addresslistadapter
 import study.kotin.my.address.Addresspersenter.Addresspresenter
 import study.kotin.my.address.R
@@ -35,6 +37,11 @@ import java.util.*
 
 class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener {
     override fun onClick(v: View?) {
+        if(TIMManager.getInstance().loginUser==""){
+            toast("请先登录")
+            ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
+            return
+        }
         when (v!!.id) {
             R.id.groupjojn -> startActivity<AddressActivity>()
             R.id.Friendjoin -> {

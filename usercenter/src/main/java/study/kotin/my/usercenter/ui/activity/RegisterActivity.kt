@@ -132,7 +132,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA), 1)
         injectactivity()
-        navToHome()
+     //   navToHome()
         val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)
         val user = sharedPreferences.getString("user", "")
         val sig = sharedPreferences.getString("sig", "")
@@ -157,14 +157,10 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
 //           val userConfig  = TIMUserConfig()
 //                   .groupSettings
 //        }
-        //tlsHelper.TLSRefreshUserSig("admin", RefreshUserSigListener("test","eJw1j8FygjAURf*FbTslCJHQHS3U4kgt1UHoJhPNi43UgBhngE7-vTYj23MW99wfa71YPbCmkZwyTd2WW48Wsu4Nhq6RLVAmNLRX7GCMJwiNVnJQWgppHONHqW7iLPdXksblc5JFNiKnbVGJzRxSBEF*l0-LxfD9Usenp1mBQxX37*ewJ5kdJl-hktS*Wwp4zfJP1R2qw9ZO3tZzkXqD2s*yFQ*Gj01XLKPoMo7xipr8-0APIQeTieffpJZHMOGeG-hk6ozpbLerL0pT3Tdg-v7*AQwrUBo_",this@RegisterActivity))
+     //   tlsHelper.TLSRefreshUserSig("admin", RefreshUserSigListener("test","eJw1j8FygjAURf*FbTslCJHQHS3U4kgt1UHoJhPNi43UgBhngE7-vTYj23MW99wfa71YPbCmkZwyTd2WW48Wsu4Nhq6RLVAmNLRX7GCMJwiNVnJQWgppHONHqW7iLPdXksblc5JFNiKnbVGJzRxSBEF*l0-LxfD9Usenp1mBQxX37*ewJ5kdJl-hktS*Wwp4zfJP1R2qw9ZO3tZzkXqD2s*yFQ*Gj01XLKPoMo7xipr8-0APIQeTieffpJZHMOGeG-hk6ozpbLerL0pT3Tdg-v7*AQwrUBo_",this@RegisterActivity))
         // 获取所有已登录用户
         //----------------
         changFragment()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        }
         //注册方法
         register.setOnClickListener {
             val Transaction = supportFragmentManager.beginTransaction()
@@ -225,12 +221,13 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
     override fun onBackPressed() {
         if (RigsterFragment.tag == "RigsterFragment" || ResetFrament.tag == "ResetFrament") {
             if (!RigsterFragment.isVisible && !ResetFrament.isVisible) {
-                toast("再次点击退出程序")
-                count++
-                Handler().postDelayed({ count = 0 }, 2000)
-                if (count == 2) {
-                    finish()
-                }
+//                toast("再次点击退出程序")
+//                count++
+//                Handler().postDelayed({ count = 0 }, 2000)
+//                if (count == 2) {
+//                    finish()
+//                }
+                super.onBackPressed()
             } else {
                 val Transaction = supportFragmentManager.beginTransaction()
                 Transaction.hide(RigsterFragment)

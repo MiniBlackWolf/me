@@ -21,9 +21,12 @@ import study.kotin.my.mycenter.common.UpdateChangIdEvent
 import study.kotin.my.mycenter.persenter.Mypersenter
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
+import android.util.Log
 import android.view.Display
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ActivityUtils
+import com.tencent.imsdk.TIMCallBack
+import com.tencent.imsdk.TIMManager
 import org.jetbrains.anko.support.v4.toast
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
@@ -38,8 +41,16 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
 
     override fun Logoutreslut(t: BaseResp<String>) {
         if(t.success){
-            activity!!.getSharedPreferences("UserAcc",Context.MODE_PRIVATE).edit().clear().apply()
-            ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
+            TIMManager.getInstance().logout(object: TIMCallBack{
+                override fun onError(p0: Int, p1: String?) {
+                    toast("退出失败")
+                }
+
+                override fun onSuccess() {
+                    activity!!.getSharedPreferences("UserAcc",Context.MODE_PRIVATE).edit().clear().apply()
+                    ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
+                }
+            })
         }else{
             toast(t.message)
         }
@@ -57,6 +68,11 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
     lateinit var m10: TextView
     lateinit var m11: TextView
     override fun onClick(v: View?) {
+        if(TIMManager.getInstance().loginUser==""){
+            toast("请先登录")
+            ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
+            return
+        }
         when (v!!.id) {
             R.id.m1 -> activity!!.startActivity<MyClassActivity>()
             R.id.m2 -> ARouter.getInstance().build("/address/PublicGroupActivity").navigation()

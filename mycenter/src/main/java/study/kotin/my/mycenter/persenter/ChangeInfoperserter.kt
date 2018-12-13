@@ -1,6 +1,7 @@
 package study.kotin.my.mycenter.persenter
 
 import android.util.Log
+import okhttp3.MultipartBody
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.ext.excute
@@ -28,4 +29,19 @@ class ChangeInfoperserter @Inject constructor() : Basepersenter<ChangeInfoview>(
         },lifecycleProvider)
 
     }
+    fun uploadimg(Authorization:String,file: List<MultipartBody.Part>){
+        myServiceimp.uploadimg(Authorization,file).excute(object : BaseObserver<BaseResp<String>>(){
+            override fun onNext(t: BaseResp<String>) {
+                mView.uploadimg(t)
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+                Log.e("eeeeeeeeeeeee","图片上传错误")
+            }
+        },lifecycleProvider)
+
+
+    }
+
 }

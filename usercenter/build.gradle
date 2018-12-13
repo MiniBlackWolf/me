@@ -1,8 +1,6 @@
-if(isUserModule.toBoolean()){
-    apply plugin: 'com.android.library'
-}else{
-    apply plugin: 'com.android.application'
-}
+
+apply plugin: 'com.android.library'
+
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -34,34 +32,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets{
-        main{
-            if(isUserModule.toBoolean()){
-                manifest.srcFile 'src/main/release/AndroidManifest.xml'
-            }else{
-                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
-            }
-        }
-    }
+
+
 
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    api project(':provider')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.google.dagger:dagger:2.16'
-    kapt 'com.google.dagger:dagger-compiler:2.16'
-    kapt 'com.alibaba:arouter-compiler:1.2.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':provider')
+    //Dagger2
+    kapt "com.google.dagger:dagger-compiler:2.16"
+    //ARouter
+    kapt "com.alibaba:arouter-compiler:1.2.1"
 
-}
-noArg {
-    annotation("study.kotin.my.baselibrary.common.Poko")
-}
-
-allOpen {
-    annotation("study.kotin.my.baselibrary.common.Poko")
 }

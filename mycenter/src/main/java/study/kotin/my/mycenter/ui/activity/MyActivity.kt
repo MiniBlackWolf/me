@@ -2,17 +2,26 @@ package study.kotin.my.mycenter.ui.activity
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.core.view.isVisible
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.RegexUtils
 import com.bumptech.glide.Glide
 import com.tencent.imsdk.*
+import com.zhihu.matisse.Matisse
+import com.zhihu.matisse.MimeType
+import com.zhihu.matisse.filter.Filter
 import kotlinx.android.synthetic.main.my_main.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
@@ -21,16 +30,31 @@ import study.kotin.my.mycenter.R
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
 import jsc.kit.datetimepicker.widget.DateTimePicker
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.text.SimpleDateFormat
 import java.util.*
 import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.protocol.BaseResp
+import study.kotin.my.baselibrary.utils.GifSizeFilter
 import study.kotin.my.mycenter.persenter.ChangeInfoperserter
 import study.kotin.my.mycenter.persenter.view.ChangeInfoview
+import java.io.File
 import kotlin.collections.HashMap
 
 
+@Route(path = "/mycenter/MyActivity")
 class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.OnClickListener {
+    var trun = true
+    override fun uploadimg(result: BaseResp<String>) {
+        if (result.success) {
+
+        } else {
+            Log.e("eeeeeeeeee", result.message)
+        }
+    }
+
     override fun Synchronizeinfo(result: BaseResp<String>) {
         if (result.success) {
 
@@ -39,9 +63,41 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1) {
+            //获取图片路径
+            val obtainPathResult = Matisse.obtainPathResult(data)
+            val bitmap = BitmapFactory.decodeFile(obtainPathResult.get(0))
+            //构筑文件
+            val file = File(obtainPathResult[0])
+            val Builder = MultipartBody.Builder()
+            Builder.setType(MultipartBody.FORM)
+            val create = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            val addFormDataPart = Builder.addFormDataPart("file", file.name, create)
+            val parts = addFormDataPart.build().parts()
+            val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+            mpersenter.uploadimg("Bearer $jwt", parts)
+            Log.d("Matisse", "mSelected: $obtainPathResult")
+        }
+    }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
+            R.id.z10 -> {
+            }
+            R.id.z9 -> {
+                Matisse.from(this)
+                        .choose(MimeType.ofImage())
+                        .countable(false)
+                        .maxSelectable(1)
+                        .capture(false)
+                        .addFilter(GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+//                .gridExpectedSize(resources.getDimensionPixelSize(R.dimen.grid_expected_size))
+                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                        .thumbnailScale(0.85f)
+                        .imageEngine(study.kotin.my.baselibrary.common.GlideEngine())
+                        .forResult(1)
+            }
             R.id.z1 -> {
                 setdatadialog("修改个性签名", z1_1)
             }
@@ -127,18 +183,18 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 setdatadialog("修改个人标签", z8_1)
             }
             R.id.done -> {
-                if (z1_1.text==null) {
-                    z1_1.text=" "
+                if (z1_1.text == null) {
+                    z1_1.text = " "
                 }
-                if (z2_1.text.toString() == "" && z2_1.text.toString() == "不明") {
+                if (z2_1.text.toString() == "" || z2_1.text.toString() == "不明") {
                     toast("请填写昵称")
                     return
                 }
-                if (z6_1.text.toString() == "" && z6_1.text.toString() == "不明") {
+                if (z6_1.text.toString() == "" || z6_1.text.toString() == "不明") {
                     toast("请填写学校")
                     return
                 }
-                if (z7_1.text.toString() == "" && z7_1.text.toString() == "不明") {
+                if (z7_1.text.toString() == "" || z7_1.text.toString() == "不明") {
                     toast("请填写邮箱")
                     return
                 }
@@ -161,11 +217,11 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 TIMFriendshipManager.getInstance().modifyProfile(param, object : TIMCallBack {
                     override fun onSuccess() {
                         ARouter.getInstance().build("/App/Homepage").navigation()
-                        val jwt=getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt","")
-                        if(jwt==""){
+                        val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+                        if (jwt == "") {
                             return
                         }
-                        mpersenter.Synchronizeinfo("Bearer "+jwt!!)
+                        mpersenter.Synchronizeinfo("Bearer " + jwt!!)
                         toast("修改成功")
                     }
 
@@ -174,7 +230,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                     }
                 })
             }
-            R.id.fh->finish()
+            R.id.fh -> finish()
 
         }
 
@@ -214,6 +270,8 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
         z6.setOnClickListener(this)
         z7.setOnClickListener(this)
         z8.setOnClickListener(this)
+        z9.setOnClickListener(this)
+        z10.setOnClickListener(this)
         done.setOnClickListener(this)
         fh.setOnClickListener(this)
         TIMFriendshipManager.getInstance().getSelfProfile(object : TIMValueCallBack<TIMUserProfile> {
@@ -253,8 +311,23 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
             override fun onError(p0: Int, p1: String?) {
             }
         })
+        if (z2_1.text.toString() == "" || z2_1.text.toString() == "不明" || z6_1.text.toString() == "" || z6_1.text.toString() == "不明" || z7_1.text.toString() == "" || z7_1.text.toString() == "不明") {
+            fh.isVisible = false
+            trun = true
+            return
+        } else {
+            trun = false
+            fh.isVisible = true
+        }
 
 
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK && trun) {
+            return true
+        }
+        return false
     }
 
     fun initinject() {

@@ -2,6 +2,7 @@ package study.kotin.my.mycenter.Repossitory
 
 
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Header
 import retrofit2.http.Query
@@ -19,5 +20,8 @@ class UserRepossitory @Inject constructor(){
     }
     fun Synchronizeinfo(Authorization:String): Observable<BaseResp<String>> {
         return RetrofitFactory.instance.creat(Mycenterapi::class.java).Synchronizeinfo(Authorization)
+    }
+    fun uploadimg(Authorization: String,file: List<MultipartBody.Part>): Observable<BaseResp<String>> {
+        return RetrofitFactory.instance.creat(Mycenterapi::class.java).uploadimg(Authorization,file)
     }
 }

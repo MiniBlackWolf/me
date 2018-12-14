@@ -6,6 +6,8 @@ import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.CrashUtils
+import com.blankj.utilcode.util.KeyboardUtils
 import com.tencent.imsdk.*
 import com.tencent.qalsdk.sdk.MsfSdkUtils
 import com.tencent.qcloud.presentation.business.InitBusiness
@@ -16,6 +18,11 @@ import study.kotin.my.baselibrary.injection.commponent.DaggerAppCommpoent
 import study.kotin.my.baselibrary.injection.module.AppModule
 import study.kotin.my.baselibrary.utils.Foreground
 import com.tencent.smtt.sdk.QbSdk
+import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
+import android.content.IntentFilter
+
+
 
 
 class BaseApplication : MultiDexApplication() {
@@ -54,6 +61,12 @@ class BaseApplication : MultiDexApplication() {
                 }
             }
         })
+        val NetBroadcastReceiver = NetBroadcastReceiver()
+        val filter = IntentFilter()
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(NetBroadcastReceiver, filter)
     }
 
     private fun initjection() {

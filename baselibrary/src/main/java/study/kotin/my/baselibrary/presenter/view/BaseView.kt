@@ -5,4 +5,5 @@ interface BaseView {
     fun hideLoading()
     fun onError(text:String)
     fun onDataIsNull(){}//默认实现
+
 }

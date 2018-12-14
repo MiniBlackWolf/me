@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.RegexUtils
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.tencent.imsdk.*
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
@@ -47,9 +48,12 @@ import kotlin.collections.HashMap
 @Route(path = "/mycenter/MyActivity")
 class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.OnClickListener {
     var trun = true
+    var faceurl = ""
     override fun uploadimg(result: BaseResp<String>) {
+        hideLoading()
         if (result.success) {
-
+            faceurl = result.message
+            Glide.with(this).load(faceurl).into(sss)
         } else {
             Log.e("eeeeeeeeee", result.message)
         }
@@ -57,14 +61,18 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
 
     override fun Synchronizeinfo(result: BaseResp<String>) {
         if (result.success) {
-
+            ARouter.getInstance().build("/App/Homepage").navigation()
+            finish()
+            toast("修改成功")
         } else {
+            toast(result.message)
             Log.e("eeeeeeeeee", result.message)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
+            showLoading()
             //获取图片路径
             val obtainPathResult = Matisse.obtainPathResult(data)
             val bitmap = BitmapFactory.decodeFile(obtainPathResult.get(0))
@@ -76,8 +84,9 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
             val addFormDataPart = Builder.addFormDataPart("file", file.name, create)
             val parts = addFormDataPart.build().parts()
             val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-            mpersenter.uploadimg("Bearer $jwt", parts)
+            mpersenter.uploadimg(this, "Bearer $jwt", parts)
             Log.d("Matisse", "mSelected: $obtainPathResult")
+
         }
     }
 
@@ -202,6 +211,9 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 val param = TIMFriendshipManager.ModifyUserProfileParam()
                 param.setSelfSignature(z1_1.text.toString())
                 param.setNickname(z2_1.text.toString())
+                if (faceurl != "") {
+                    param.setFaceUrl(faceurl)
+                }
                 when {
                     z3_1.text.toString() == "男" -> param.setGender(TIMFriendGenderType.Male)
                     z3_1.text.toString() == "女" -> param.setGender(TIMFriendGenderType.Female)
@@ -216,13 +228,11 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 param.setCustomInfo(map)
                 TIMFriendshipManager.getInstance().modifyProfile(param, object : TIMCallBack {
                     override fun onSuccess() {
-                        ARouter.getInstance().build("/App/Homepage").navigation()
                         val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
                         if (jwt == "") {
                             return
                         }
                         mpersenter.Synchronizeinfo("Bearer " + jwt!!)
-                        toast("修改成功")
                     }
 
                     override fun onError(p0: Int, p1: String?) {
@@ -280,6 +290,11 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 //     Glide.with(this@MyActivity).load("").preload()
                 z1_1.text = p0.selfSignature
                 z2_1.text = p0.nickName
+                if (p0.faceUrl != "") {
+                    val options = RequestOptions()
+                            .error(R.drawable.a4_2)
+                    Glide.with(this@MyActivity).load(p0.faceUrl).apply(options).into(sss)
+                }
                 when {
                     p0.gender == TIMFriendGenderType.Male -> z3_1.text = "男"
                     p0.gender == TIMFriendGenderType.Female -> z3_1.text = "女"
@@ -306,19 +321,19 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 } else {
                     z8_1.text = String(p0.customInfo["Tag_Profile_Custom_Label"]!!)
                 }
+                if (z2_1.text.toString() == "" || z6_1.text.toString() == "不明" || z7_1.text.toString() == "不明") {
+                    fh.isVisible = false
+                    trun = true
+                    return
+                } else {
+                    trun = false
+                    fh.isVisible = true
+                }
             }
 
             override fun onError(p0: Int, p1: String?) {
             }
         })
-        if (z2_1.text.toString() == "" || z2_1.text.toString() == "不明" || z6_1.text.toString() == "" || z6_1.text.toString() == "不明" || z7_1.text.toString() == "" || z7_1.text.toString() == "不明") {
-            fh.isVisible = false
-            trun = true
-            return
-        } else {
-            trun = false
-            fh.isVisible = true
-        }
 
 
     }
@@ -327,7 +342,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
         if (keyCode == KeyEvent.KEYCODE_BACK && trun) {
             return true
         }
-        return false
+        return super.onKeyDown(keyCode, event)
     }
 
     fun initinject() {

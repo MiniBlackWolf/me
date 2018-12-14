@@ -1,12 +1,18 @@
 package study.kotin.my.baselibrary.ui.activity
 
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.Gravity
 import android.view.WindowManager
+import android.widget.TextView
+import com.blankj.utilcode.util.CrashUtils
+import com.blankj.utilcode.util.KeyboardUtils
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.injection.commponent.ActivityCommpoent
 import study.kotin.my.baselibrary.injection.commponent.AppCommpoent
@@ -21,7 +27,10 @@ import com.zyao89.view.zloading.Z_TYPE
 import org.jetbrains.anko.toast
 
 
-open class BaseMVPActivity<T:Basepersenter<*>>:BaseActivity(),BaseView {
+open class BaseMVPActivity<T : Basepersenter<*>> : BaseActivity(), BaseView {
+
+
+
     val dialog = ZLoadingDialog(this)
     override fun showLoading() {
         dialog.setLoadingBuilder(Z_TYPE.LEAF_ROTATE)//设置类型
@@ -40,22 +49,29 @@ open class BaseMVPActivity<T:Basepersenter<*>>:BaseActivity(),BaseView {
         dialog.dismiss()
     }
 
-    override fun onError(text:String) {
+    override fun onError(text: String) {
         toast("网络错误")
         dialog.dismiss()
     }
-    @Inject
-    lateinit var mpersenter:T
 
-    lateinit var activityCommpoent:ActivityCommpoent
+
+    @Inject
+    lateinit var mpersenter: T
+
+    lateinit var activityCommpoent: ActivityCommpoent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        BaseView = this
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         }
-        activityCommpoent= DaggerActivityCommpoent.builder().appCommpoent((application as BaseApplication).appCommpoen).activityModule(ActivityModule(this)).lifecycleProviderModule(LifecycleProviderModule(this)).build()
+        activityCommpoent = DaggerActivityCommpoent.builder().appCommpoent((application as BaseApplication).appCommpoen).activityModule(ActivityModule(this)).lifecycleProviderModule(LifecycleProviderModule(this)).build()
+    }
 
+
+    companion object {
+     lateinit var BaseView: BaseView
     }
 
 }

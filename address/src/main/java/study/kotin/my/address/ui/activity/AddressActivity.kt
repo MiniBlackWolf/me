@@ -50,7 +50,7 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.On
                         iterator.remove()
                     }
                 }
-                val publicGroupAdapter = PublicGroupAdapter(p0)
+                val publicGroupAdapter = PublicGroupAdapter(this@AddressActivity,p0)
                 mygroup.adapter = publicGroupAdapter
                 mygroup.layoutManager = LinearLayoutManager(this@AddressActivity)
                 publicGroupAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {

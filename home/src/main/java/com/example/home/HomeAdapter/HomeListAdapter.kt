@@ -50,56 +50,74 @@ class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuic
 
         }
         val name = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.Name}name", "")
+        val face = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.Name}face", "")
         if (name != "") {
             helper.setText(R.id.peername, name)
         } else {
-            TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
-                override fun onError(p0: Int, p1: String?) {
-
-                }
-
-                override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                    val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
-                    if (p0 == null) return
-                    if (p0[0].remark == "") {
-                        helper.setText(R.id.peername, p0[0].nickName)
-                        edit.putString("${item.Name}name", p0[0].nickName)
-                    } else {
-                        helper.setText(R.id.peername, p0[0].remark)
-                        edit.putString("${item.Name}name", p0[0].remark)
-                    }
-                    edit.apply()
-                    val head = helper.getView<ImageView>(R.id.head)
-                    val options =  RequestOptions()
-                            .error(R.drawable.a4_2)
-                    Glide.with(context)
-                            .load(p0[0].faceUrl)
-                            .apply(options)
-                            .into(head)
-
-                }
-            })
-            TIMGroupManagerExt.getInstance().getGroupPublicInfo(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
-                override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
-                    if (p0 == null) return
-                    val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
-                    helper.setText(R.id.peername, p0[0].groupName)
-                    edit.putString("${item.Name}name", p0[0].groupName)
-                    edit.apply()
-                    val head = helper.getView<ImageView>(R.id.head)
-                    val options =  RequestOptions()
-                            .error(R.drawable.a4_2)
-                    Glide.with(context)
-                            .load(p0[0].faceUrl)
-                            .apply(options)
-                            .into(head)
-
-                }
-
-                override fun onError(p0: Int, p1: String?) {
-                }
-            })
+            downloaddata(item, helper)
         }
+        if (face != "") {
+            val head = helper.getView<ImageView>(R.id.head)
+            val options = RequestOptions()
+                    .error(R.drawable.a4_2)
+            Glide.with(context)
+                    .load(face)
+                    .apply(options)
+                    .into(head)
+        } else {
+            downloaddata(item, helper)
+        }
+    }
+
+    private fun downloaddata(item: UserList, helper: BaseViewHolder) {
+        TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
+            override fun onError(p0: Int, p1: String?) {
+
+            }
+
+            override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
+                val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                if (p0 == null) return
+                if (p0[0].remark == "") {
+                    helper.setText(R.id.peername, p0[0].nickName)
+                    edit.putString("${item.Name}name", p0[0].nickName)
+                } else {
+                    helper.setText(R.id.peername, p0[0].remark)
+                    edit.putString("${item.Name}name", p0[0].remark)
+                }
+                edit.putString("${item.Name}face", p0[0].faceUrl)
+                edit.apply()
+                val head = helper.getView<ImageView>(R.id.head)
+                val options = RequestOptions()
+                        .error(R.drawable.a4_2)
+                Glide.with(context)
+                        .load(p0[0].faceUrl)
+                        .apply(options)
+                        .into(head)
+
+            }
+        })
+        TIMGroupManagerExt.getInstance().getGroupPublicInfo(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
+            override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
+                if (p0 == null) return
+                val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                helper.setText(R.id.peername, p0[0].groupName)
+                edit.putString("${item.Name}name", p0[0].groupName)
+                edit.putString("${item.Name}face", p0[0].faceUrl)
+                edit.apply()
+                val head = helper.getView<ImageView>(R.id.head)
+                val options = RequestOptions()
+                        .error(R.drawable.a4_2)
+                Glide.with(context)
+                        .load(p0[0].faceUrl)
+                        .apply(options)
+                        .into(head)
+
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+            }
+        })
     }
 
 }

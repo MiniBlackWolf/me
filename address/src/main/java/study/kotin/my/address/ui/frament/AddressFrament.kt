@@ -124,4 +124,14 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
         recyclerView.layoutManager = LinearLayoutManager(mpersenter.context)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(TIMManager.getInstance().loginUser==""){
+            showview(ArrayList())
+        }else{
+            generateData()
+        }
+
+    }
+
 }

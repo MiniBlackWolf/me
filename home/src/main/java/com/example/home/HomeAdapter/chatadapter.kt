@@ -2,10 +2,13 @@ package com.example.home.HomeAdapter
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Bitmap
 import android.support.constraint.ConstraintLayout
 import android.widget.*
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -13,6 +16,7 @@ import com.example.home.R
 import com.example.home.common.Msg
 import com.example.home.data.Sounddata
 import com.tencent.imsdk.*
+import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.common.CircleImageView
 import java.math.BigDecimal
 
@@ -32,7 +36,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
     lateinit var filesize: TextView
     lateinit var ches: CircleImageView
     lateinit var grouptip: TextView
-    lateinit var dd:ImageView
+    lateinit var dd: ImageView
 
     init {
         addItemType(Msg.TYPE_RECEIVED, R.layout.chatitem2)
@@ -53,18 +57,24 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                 filesize = helper.getView(R.id.filesize)
                 grouptip = helper.getView(R.id.grouptip)
                 dd = helper.getView(R.id.dd)
-                TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.userInfoData.id),object: TIMValueCallBack<MutableList<TIMUserProfile>> {
+                TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.userInfoData.id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
                     override fun onError(p0: Int, p1: String?) {
 
                     }
 
                     override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                        if(p0==null)return
-                        if(p0[0].remark==""){
-                            helper.setText(R.id.myname,p0[0].nickName)
-                        }else{
-                            helper.setText(R.id.myname,p0[0].remark)
+                        if (p0 == null) return
+                        if (p0[0].remark == "") {
+                            helper.setText(R.id.myname, p0[0].nickName)
+                        } else {
+                            helper.setText(R.id.myname, p0[0].remark)
                         }
+                        val options = RequestOptions()
+                                .error(R.drawable.a4_2)
+                        Glide.with(context)
+                                .load(p0[0].faceUrl)
+                                .apply(options)
+                                .into(ches)
 
                     }
                 })
@@ -72,7 +82,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     1 -> {
                         initview(helper)
                         chatmsg2.isVisible = true
-                        dd.isVisible=true
+                        dd.isVisible = true
                         ches.isVisible = true
                         helper.setText(R.id.chatmsg2, item.content as String)
                     }
@@ -156,6 +166,13 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
 
             }
             Msg.TYPE_SENT -> {
+                val face = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("myface", "")
+                val options = RequestOptions()
+                        .error(R.drawable.a4_2)
+                Glide.with(context)
+                        .load(face)
+                        .apply(options)
+                        .into(ches)
                 dd = helper.getView(R.id.dd)
                 chatbg = helper.getView(R.id.chatbg)
                 chatmsgs3 = helper.getView(R.id.chatmsgs3)
@@ -170,7 +187,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     1 -> {
                         initview2(helper)
                         chatmsgs1.isVisible = true
-                        dd.isVisible=true
+                        dd.isVisible = true
                         helper.setText(R.id.chatmsgs1, item.content as String)
 
                     }

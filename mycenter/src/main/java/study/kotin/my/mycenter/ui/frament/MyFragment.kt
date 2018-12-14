@@ -1,6 +1,7 @@
 package study.kotin.my.mycenter.ui.frament
 
 import android.content.Context
+import android.media.Image
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
@@ -25,33 +26,37 @@ import android.util.Log
 import android.view.Display
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ActivityUtils
-import com.tencent.imsdk.TIMCallBack
-import com.tencent.imsdk.TIMManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.tencent.imsdk.*
 import org.jetbrains.anko.support.v4.toast
+import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
 import study.kotin.my.mycenter.persenter.view.MyView
 import study.kotin.my.mycenter.ui.activity.*
+import java.util.ArrayList
 
 
-class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
+class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView {
     override fun changePasswordreslut(t: BaseResp<String>) {
     }
 
     override fun Logoutreslut(t: BaseResp<String>) {
-        if(t.success){
-            TIMManager.getInstance().logout(object: TIMCallBack{
+        if (t.success) {
+            TIMManager.getInstance().logout(object : TIMCallBack {
                 override fun onError(p0: Int, p1: String?) {
                     toast("退出失败")
                 }
 
                 override fun onSuccess() {
-                    activity!!.getSharedPreferences("UserAcc",Context.MODE_PRIVATE).edit().clear().apply()
+                    activity!!.getSharedPreferences("UserAcc", Context.MODE_PRIVATE).edit().clear().apply()
+                    activity!!.getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).edit().clear().apply()
                     ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
                 }
             })
-        }else{
+        } else {
             toast(t.message)
         }
     }
@@ -67,8 +72,11 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
     lateinit var m9: TextView
     lateinit var m10: TextView
     lateinit var m11: TextView
+    lateinit var pot: ImageView
+    lateinit var name: TextView
+    lateinit var sige: TextView
     override fun onClick(v: View?) {
-        if(TIMManager.getInstance().loginUser==""){
+        if (TIMManager.getInstance().loginUser == "") {
             toast("请先登录")
             ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
             return
@@ -76,7 +84,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
         when (v!!.id) {
             R.id.m1 -> activity!!.startActivity<MyClassActivity>()
             R.id.m2 -> ARouter.getInstance().build("/address/PublicGroupActivity").navigation()
-            R.id.m3 ->activity!!.startActivity<ResumeActivity>()
+            R.id.m3 -> activity!!.startActivity<ResumeActivity>()
             R.id.m4 -> activity!!.startActivity<AllSettingActivity>()
             R.id.m5 -> activity!!.startActivity<VersionCheckActivity>()
 //            R.id.m6 ->activity!!.startActivity<>()
@@ -85,9 +93,11 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
             R.id.m9 -> {
                 mpersenter.Logout()
             }
-            R.id.m11->activity!!.startActivity<PersonnelActivity>()
+            R.id.m11 -> activity!!.startActivity<PersonnelActivity>()
             //          R.id.m10 -> ActivityUtils.finishAllActivities()
-
+            R.id.pot -> {
+                ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id",TIMManager.getInstance().loginUser).navigation()
+            }
         }
 
     }
@@ -97,14 +107,40 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
         val View = inflater.inflate(R.layout.mylayout, container, false)
         initdagger()
         initOnClickListener(View)
+        if (TIMManager.getInstance().loginUser == "") {
+            name.text="点击登录"
+            sige.text="登录后享受精彩世界"
+            return View
+        }
         changid()
+        TIMFriendshipManager.getInstance().getSelfProfile(object : TIMValueCallBack<TIMUserProfile> {
+            override fun onError(p0: Int, p1: String?) {
 
+            }
+
+            override fun onSuccess(p0: TIMUserProfile?) {
+                val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                if (p0 == null) return
+                edit.putString("myname", p0.nickName)
+                edit.putString("myface", p0.faceUrl)
+                edit.putString("mselfSignature", p0.selfSignature)
+                edit.apply()
+                name.text = p0.nickName
+                sige.text = p0.selfSignature
+                val options = RequestOptions()
+                        .error(R.drawable.a4_2)
+                Glide.with(this@MyFragment)
+                        .load(p0.faceUrl)
+                        .apply(options)
+                        .into(pot)
+            }
+        })
         return View
     }
 
     fun initdagger() {
         DaggerMyCommponent.builder().activityCommpoent(mActivityComponent).mymodule(Mymodule()).build().inject(this)
-        mpersenter.mView=this
+        mpersenter.mView = this
 
     }
 
@@ -139,6 +175,10 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
         m10.setOnClickListener(this)
         m11 = View.find(R.id.m11)
         m11.setOnClickListener(this)
+        pot = View.find(R.id.pot)
+        pot.setOnClickListener(this)
+        name = View.find(R.id.name)
+        sige = View.find(R.id.sige)
     }
 
     private fun switchid() {
@@ -160,7 +200,14 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener,MyView {
             Bus.send(UpdateChangIdEvent(false))
             Alert.dismiss()
         }
-
+    }
+    override fun onResume() {
+        super.onResume()
+        if(TIMManager.getInstance().loginUser==""){
+            name.text="点击登录"
+            sige.text="登录后享受精彩世界"
+            pot.setImageResource(R.drawable.a4_2)
+        }
 
     }
 }

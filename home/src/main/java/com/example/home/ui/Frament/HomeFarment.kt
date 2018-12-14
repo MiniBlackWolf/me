@@ -82,7 +82,6 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
      */
     override fun initView(conversationList: MutableList<TIMConversation>?) {
         homeRefreshView = HomeRefreshView(mpersenter.context)
-        mpersenter.getdatas()
         hz.finishRefresh()
         if(TIMManager.getInstance().loginUser==""){
             RecyclerViewset1(LinkedHashSet<UserList>())
@@ -182,7 +181,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
      * 刷新
      */
     override fun refresh() {
-
+        mpersenter.getdatas()
         Log.i("iiiiii", "刷新")
     }
 
@@ -217,7 +216,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         }
         hz.setRefreshHeader(homeRefreshView)
         hz.setHeaderMaxDragRate(4f)
-
+        mpersenter.getdatas()
         return view
     }
 
@@ -225,7 +224,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     fun RecyclerViewset1(userlist: LinkedHashSet<UserList>) {
         var noReadAllCount: Int = 0
         val homeListAdapter = HomeListAdapter(mpersenter.context, userlist.toList())
-        val textView = TextView(activity)
+        val textView = TextView(mpersenter.context)
         textView.text = "没有更多消息了哦"
         textView.gravity = Gravity.CENTER
         homeListAdapter.emptyView = textView
@@ -277,8 +276,8 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
 
     //消息上方列表
     fun RecyclerViewset2(userlist: LinkedHashSet<UserList>) {
-        val chatListAdapter = ChatListAdapter(activity as Activity,userlist.toList())
-        val textView = TextView(activity)
+        val chatListAdapter = ChatListAdapter(mpersenter.context,userlist.toList())
+        val textView = TextView(mpersenter.context)
         textView.text = "没有更多社团了哦"
         textView.gravity=Gravity.TOP.and(Gravity.CENTER)
         chatListAdapter.emptyView = textView
@@ -287,7 +286,6 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
                 startActivity<HomeActivity>("id" to userlist.toList().get(position).Name)
             }
         }
-        val view = layoutInflater.inflate(R.layout.homerefreshhead, null)
         val chatlistrc = homeRefreshView.chatlistrc
         chatlistrc.adapter = chatListAdapter
         val linearLayoutManager = LinearLayoutManager(activity)
@@ -302,6 +300,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
                 // dx>0:向右滑动,dx<0:向左滑动
                 // dy>0:向下滑动,dy<0:向上滑动
                 isSlidingToLast = dy > 0
+
 
             }
 
@@ -335,8 +334,9 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         //   easylayout = view.find(R.id.easylayout)
         view.find<ImageView>(R.id.search).setOnClickListener(this)
         view.find<ImageView>(R.id.more).setOnClickListener(this)
+        oooo=view.find(R.id.oooo)
     }
-
+lateinit var oooo:TextView
     //注入
     fun initinject() {
         DaggerHomeCommponent.builder().activityCommpoent(mActivityComponent).homemodule(Homemodule()).build().inject(this)
@@ -348,4 +348,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         conversationPresenter.getConversation()
         super.onResume()
     }
+
+
+
 }

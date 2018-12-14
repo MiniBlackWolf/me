@@ -20,7 +20,7 @@ object SendTextMsg {
         }
         conversation.sendMessage(data, object : TIMValueCallBack<TIMMessage> {
             override fun onSuccess(p0: TIMMessage?) {
-                context.toast("发送成功")
+               // context.toast("发送成功")
             }
 
             override fun onError(p0: Int, p1: String?) {

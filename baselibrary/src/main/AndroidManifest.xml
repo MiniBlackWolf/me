@@ -1,2 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="study.kotin.my.baselibrary" />
+    package="study.kotin.my.baselibrary" >
+
+
+</manifest>

@@ -12,6 +12,8 @@ import android.view.WindowManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
+import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.CrashUtils
 import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
 import com.example.home.common.UpdateMessgeSizeEvent
@@ -186,7 +188,7 @@ class MainActivity : BaseMVPActivity<Mainpersenter>() {
             pressTime = time
         } else {
 //            AppManager.instance.exitApp(this)
-            finish()
+            ActivityUtils.finishAllActivities()
         }
 
 

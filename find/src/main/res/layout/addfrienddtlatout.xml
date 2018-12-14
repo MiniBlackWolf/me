@@ -72,12 +72,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/mainred"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/gridLayout"
         app:layout_constraintTop_toBottomOf="@+id/editText"
-        app:srcCompat="@drawable/ic_more" />
+        app:srcCompat="@drawable/addimg" />
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/gridLayout"

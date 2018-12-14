@@ -22,6 +22,7 @@ import javax.inject.Inject
 
 open class BaseMVPFragmnet<T: Basepersenter<*>>:BaseFragment(),BaseView {
 
+
     lateinit var mActivityComponent: ActivityCommpoent
     val dialog = ZLoadingDialog(BaseApplication.context)
     override fun showLoading() {

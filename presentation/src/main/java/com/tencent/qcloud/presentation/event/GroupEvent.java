@@ -10,6 +10,7 @@ import com.tencent.imsdk.ext.group.TIMGroupAssistantListener;
 import com.tencent.imsdk.ext.group.TIMGroupCacheInfo;
 import com.tencent.imsdk.ext.group.TIMUserConfigGroupExt;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
@@ -32,6 +33,12 @@ public class GroupEvent extends Observable implements TIMGroupAssistantListener 
 
     public TIMUserConfig init(TIMUserConfig config){
         TIMGroupSettings settings = new TIMGroupSettings();
+        TIMGroupSettings.Options groupOpt = new TIMGroupSettings.Options();
+        ArrayList<String> s=new ArrayList<>();
+        s.add("Authentication");
+        s.add("school");
+        groupOpt.setCustomTags(s);
+        settings.setGroupInfoOptions(groupOpt);
         config.setGroupSettings(settings);
 
         //开启IMSDK本地存储

@@ -20,7 +20,7 @@ object SendSoundMsg {
         }
         conversation.sendMessage(data,object : TIMValueCallBack<TIMMessage>{
             override fun onSuccess(p0: TIMMessage?) {
-                BaseApplication.context.toast("发送成功")
+             //   BaseApplication.context.toast("发送成功")
             }
 
             override fun onError(p0: Int, p1: String?) {

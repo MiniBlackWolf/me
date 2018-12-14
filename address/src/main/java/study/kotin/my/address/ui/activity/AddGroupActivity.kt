@@ -28,6 +28,7 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
                 createGroupParam.setFaceUrl("")
                 createGroupParam.setMaxMemberNum(100)
                 createGroupParam.setCustomInfo("school", school.text.toString().toByteArray())
+                createGroupParam.setCustomInfo("Authentication", "false".toByteArray())
                 val info = TIMGroupMemberInfo(TIMManager.getInstance().loginUser)
                 createGroupParam.setMembers(arrayListOf(info))
                 TIMGroupManager.getInstance().createGroup(createGroupParam, object : TIMValueCallBack<String> {

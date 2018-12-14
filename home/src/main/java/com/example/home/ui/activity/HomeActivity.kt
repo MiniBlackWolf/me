@@ -38,6 +38,7 @@ import com.ajguan.library.EasyRefreshLayout
 import com.ajguan.library.LoadModel
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.KeyboardUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.home.HomeAdapter.emoji
 import study.kotin.my.baselibrary.utils.GifSizeFilter
@@ -156,6 +157,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chatlayout)
         initinject()
+        KeyboardUtils.fixAndroidBug5497(this)
         val Bgpath = getSharedPreferences("boolen", Context.MODE_PRIVATE).getString("BGpath", "")
         if (Bgpath != "") {
             //压缩bitmap
@@ -564,8 +566,12 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 
                         }
                         TIMElemType.Sound -> {
-                            val string = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMSoundElem).uuid, "")
+                            var string = getSharedPreferences("LongTimeData", Context.MODE_PRIVATE).getString((element as TIMSoundElem).uuid, "")
+                            if(!File(string).exists()){
+                                string=""
+                            }
                             if (string != "") {
+
                                 val getsoundtime = MediaPlayer().getsoundtime(string!!)
                                 list.add(longtimedata(Sounddata(string, getsoundtime),p0.get(i).sender, p0.get(i).timestamp(), 3, p0.get(i).isSelf))
                                 continue@loop

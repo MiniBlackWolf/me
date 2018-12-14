@@ -14,6 +14,7 @@ import org.jetbrains.anko.startActivity
 import study.kotin.my.address.Addresspersenter.Addresspresenter
 import study.kotin.my.address.R
 import study.kotin.my.address.adapter.PublicGroupAdapter
+import study.kotin.my.baselibrary.presenter.view.BaseView
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 
 @Route(path = "/address/PublicGroupActivity")
@@ -32,6 +33,7 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
         fh.setOnClickListener(this)
         //自己的社团
         showmygrouplist()
+
     }
 
     private fun showmygrouplist() {
@@ -44,7 +46,7 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
                         iterator.remove()
                     }
                 }
-                val publicGroupAdapter = PublicGroupAdapter(p0)
+                val publicGroupAdapter = PublicGroupAdapter(this@PublicGroupActivity,p0)
                 mygroup.adapter = publicGroupAdapter
                 mygroup.layoutManager = LinearLayoutManager(this@PublicGroupActivity)
                 publicGroupAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {

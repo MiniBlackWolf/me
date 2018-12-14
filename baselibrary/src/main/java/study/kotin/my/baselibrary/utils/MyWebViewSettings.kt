@@ -1,15 +1,19 @@
 package study.kotin.my.baselibrary.utils
 
+import android.R
 import android.graphics.Bitmap
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
 import com.tencent.smtt.sdk.WebViewClient
+import study.kotin.my.baselibrary.common.BaseApplication
 
 object MyWebViewSettings {
-    fun initWeb(webView: WebView):WebView {
-        webView.setWebChromeClient(WebChromeClient())
+    fun initWeb(webView: WebView): WebView {
         val webSettings = webView.getSettings()
 
         // 修改ua使得web端正确判断(加标识+++++++++++++++++++++++++++++++++++++++++++++++++++++)
@@ -71,7 +75,24 @@ object MyWebViewSettings {
 
         //以下接口禁止(直接或反射)调用，避免视频画面无法显示：
         //webView.setLayerType();
-        webView.setDrawingCacheEnabled(true);
+        webView.setDrawingCacheEnabled(true)
+        val mProgressBar = ProgressBar(BaseApplication.context, null, R.attr.progressBarStyleHorizontal)
+        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 10)
+        mProgressBar.setLayoutParams(layoutParams);
+        mProgressBar.setProgress(0)
+        webView.addView(mProgressBar)
+        webView.webChromeClient = object : WebChromeClient() {
+
+            override fun onProgressChanged(p0: WebView?, p1: Int) {
+                if (p1 == 100) {
+                    mProgressBar.isVisible=false
+                } else {
+                    if (mProgressBar.isVisible==false) mProgressBar.isVisible=true
+                    mProgressBar.progress = p1
+                }
+
+            }
+        }
         return webView
 
 

@@ -74,7 +74,6 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
 
 
     lateinit var userInfo: TLSUserInfo
-    // val publickey = "nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEwPS+nyBWgVYxxUbNcI5bQtN33OZ\\n9JjpUbmotPfkfGty3R4I9j4KoiVLXfY2m986TTK5w1yWbB3AURvSVnPOtA=="
     lateinit var tlsHelper: TLSHelper
     var count = 0
     @Inject
@@ -151,10 +150,6 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         setContentView(R.layout.main_activity)
         ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA), 1)
-//        PermissionUtils.permission(PermissionConstants.STORAGE,PermissionConstants.CAMERA,PermissionConstants.MICROPHONE).rationale{
-//            it.again(true)
-//        } .request()
-        //  ActivityCompat.checkSelfPermission(this,)
         injectactivity()
      //   navToHome()
         val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)
@@ -165,24 +160,6 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
             TIMlogin(Base64Utils.getFromBase64(user!!), sig!!)
         }
 
-
-        //----------------------
-//        try {
-//            userInfo = tlsHelper.lastUserInfo
-//            val hasLogin = userInfo != null && !tlsHelper.needLogin(userInfo.identifier)
-//            if (hasLogin) {
-//                showLoading()
-//                usersig = tlsHelper.getUserSig(userInfo.identifier)
-        //            tlsHelper.TLSRefreshUserSig(userInfo.identifier, RefreshUserSigListener(userInfo.identifier,usersig,this@RegisterActivity))
-//
-//            }
-//        } catch (e: IllegalStateException) {
-//            Log.e("erorr", "userInfo is null")
-//           val userConfig  = TIMUserConfig()
-//                   .groupSettings
-//        }
-     //   tlsHelper.TLSRefreshUserSig("admin", RefreshUserSigListener("test","eJw1j8FygjAURf*FbTslCJHQHS3U4kgt1UHoJhPNi43UgBhngE7-vTYj23MW99wfa71YPbCmkZwyTd2WW48Wsu4Nhq6RLVAmNLRX7GCMJwiNVnJQWgppHONHqW7iLPdXksblc5JFNiKnbVGJzRxSBEF*l0-LxfD9Usenp1mBQxX37*ewJ5kdJl-hktS*Wwp4zfJP1R2qw9ZO3tZzkXqD2s*yFQ*Gj01XLKPoMo7xipr8-0APIQeTieffpJZHMOGeG-hk6ozpbLerL0pT3Tdg-v7*AQwrUBo_",this@RegisterActivity))
-        // 获取所有已登录用户
         //----------------
         changFragment()
         //注册方法
@@ -203,14 +180,7 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
                 return@setOnClickListener
             }
             showLoading()
-            //          val passByte = passworld.text.toString().toByteArray(Charsets.UTF_8)
             mpersenter.Login(username.text.toString(), passworld.text.toString())
-//            tlsHelper.TLSPwdLogin("86-${username.text}", passByte, pwdLoginListener)
-
-            //            mpersenter.mView=this
-//            mpersenter.Login(username.text.toString(),passworld.text.toString())
-//            ARouter.getInstance().build("/App/Homepage").navigation()
-//            this.finish()
         }
 
         romve.setOnClickListener {

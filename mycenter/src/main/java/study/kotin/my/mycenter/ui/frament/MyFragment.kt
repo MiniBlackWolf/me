@@ -93,10 +93,10 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
             R.id.m9 -> {
                 mpersenter.Logout()
             }
-            R.id.m11 -> activity!!.startActivity<PersonnelActivity>()
+            //   R.id.m11 -> activity!!.startActivity<PersonnelActivity>()
             //          R.id.m10 -> ActivityUtils.finishAllActivities()
             R.id.pot -> {
-                ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id",TIMManager.getInstance().loginUser).navigation()
+                ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id", TIMManager.getInstance().loginUser).navigation()
             }
         }
 
@@ -108,8 +108,8 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
         initdagger()
         initOnClickListener(View)
         if (TIMManager.getInstance().loginUser == "") {
-            name.text="点击登录"
-            sige.text="登录后享受精彩世界"
+            name.text = "点击登录"
+            sige.text = "登录后享受精彩世界"
             return View
         }
         changid()
@@ -135,6 +135,16 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
                         .into(pot)
             }
         })
+        val edit = activity!!.getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
+        val string = edit.getBoolean("status", true)
+        if (string == true) {
+            m7.setText("切换身份-求职者")
+            m3.setOnClickListener(this)
+
+        } else {
+            m7.setText("切换身份-企业")
+            m3.setOnClickListener { activity!!.startActivity<PersonnelActivity>() }
+        }
         return View
     }
 
@@ -158,7 +168,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
         m2 = View.find(R.id.m2)
         m2.setOnClickListener(this)
         m3 = View.find(R.id.m3)
-        m3.setOnClickListener(this)
+        //    m3.setOnClickListener(this)
         m4 = View.find(R.id.m4)
         m4.setOnClickListener(this)
         m5 = View.find(R.id.m5)
@@ -173,8 +183,8 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
         m9.setOnClickListener(this)
         m10 = View.find(R.id.m10)
         m10.setOnClickListener(this)
-        m11 = View.find(R.id.m11)
-        m11.setOnClickListener(this)
+//        m11 = View.find(R.id.m11)
+//        m11.setOnClickListener(this)
         pot = View.find(R.id.pot)
         pot.setOnClickListener(this)
         name = View.find(R.id.name)
@@ -192,20 +202,27 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
         Alert.show()
         Alert.window.setLayout(width / 1.2.toInt(), height / 3)
         Alert.window.setContentView(view)
+        val edit = activity!!.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
         view.find<ImageView>(R.id.q1).setOnClickListener {
             Bus.send(UpdateChangIdEvent(true))
+            edit.putBoolean("status", false)
+            edit.apply()
             Alert.dismiss()
         }
         view.find<ImageView>(R.id.q2).setOnClickListener {
             Bus.send(UpdateChangIdEvent(false))
+            edit.putBoolean("status", true)
+            edit.apply()
             Alert.dismiss()
         }
+
     }
+
     override fun onResume() {
         super.onResume()
-        if(TIMManager.getInstance().loginUser==""){
-            name.text="点击登录"
-            sige.text="登录后享受精彩世界"
+        if (TIMManager.getInstance().loginUser == "") {
+            name.text = "点击登录"
+            sige.text = "登录后享受精彩世界"
             pot.setImageResource(R.drawable.a4_2)
         }
 

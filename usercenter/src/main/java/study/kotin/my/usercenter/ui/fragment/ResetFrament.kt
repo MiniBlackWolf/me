@@ -33,16 +33,8 @@ import javax.inject.Inject
 
 class ResetFrament @Inject constructor(): BaseMVPFragmnet<registerPersenter>(), registerView {
     override fun resetpassResult(result: BaseResp<String>) {
-
-    }
-
-    override fun LoginResult(result: Response<BaseResp<String>>) {
-
-    }
-
-    override fun RegistResult(result: BaseResp<String>) {
         if (result.success) {
-            toast("注册成功")
+            toast("重置密码成功")
             val Transaction = activity!!.supportFragmentManager.beginTransaction()
             Transaction.hide(this)
             Transaction.commit()
@@ -50,6 +42,14 @@ class ResetFrament @Inject constructor(): BaseMVPFragmnet<registerPersenter>(), 
         } else {
             toast(result.message)
         }
+    }
+
+    override fun LoginResult(result: Response<BaseResp<String>>) {
+
+    }
+
+    override fun RegistResult(result: BaseResp<String>) {
+
     }
 
     override fun sendSms(result: BaseResp<String>) {

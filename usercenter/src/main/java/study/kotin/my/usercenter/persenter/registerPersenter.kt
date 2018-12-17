@@ -32,7 +32,7 @@ class registerPersenter @Inject constructor() : Basepersenter<registerView>() {
 
             override fun onError(e: Throwable) {
                 super.onError(e)
-                BaseApplication.context.toast("登录失败")
+                BaseApplication.context.toast("重置失败，请重试")
             }
         }, lifecycleProvider)
 

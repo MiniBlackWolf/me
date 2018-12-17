@@ -19,6 +19,6 @@ interface UserApi {
     @GET("auth/sendSms")
     fun sendSms(@Query("phonenumber") phonenumber: String): Observable<BaseResp<String>>
 
-    @POST("")
-    fun resetpass(@Query("") phonenumber: String,@Query("")yzm:String,@Query("") pass:String): Observable<BaseResp<String>>
+    @POST("auth/forget")
+    fun resetpass(@Query("phone") phonenumber: String,@Query("code")yzm:String,@Query("password") pass:String): Observable<BaseResp<String>>
 }

@@ -253,6 +253,7 @@
         android:paddingLeft="30dp"
         android:text="人事信息"
         android:textColor="@color/common_black"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

@@ -8,4 +8,5 @@ interface registerView:BaseView {
     fun LoginResult(result: Response<BaseResp<String>>)
     fun RegistResult(result: BaseResp<String>)
     fun sendSms(result: BaseResp<String>)
+    fun resetpassResult(result: BaseResp<String>)
 }

@@ -3,8 +3,10 @@ package study.kotin.my.baselibrary.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.DialogInterface
+import android.content.*
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -24,13 +26,16 @@ import study.kotin.my.baselibrary.presenter.view.BaseView
 import javax.inject.Inject
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 
 
+
+@Suppress("DEPRECATION")
 open class BaseMVPActivity<T : Basepersenter<*>> : BaseActivity(), BaseView {
 
 
-
+     var registerReceiver:Intent?=null
     val dialog = ZLoadingDialog(this)
     override fun showLoading() {
         dialog.setLoadingBuilder(Z_TYPE.LEAF_ROTATE)//设置类型
@@ -62,6 +67,11 @@ open class BaseMVPActivity<T : Basepersenter<*>> : BaseActivity(), BaseView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         BaseView = this
+        val filter = IntentFilter()
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+         registerReceiver = registerReceiver(Receiver, filter)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -74,4 +84,17 @@ open class BaseMVPActivity<T : Basepersenter<*>> : BaseActivity(), BaseView {
      lateinit var BaseView: BaseView
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(Receiver)
+    }
+
+    object Receiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent!!.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+                BaseApplication.context.longToast("网络连接已断开")
+            }
+        }
+
+    }
 }

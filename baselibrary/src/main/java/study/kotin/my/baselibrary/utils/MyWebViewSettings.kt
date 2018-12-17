@@ -1,19 +1,26 @@
 package study.kotin.my.baselibrary.utils
 
 import android.R
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
-import com.tencent.smtt.sdk.WebChromeClient
-import com.tencent.smtt.sdk.WebSettings
-import com.tencent.smtt.sdk.WebView
-import com.tencent.smtt.sdk.WebViewClient
+import com.tencent.smtt.sdk.*
 import study.kotin.my.baselibrary.common.BaseApplication
 
 object MyWebViewSettings {
-    fun initWeb(webView: WebView): WebView {
+    var uploadMessageAboveL: ValueCallback<Array<Uri>>?=null
+    var uploadMessage: ValueCallback<Uri>?=null
+    fun initWeb(webView: WebView,context: Activity): WebView {
         val webSettings = webView.getSettings()
 
         // 修改ua使得web端正确判断(加标识+++++++++++++++++++++++++++++++++++++++++++++++++++++)
@@ -76,18 +83,28 @@ object MyWebViewSettings {
         //以下接口禁止(直接或反射)调用，避免视频画面无法显示：
         //webView.setLayerType();
         webView.setDrawingCacheEnabled(true)
-        val mProgressBar = ProgressBar(BaseApplication.context, null, R.attr.progressBarStyleHorizontal)
+        val mProgressBar = ProgressBar(BaseApplication.context, null, android.R.attr.progressBarStyleHorizontal)
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 10)
         mProgressBar.setLayoutParams(layoutParams);
         mProgressBar.setProgress(0)
         webView.addView(mProgressBar)
         webView.webChromeClient = object : WebChromeClient() {
+            override fun openFileChooser(p0: ValueCallback<Uri>, p1: String?, p2: String?) {
+                uploadMessage=p0
+                openImageChooserActivity(context)
+            }
+
+            override fun onShowFileChooser(p0: WebView?, p1: ValueCallback<Array<Uri>>, p2: FileChooserParams?): Boolean {
+                uploadMessageAboveL=p1
+                openImageChooserActivity(context)
+                return true
+            }
 
             override fun onProgressChanged(p0: WebView?, p1: Int) {
                 if (p1 == 100) {
-                    mProgressBar.isVisible=false
+                    mProgressBar.isVisible = false
                 } else {
-                    if (mProgressBar.isVisible==false) mProgressBar.isVisible=true
+                    if (mProgressBar.isVisible == false) mProgressBar.isVisible = true
                     mProgressBar.progress = p1
                 }
 
@@ -97,5 +114,12 @@ object MyWebViewSettings {
 
 
     }
+    private fun openImageChooserActivity(context:Activity) {
+        val i = Intent(Intent.ACTION_GET_CONTENT)
+        i.addCategory(Intent.CATEGORY_OPENABLE)
+        i.type = "image/*"
+        ActivityCompat.startActivityForResult(context, Intent.createChooser(i, "Image Chooser"), 1, null)
+    }
+
 
 }

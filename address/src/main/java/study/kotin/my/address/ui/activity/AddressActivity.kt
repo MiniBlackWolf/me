@@ -16,9 +16,12 @@ import study.kotin.my.address.R
 import study.kotin.my.address.adapter.PublicGroupAdapter
 import study.kotin.my.address.injection.commponent.DaggerAddressCommponent
 import study.kotin.my.address.injection.module.Addressmodule
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 
-class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.OnClickListener {
+class AddressActivity : BaseMVPActivity<Addresspresenter>(),View.OnClickListener {
+
+
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.newgroup->startActivity<FriendActivity>("type" to "creat")
@@ -26,15 +29,12 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.On
         }
     }
 
-    override fun reslut() {
 
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.grouplayout)
         iniinject()
-        mpersenter.ss()
         newgroup.setOnClickListener(this)
         showmygrouplist()
         fh.setOnClickListener(this)
@@ -68,7 +68,6 @@ class AddressActivity : BaseMVPActivity<Addresspresenter>(), AddressView,View.On
 
     private fun iniinject() {
         DaggerAddressCommponent.builder().activityCommpoent(activityCommpoent).addressmodule(Addressmodule()).build().inject(this)
-        mpersenter.mView=this
     }
 
     override fun onResume() {

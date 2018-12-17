@@ -7,6 +7,40 @@
     android:background="@color/background">
 
     <LinearLayout
+        android:id="@+id/publicgroups"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/background_light"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/people">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_weight="0.1"
+            app:srcCompat="@drawable/h5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="社团" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="15dp"
+            app:srcCompat="@drawable/h6" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/frienddt"
         android:layout_width="0dp"
         android:layout_height="35dp"
@@ -186,11 +220,10 @@
         android:id="@+id/webview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/people"
-        app:layout_constraintVertical_bias="0.239" />
+        app:layout_constraintTop_toBottomOf="@+id/publicgroups" />
 </android.support.constraint.ConstraintLayout>

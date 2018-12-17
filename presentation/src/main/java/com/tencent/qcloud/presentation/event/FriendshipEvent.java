@@ -41,6 +41,7 @@ public class FriendshipEvent extends Observable implements TIMFriendshipProxyLis
         strings.add("Tag_Profile_Custom_school");
         strings.add("Tag_Profile_Custom_email");
         strings.add("Tag_Profile_Custom_Label");
+        strings.add("Tag_Profile_Custom_phone");
         settings.setCustomTags(strings);
         userConfig.setFriendshipSettings(settings);
         return new TIMUserConfigSnsExt(userConfig)

@@ -61,12 +61,12 @@ class BaseApplication : MultiDexApplication() {
                 }
             }
         })
-        val NetBroadcastReceiver = NetBroadcastReceiver()
-        val filter = IntentFilter()
-        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
-        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-        registerReceiver(NetBroadcastReceiver, filter)
+//        val NetBroadcastReceiver = NetBroadcastReceiver()
+//        val filter = IntentFilter()
+//        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+//        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+//        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+//        registerReceiver(NetBroadcastReceiver, filter)
     }
 
     private fun initjection() {

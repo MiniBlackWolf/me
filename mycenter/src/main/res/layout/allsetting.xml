@@ -290,12 +290,6 @@
             android:layout_weight="0.1"
             android:text="13068380650" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:paddingRight="20dp"
-            app:srcCompat="@drawable/ic_right" />
     </LinearLayout>
 
     <LinearLayout

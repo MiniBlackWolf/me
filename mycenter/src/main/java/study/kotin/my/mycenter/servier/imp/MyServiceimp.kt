@@ -2,10 +2,8 @@ package study.kotin.my.mycenter.servier.imp
 
 import io.reactivex.Observable
 import okhttp3.MultipartBody
-import study.kotin.my.baselibrary.data.net.RetrofitFactory
 import study.kotin.my.baselibrary.protocol.BaseResp
-import study.kotin.my.mycenter.Repossitory.UserRepossitory
-import study.kotin.my.mycenter.net.Mycenterapi
+import study.kotin.my.mycenter.Repossitory.MyRepossitory
 import study.kotin.my.mycenter.servier.MyService
 import javax.inject.Inject
 
@@ -14,7 +12,7 @@ class MyServiceimp @Inject constructor() : MyService {
 
 
     @Inject
-    lateinit var UserRepossitory: UserRepossitory
+    lateinit var UserRepossitory: MyRepossitory
 
     override fun uploadimg(Authorization: String,file: List<MultipartBody.Part>): Observable<BaseResp<String>> {
         return UserRepossitory.uploadimg(Authorization,file)

@@ -33,15 +33,14 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    kapt 'com.google.dagger:dagger-compiler:2.16'
     implementation project(':provider')
+    implementation project(':mycenter')
     implementation project(':usercenter')
-    kapt 'com.alibaba:arouter-compiler:1.2.1'
     implementation project(':home')
     implementation project(':find')
     implementation project(':address')
-    implementation project(':mycenter')
-
+    kapt 'com.google.dagger:dagger-compiler:2.16'
+    kapt 'com.alibaba:arouter-compiler:1.2.1'
 }
 noArg {
     annotation("study.kotin.my.baselibrary.common.Poko")

@@ -4,6 +4,7 @@ package study.kotin.my.usercenter.ui.activity
 import android.Manifest
 import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -21,14 +22,17 @@ import android.view.WindowManager
 import android.os.Build
 import android.os.Parcelable
 import android.support.v4.app.ActivityCompat
+import android.util.Base64
 import android.util.Log
 import android.widget.Button
 import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.constant.PermissionConstants
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
+import com.blankj.utilcode.util.PermissionUtils
 import com.tencent.imsdk.*
 import com.tencent.qalsdk.QALSDKManager
 import com.tencent.qcloud.presentation.business.LoginBusiness
@@ -57,6 +61,10 @@ import java.io.IOException
 
 @Route(path = "/usercenter/RegisterActivity")
 class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
+    override fun resetpassResult(result: BaseResp<String>) {
+
+    }
+
     override fun RegistResult(result: BaseResp<String>) {
 
     }
@@ -92,13 +100,14 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         edit.apply()
         var substring = ""
         try {
-            val fromBase64 = EncodeUtils.base64Decode(result.body()!!.jwt)
+            val fromBase64 = Base64.decode(result.body()!!.jwt, Base64.URL_SAFE)
             val from = String(fromBase64)
             substring = from.substring(from.indexOf("name") + 7, from.indexOf("name") + 13)
         } catch (e: IllegalArgumentException) {
             toast("发生未知错误请重试")
             hideLoading()
             e.printStackTrace()
+            return
         }
        // ARouter.getInstance().build("/App/Homepage").navigation()
         TIMlogin(substring, result.body()!!.sig)
@@ -126,11 +135,26 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         })
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(requestCode==1){
+            for(i in 0 until  grantResults.size){
+                if(grantResults[i]== PackageManager.PERMISSION_DENIED){
+                    ActivityCompat.requestPermissions(this,
+                            permissions, 1)
+                }
+            }
+
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA), 1)
+//        PermissionUtils.permission(PermissionConstants.STORAGE,PermissionConstants.CAMERA,PermissionConstants.MICROPHONE).rationale{
+//            it.again(true)
+//        } .request()
+        //  ActivityCompat.checkSelfPermission(this,)
         injectactivity()
      //   navToHome()
         val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)

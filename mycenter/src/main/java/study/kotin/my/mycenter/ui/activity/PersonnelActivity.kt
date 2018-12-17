@@ -1,6 +1,11 @@
 package study.kotin.my.mycenter.ui.activity
 
+import android.annotation.TargetApi
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.google.gson.Gson
@@ -37,8 +42,44 @@ class PersonnelActivity:BaseMVPActivity<Mypersenter>() {
             }
 
         }
-        val initWeb = MyWebViewSettings.initWeb(webview)
+        val initWeb = MyWebViewSettings.initWeb(webview,this)
         initWeb.loadUrl(resources.getString(R.string.jobFind))
         initWeb.addJavascriptInterface(webtest(this,""),"webtest")
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            if (null == MyWebViewSettings.uploadMessage && null == MyWebViewSettings.uploadMessageAboveL) return
+            val result = if (data == null || resultCode != Activity.RESULT_OK) null else data.data
+            if (MyWebViewSettings.uploadMessageAboveL != null) {
+                onActivityResultAboveL(requestCode, resultCode, data)
+            } else if (MyWebViewSettings.uploadMessage != null) {
+                MyWebViewSettings.uploadMessage!!.onReceiveValue(result)
+                MyWebViewSettings.uploadMessage = null
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun onActivityResultAboveL(requestCode: Int, resultCode: Int, intent: Intent?) {
+        if (requestCode != 1 || MyWebViewSettings.uploadMessageAboveL == null) return
+        var results: Array<Uri>? = null
+        if (resultCode == Activity.RESULT_OK) {
+            if (intent != null) {
+                val dataString = intent.dataString
+                val clipData = intent.clipData
+                if (clipData != null) {
+                    results = arrayOf(clipData.itemCount) as Array<Uri>
+                    for (i in 0 until clipData.itemCount) {
+                        val item = clipData.getItemAt(i)
+                        results[i] = item.uri
+                    }
+                }
+                if (dataString != null)
+                    results = arrayOf(Uri.parse(dataString))
+            }
+        }
+        MyWebViewSettings.uploadMessageAboveL?.onReceiveValue(results)
+        MyWebViewSettings.uploadMessageAboveL = null
     }
 }

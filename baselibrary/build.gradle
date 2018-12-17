@@ -80,7 +80,11 @@ dependencies {
     api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-15'
     //图片加载
     api 'com.github.bumptech.glide:glide:4.8.0'
+    //H5
     api files('libs/tbs_sdk_thirdapp_v3.6.0.1371_43624_sharewithdownload_withoutGame_obfs_20181106_121046.jar')
+    //富文本
+    api 'com.zzhoujay.richtext:richtext:3.0.7'
+    api 'com.zzhoujay:html:1.0.2'
 }
 noArg {
     annotation("study.kotin.my.baselibrary.common.Poko")

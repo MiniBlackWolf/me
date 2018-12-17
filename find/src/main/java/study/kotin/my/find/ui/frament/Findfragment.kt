@@ -1,5 +1,6 @@
 package study.kotin.my.find.ui.frament
 
+import android.app.Activity
 import android.net.http.SslError
 import android.os.Bundle
 import android.util.Log
@@ -38,6 +39,7 @@ class Findfragment : BaseMVPFragmnet<Findpresenter>(), Findview,View.OnClickList
         when(v!!.id){
             R.id.people->{startActivity<RecruitActivity>()}
             R.id.frienddt->{startActivity<FriendDtActivity>()}
+            R.id.publicgroups->{ ARouter.getInstance().build("/address/PublicGroupActivity").navigation() }
         }
     }
 
@@ -45,11 +47,12 @@ class Findfragment : BaseMVPFragmnet<Findpresenter>(), Findview,View.OnClickList
         val view = inflater.inflate(R.layout.findlayout, container, false)
         val WebView = view.find<WebView>(R.id.webview)
 //        WebView.webViewClient= WebViewClient()
-        val initWeb = MyWebViewSettings.initWeb(WebView)
+        val initWeb = MyWebViewSettings.initWeb(WebView,activity as Activity)
         initWeb.webViewClient=WebViewClient()
         initWeb.loadUrl("http://www.baidu.com")
         view.find<LinearLayout>(R.id.people).setOnClickListener (this)
         view.find<LinearLayout>(R.id.frienddt).setOnClickListener (this)
+        view.find<LinearLayout>(R.id.publicgroups).setOnClickListener (this)
         return view
 
     }

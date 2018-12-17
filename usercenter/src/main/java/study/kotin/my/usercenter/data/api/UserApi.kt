@@ -12,8 +12,13 @@ interface UserApi {
     //登陆
     @POST("auth/userlogin")
     fun Login(@Body req: loginregisterreq): Observable<Response<BaseResp<String>>>
+
     @POST("auth/register")
-    fun register(@Body registerdata: registerdata,@Query("code") code:String): Observable<BaseResp<String>>
+    fun register(@Body registerdata: registerdata, @Query("code") code: String): Observable<BaseResp<String>>
+
     @GET("auth/sendSms")
-    fun sendSms(@Query("phonenumber") phonenumber:String): Observable<BaseResp<String>>
+    fun sendSms(@Query("phonenumber") phonenumber: String): Observable<BaseResp<String>>
+
+    @POST("")
+    fun resetpass(@Query("") phonenumber: String,@Query("")yzm:String,@Query("") pass:String): Observable<BaseResp<String>>
 }

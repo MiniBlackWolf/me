@@ -57,16 +57,21 @@ class HomeRefreshView(context: Context) : ConstraintLayout(context), RefreshHead
     val ofFloat2 = ObjectAnimator.ofFloat(arrow, "rotation", 0f, 180f)
     val ofFloat3 = ObjectAnimator.ofFloat(arrow, "rotation", 180f, 0f)
     var arrowset: Boolean = true
+
+    fun getrcview():RecyclerView{
+       return  views.find<RecyclerView>(R.id.chatlistrc)
+    }
     fun hideview() {
         arrow.isVisible = false
         loading.isVisible = false
         sus.isVisible = false
     }
 
-    fun initview(recyclerView: RecyclerView, smartRefreshLayout: SmartRefreshLayout, updataview: () -> Unit) {
+    fun initview(recyclerView: RecyclerView, smartRefreshLayout: SmartRefreshLayout, updataview: () -> Unit):HomeRefreshView {
         this.recyclerView = recyclerView
         this.smartRefreshLayout = smartRefreshLayout
         this.updataview = updataview
+        return this
     }
 
     override fun getView(): View {

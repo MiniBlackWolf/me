@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class Userserviceimpl @Inject constructor() : Userservice {
+
+    @Inject
+    lateinit var userRepossitory:UserRepossitory
     var count=0;
     override fun sendSms(phonenumber: String): Observable<BaseResp<String>> {
         return userRepossitory.sendSms(phonenumber)
@@ -23,9 +26,10 @@ class Userserviceimpl @Inject constructor() : Userservice {
     override fun Regist(registerdata: registerdata, code: String): Observable<BaseResp<String>> {
       return  userRepossitory.register(registerdata,code)
     }
+    override fun resetpass(phonenumber: String, yzm: String, pass: String): Observable<BaseResp<String>> {
+        return userRepossitory.resetpass(phonenumber,yzm,pass)
+    }
 
-    @Inject
-    lateinit var userRepossitory:UserRepossitory
     //登陆方法
     override fun Login(user: String, pass: String): Observable<Response<BaseResp<String>>> {
         return  userRepossitory.login(user, pass).retryWhen { it->

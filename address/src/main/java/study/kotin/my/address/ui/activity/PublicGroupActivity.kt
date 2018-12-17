@@ -23,6 +23,10 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
         when(v!!.id){
             R.id.newgroup->startActivity<AddGroupActivity>()
             R.id.fh->finish()
+            R.id.seach->{
+                ARouter.getInstance().build("/home/searchactivity").navigation()
+            }
+
         }
     }
 
@@ -31,6 +35,8 @@ class PublicGroupActivity:BaseMVPActivity<Addresspresenter>(),View.OnClickListen
         setContentView(R.layout.publicgroup)
         newgroup.setOnClickListener(this)
         fh.setOnClickListener(this)
+        seach.setOnClickListener(this)
+
         //自己的社团
         showmygrouplist()
 

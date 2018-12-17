@@ -11,7 +11,7 @@ import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.mycenter.net.Mycenterapi
 import javax.inject.Inject
 
-class UserRepossitory @Inject constructor(){
+class MyRepossitory @Inject constructor(){
     fun logout(): Observable<BaseResp<String>> {
        return RetrofitFactory.instance.creat(Mycenterapi::class.java).logout()
     }

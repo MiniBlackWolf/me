@@ -2,10 +2,13 @@ package study.kotin.my.find.ui.Activity
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import androidx.core.view.isVisible
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
 import com.tencent.smtt.sdk.WebViewClient
@@ -17,6 +20,12 @@ import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.baselibrary.utils.MyWebViewSettings
 import study.kotin.my.find.R
 import study.kotin.my.find.presenter.Findpresenter
+import android.content.ClipData
+import android.app.Activity
+import android.content.Intent
+import android.annotation.TargetApi
+import android.os.Build
+
 
 
 class RecruitActivity : BaseMVPActivity<Findpresenter>() {
@@ -43,12 +52,12 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
             }
 
         }
-        val initWeb = MyWebViewSettings.initWeb(people)
+
+        val initWeb = MyWebViewSettings.initWeb(people,this)
         initWeb.loadUrl(resources.getString(R.string.jobFind))
         initWeb.addJavascriptInterface(webtest(this,""),"webtest")
 
     }
-
     override fun onBackPressed() {
         if(people.url=="http://madengwang.com:9200/admin/job/jobFind.html"){
             super.onBackPressed()
@@ -56,5 +65,43 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
             people.goBack()
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            if (null == MyWebViewSettings.uploadMessage && null == MyWebViewSettings.uploadMessageAboveL) return
+            val result = if (data == null || resultCode != Activity.RESULT_OK) null else data.data
+            if (MyWebViewSettings.uploadMessageAboveL != null) {
+                onActivityResultAboveL(requestCode, resultCode, data)
+            } else if (MyWebViewSettings.uploadMessage != null) {
+                MyWebViewSettings.uploadMessage!!.onReceiveValue(result)
+                MyWebViewSettings.uploadMessage = null
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun onActivityResultAboveL(requestCode: Int, resultCode: Int, intent: Intent?) {
+        if (requestCode != 1 || MyWebViewSettings.uploadMessageAboveL == null) return
+        var results: Array<Uri>? = null
+        if (resultCode == Activity.RESULT_OK) {
+            if (intent != null) {
+                val dataString = intent.dataString
+                val clipData = intent.clipData
+                if (clipData != null) {
+                    results = arrayOf(clipData.itemCount) as Array<Uri>
+                    for (i in 0 until clipData.itemCount) {
+                        val item = clipData.getItemAt(i)
+                        results[i] = item.uri
+                    }
+                }
+                if (dataString != null)
+                    results = arrayOf(Uri.parse(dataString))
+            }
+        }
+        MyWebViewSettings.uploadMessageAboveL?.onReceiveValue(results)
+        MyWebViewSettings.uploadMessageAboveL = null
+    }
+
 }
 

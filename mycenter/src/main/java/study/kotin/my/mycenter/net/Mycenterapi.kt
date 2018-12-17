@@ -18,6 +18,6 @@ interface Mycenterapi {
     fun Synchronizeinfo(@Header("Authorization") Authorization: String): Observable<BaseResp<String>>
 
     @Multipart
-    @POST("http://192.168.1.105:9200/upload/img")
+    @POST("http://madengwang.com:9200/upload/img")
     fun uploadimg(@Header("Authorization")   Authorization: String,@Part file: List<MultipartBody.Part>): Observable<BaseResp<String>>
 }

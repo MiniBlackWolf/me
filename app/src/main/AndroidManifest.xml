@@ -39,11 +39,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name="study.kotin.my.baselibrary.common.NetBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name="study.kotin.my.baselibrary.common.NetBroadcastReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
         <!-- 【必须】消息收发service -->
         <service
             android:name="com.tencent.qalsdk.service.QalService"

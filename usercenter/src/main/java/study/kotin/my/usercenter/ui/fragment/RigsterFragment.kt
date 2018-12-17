@@ -36,6 +36,10 @@ import javax.inject.Inject
 
 
 class RigsterFragment @Inject constructor() : BaseMVPFragmnet<registerPersenter>(), registerView {
+    override fun resetpassResult(result: BaseResp<String>) {
+
+    }
+
     override fun LoginResult(result: Response<BaseResp<String>>) {
 
     }

@@ -24,7 +24,19 @@ class registerPersenter @Inject constructor() : Basepersenter<registerView>() {
     lateinit var userserviceimpl: Userservice
 
 
+    fun resetpass(phonenumber: String, yzm: String, pass: String){
+        userserviceimpl.resetpass(phonenumber,yzm,pass).excute(object : BaseObserver<BaseResp<String>>() {
+            override fun onNext(t: BaseResp<String>) {
+                mView.resetpassResult(t)
+            }
 
+            override fun onError(e: Throwable) {
+                super.onError(e)
+                BaseApplication.context.toast("登录失败")
+            }
+        }, lifecycleProvider)
+
+    }
     fun Login(user: String, pass: String) {
         userserviceimpl.Login(user, pass)
                 .excute(object : BaseObserver<Response<BaseResp<String>>>() {

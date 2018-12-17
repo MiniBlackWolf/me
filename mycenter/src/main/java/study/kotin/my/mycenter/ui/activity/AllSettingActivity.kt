@@ -10,9 +10,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.tencent.imsdk.TIMCallBack
-import com.tencent.imsdk.TIMConversationType
-import com.tencent.imsdk.TIMManager
+import com.tencent.imsdk.*
 import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.message.TIMManagerExt
 import com.zhihu.matisse.Matisse
@@ -159,6 +157,21 @@ class AllSettingActivity : BaseMVPActivity<Mypersenter>(), View.OnClickListener 
         s7_1.isChecked=edit.getBoolean("Friendverification", true)
         s8_1.isChecked=edit.getBoolean("wifimsg", true)
         s9_1.isChecked=edit.getBoolean("Strangerdynamic", false)
+        TIMFriendshipManager.getInstance().getSelfProfile(object: TIMValueCallBack<TIMUserProfile>{
+            override fun onSuccess(p0: TIMUserProfile?) {
+                if(p0==null)return
+                if(p0.customInfo["Tag_Profile_Custom_phone"]!=null){
+                    s3_1.text=String(p0.customInfo["Tag_Profile_Custom_phone"]!!)
+                }else{
+                    s3_1.text="未知"
+                }
+
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+            }
+        })
+
 
     }
 

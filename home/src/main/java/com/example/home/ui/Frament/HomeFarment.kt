@@ -1,7 +1,6 @@
 package com.example.home.ui.Frament
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,28 +12,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
-import com.ajguan.library.EasyRefreshLayout
-import com.ajguan.library.LoadModel
 import com.alibaba.android.arouter.launcher.ARouter
-import com.blankj.utilcode.util.ActivityUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.eightbitlab.rxbus.Bus
 import com.example.home.HomeAdapter.ChatListAdapter
 import com.example.home.HomeAdapter.HomeListAdapter
 import com.example.home.R
 import com.example.home.Utils.HomeRefreshView
-import com.example.home.Utils.RefreshView
 import com.example.home.common.UpdateMessgeSizeEvent
 import com.example.home.data.UserList
 import com.example.home.persenter.HomePersenter
 import com.example.home.ui.activity.HomeActivity
 import com.example.home.ui.activity.SearchActivity
-import com.scwang.smartrefresh.header.FunGameHitBlockHeader
-import com.scwang.smartrefresh.header.WaveSwipeHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.tencent.imsdk.*
 import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
@@ -43,26 +33,21 @@ import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.message.TIMManagerExt
 import com.tencent.qcloud.presentation.presenter.ConversationPresenter
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView
-import kotlinx.android.synthetic.main.chatlayout.*
-import kotlinx.android.synthetic.main.homemain_layout.*
 import kotlinx.android.synthetic.main.homerefreshhead.view.*
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
-import study.kotin.my.baselibrary.utils.HeadZoomScrollView
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
-import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashSet
 
 
 class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnClickListener {
     override fun onClick(v: View?) {
-        if(TIMManager.getInstance().loginUser==""){
-        toast("请先登录")
-        ARouter.getInstance().build("/usercenter/RegisterActivity").navigation(activity as Activity)
+        if (TIMManager.getInstance().loginUser == "") {
+            toast("请先登录")
+            ARouter.getInstance().build("/usercenter/RegisterActivity").navigation(activity as Activity)
             return
-    }
+        }
         when (v!!.id) {
             R.id.search -> {
 
@@ -81,9 +66,9 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
      * 初始化界面或刷新界面
      */
     override fun initView(conversationList: MutableList<TIMConversation>?) {
-        homeRefreshView = HomeRefreshView(mpersenter.context)
+        //   homeRefreshView = HomeRefreshView(mpersenter.context)
         hz.finishRefresh()
-        if(TIMManager.getInstance().loginUser==""){
+        if (TIMManager.getInstance().loginUser == "") {
             RecyclerViewset1(LinkedHashSet<UserList>())
             RecyclerViewset2(LinkedHashSet<UserList>())
             hz.setOnRefreshListener {
@@ -192,16 +177,16 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     lateinit var rigth: ImageView
     lateinit var hz: SmartRefreshLayout
     //  lateinit var easylayout: EasyRefreshLayout
-    lateinit var homeRefreshView: HomeRefreshView
+    val conversationPresenter = ConversationPresenter(this)
+    val homeRefreshView by lazy {    HomeRefreshView(activity as Activity).initview(chatlist2, hz) { conversationPresenter.getConversation() }}
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
         initinject()
         initlayout(view)
-        val conversationPresenter = ConversationPresenter(this)
         conversationPresenter.getConversation()
-        homeRefreshView.initview(chatlist2, hz) { conversationPresenter.getConversation() }
+        //    homeRefreshView = HomeRefreshView(activity as Activity).initview(chatlist2, hz) { conversationPresenter.getConversation() }
         val list = TIMManagerExt.getInstance().conversationList
         if (list.size == 0) {
             RecyclerViewset1(LinkedHashSet<UserList>())
@@ -276,10 +261,10 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
 
     //消息上方列表
     fun RecyclerViewset2(userlist: LinkedHashSet<UserList>) {
-        val chatListAdapter = ChatListAdapter(mpersenter.context,userlist.toList())
+        val chatListAdapter = ChatListAdapter(mpersenter.context, userlist.toList())
         val textView = TextView(mpersenter.context)
         textView.text = "没有更多社团了哦"
-        textView.gravity=Gravity.TOP.and(Gravity.CENTER)
+        textView.gravity = Gravity.TOP
         chatListAdapter.emptyView = textView
         chatListAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
@@ -334,9 +319,10 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         //   easylayout = view.find(R.id.easylayout)
         view.find<ImageView>(R.id.search).setOnClickListener(this)
         view.find<ImageView>(R.id.more).setOnClickListener(this)
-        oooo=view.find(R.id.oooo)
+        oooo = view.find(R.id.oooo)
     }
-lateinit var oooo:TextView
+
+    lateinit var oooo: TextView
     //注入
     fun initinject() {
         DaggerHomeCommponent.builder().activityCommpoent(mActivityComponent).homemodule(Homemodule()).build().inject(this)
@@ -348,7 +334,6 @@ lateinit var oooo:TextView
         conversationPresenter.getConversation()
         super.onResume()
     }
-
 
 
 }

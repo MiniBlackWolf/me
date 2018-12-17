@@ -18,7 +18,7 @@ import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 
 class ChatListAdapter(val context: Context, data: List<UserList>) : BaseQuickAdapter<UserList, BaseViewHolder>(R.layout.chatitem3, data) {
     override fun convert(helper: BaseViewHolder, item: UserList) {
-            TIMGroupManagerExt.getInstance().getGroupPublicInfo(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
+        TIMGroupManagerExt.getInstance().getGroupPublicInfo(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
                 override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
                     if (p0 == null) return
                     val head = helper.getView<ImageView>(R.id.head)

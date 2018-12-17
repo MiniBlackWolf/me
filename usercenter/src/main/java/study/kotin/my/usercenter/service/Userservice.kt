@@ -10,4 +10,5 @@ interface Userservice {
     fun Login(user:String,pass:String): Observable<Response<BaseResp<String>>>
     fun Regist(registerdata: registerdata, code:String): Observable<BaseResp<String>>
     fun sendSms(phonenumber:String): Observable<BaseResp<String>>
+    fun resetpass(phonenumber: String,yzm:String,pass:String):Observable<BaseResp<String>>
 }

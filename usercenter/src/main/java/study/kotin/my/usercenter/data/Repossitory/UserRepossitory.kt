@@ -3,6 +3,7 @@ package study.kotin.my.usercenter.data.Repossitory
 
 import io.reactivex.Observable
 import retrofit2.Response
+import retrofit2.http.Query
 import study.kotin.my.baselibrary.data.net.RetrofitFactory
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.usercenter.data.api.UserApi
@@ -19,5 +20,8 @@ class UserRepossitory @Inject constructor(){
     }
     fun sendSms(phonenumber:String): Observable<BaseResp<String>> {
         return RetrofitFactory.instance.creat(UserApi::class.java).sendSms(phonenumber)
+    }
+    fun resetpass(phonenumber: String,yzm:String,pass:String):Observable<BaseResp<String>>{
+        return RetrofitFactory.instance.creat(UserApi::class.java).resetpass(phonenumber,yzm,pass)
     }
 }

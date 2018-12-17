@@ -8,12 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.core.view.isVisible
 import com.tencent.qalsdk.QALSDKManager
 import com.tencent.qcloud.sdk.Constant
+import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
+import retrofit2.Response
 import study.kotin.my.baselibrary.ext.passverify
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import study.kotin.my.usercenter.R
 import study.kotin.my.usercenter.common.PwdRegListener
@@ -22,11 +26,40 @@ import study.kotin.my.usercenter.common.TextWatchers
 import study.kotin.my.usercenter.injection.commponent.DaggerUserCommponent
 import study.kotin.my.usercenter.injection.module.UserModule
 import study.kotin.my.usercenter.persenter.registerPersenter
+import study.kotin.my.usercenter.persenter.view.registerView
 import study.kotin.my.usercenter.ui.activity.RegisterActivity
 import tencent.tls.platform.TLSHelper
 import javax.inject.Inject
 
-class ResetFrament @Inject constructor(): BaseMVPFragmnet<registerPersenter>() {
+class ResetFrament @Inject constructor(): BaseMVPFragmnet<registerPersenter>(), registerView {
+    override fun resetpassResult(result: BaseResp<String>) {
+
+    }
+
+    override fun LoginResult(result: Response<BaseResp<String>>) {
+
+    }
+
+    override fun RegistResult(result: BaseResp<String>) {
+        if (result.success) {
+            toast("注册成功")
+            val Transaction = activity!!.supportFragmentManager.beginTransaction()
+            Transaction.hide(this)
+            Transaction.commit()
+            activity!!.loginbutton.isVisible=true
+        } else {
+            toast(result.message)
+        }
+    }
+
+    override fun sendSms(result: BaseResp<String>) {
+        if (result.success) {
+            toast("发送验证码成功")
+        } else {
+            toast(result.message)
+        }
+    }
+
     lateinit var tlsHelper: TLSHelper
     lateinit var pwdResetListener: PwdResetListener
     lateinit var registerbutton2: Button
@@ -62,7 +95,7 @@ class ResetFrament @Inject constructor(): BaseMVPFragmnet<registerPersenter>() {
             }.start()
             fsyzm2.isEnabled = false
             fsyzm2.isClickable = false
-         tlsHelper.TLSPwdResetAskCode("86-${phonenmber2.text}", pwdResetListener)
+            mpersenter.sendsms(phonenmber2.text.toString())
         }
         registerbutton2.setOnClickListener{
             if(yzm2.text.isEmpty()){
@@ -72,13 +105,11 @@ class ResetFrament @Inject constructor(): BaseMVPFragmnet<registerPersenter>() {
             else {
                 if (it.passverify(setpassworld2.text.toString(), activity)) {
                     if (okpassworld2.text.toString() == setpassworld2.text.toString()) {
-                        tlsHelper.TLSPwdResetCommit (okpassworld2.text.toString(), pwdResetListener)
+                        mpersenter.resetpass(phonenmber2.text.toString(),yzm2.text.toString(),okpassworld2.text.toString())
                     } else activity!!.toast("两次密码不正确")
                 }
             }
         }
-        yzm2.onFocusChangeListener = TextWatchers(tlsHelper,pwdResetListener,yzm2,0,mpersenter.context)
-
     }
     private fun initlayout(view: View) {
         phonenmber2 = view.find(R.id.phonenmber)
@@ -94,6 +125,7 @@ class ResetFrament @Inject constructor(): BaseMVPFragmnet<registerPersenter>() {
         QALSDKManager.getInstance().setEnv(0)
         QALSDKManager.getInstance().init(mpersenter.context, Constant.SDK_APPID)
         tlsHelper = TLSHelper.getInstance().init(mpersenter.context, Constant.SDK_APPID.toLong())
+        mpersenter.mView=this
     }
 
 }

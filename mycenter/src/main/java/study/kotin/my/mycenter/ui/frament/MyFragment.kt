@@ -139,10 +139,12 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
         val string = edit.getBoolean("status", true)
         if (string == true) {
             m7.setText("切换身份-求职者")
+            m3.text="我的简历"
             m3.setOnClickListener(this)
 
         } else {
             m7.setText("切换身份-企业")
+            m3.text="人事信息"
             m3.setOnClickListener { activity!!.startActivity<PersonnelActivity>() }
         }
         return View

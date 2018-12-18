@@ -1,19 +1,27 @@
 package study.kotin.my.kotinstudy.ui.activity
 
 import android.app.Activity
+import android.app.job.JobScheduler
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.CrashUtils
+import com.blankj.utilcode.util.NetworkUtils
+import com.blankj.utilcode.util.SnackbarUtils
 import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
 import com.example.home.common.UpdateMessgeSizeEvent
@@ -25,6 +33,8 @@ import com.tencent.qcloud.presentation.event.MessageEvent
 import com.tencent.qcloud.presentation.event.RefreshEvent
 import com.tencent.qcloud.ui.NotifyDialog
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.contentView
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 import study.kotin.my.address.ui.frament.AddressFrament
 import study.kotin.my.baselibrary.common.BaseApplication
@@ -34,7 +44,6 @@ import study.kotin.my.baselibrary.utils.PushUtil
 import study.kotin.my.find.ui.frament.Findfragment
 import study.kotin.my.kotinstudy.R
 import study.kotin.my.mycenter.ui.frament.MyFragment
-import study.kotin.my.usercenter.ui.activity.RegisterActivity
 import java.util.*
 
 @Route(path = "/App/Homepage")
@@ -50,7 +59,7 @@ class MainActivity : BaseMVPActivity<Mainpersenter>() {
     private val mFindfragment by lazy { Findfragment() }
     //我的主界面
     private val mMyFragment by lazy { MyFragment() }
-
+    var registerReceiver:Intent?=null
     private fun TIMlogin(user: String, sig: String) {
         TIMManager.getInstance().login(user, sig, object : TIMCallBack {
             override fun onSuccess() {
@@ -73,10 +82,36 @@ class MainActivity : BaseMVPActivity<Mainpersenter>() {
             }
         })
     }
+    class Receiver(val view:View?) : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if(view==null)return
+            if (intent!!.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+              //  BaseApplication.context.longToast("网络连接已断开")
+                if(!NetworkUtils.isConnected()){
+                    SnackbarUtils.with(view).setMessage("网络连接已断开").setBottomMargin(180) .setBgColor(context!!.resources.getColor(android.R.color.holo_red_light)).setDuration(SnackbarUtils.LENGTH_INDEFINITE).show()
+                }
 
+            } else {
+                if(NetworkUtils.isConnected()){
+                    SnackbarUtils.dismiss()
+                }
+
+            }
+        }
+
+    }
+    lateinit var receiver:Receiver
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val filter = IntentFilter()
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        if(registerReceiver==null){
+             receiver = Receiver(contentView)
+            registerReceiver = registerReceiver(receiver, filter)
+        }
         navToHome()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
@@ -116,7 +151,7 @@ class MainActivity : BaseMVPActivity<Mainpersenter>() {
             override fun onSuccess(p0: TIMUserProfile?) {
                 if (p0 == null) return
                 if (p0.nickName == "" || p0.customInfo["Tag_Profile_Custom_school"] == null || p0.customInfo["Tag_Profile_Custom_email"] == null) {
-                    toast("清先完善资料")
+                    toast("请先完善资料")
                     ARouter.getInstance().build("/mycenter/MyActivity").navigation()
                 }
             }
@@ -233,6 +268,9 @@ class MainActivity : BaseMVPActivity<Mainpersenter>() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if(registerReceiver!=null) {
+            unregisterReceiver(receiver)
+        }
         Bus.unregister(this)
     }
 }

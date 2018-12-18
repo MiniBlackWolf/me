@@ -176,7 +176,6 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
     lateinit var left: ImageView
     lateinit var rigth: ImageView
     lateinit var hz: SmartRefreshLayout
-    //  lateinit var easylayout: EasyRefreshLayout
     val conversationPresenter = ConversationPresenter(this)
     val homeRefreshView by lazy {    HomeRefreshView(activity as Activity).initview(chatlist2, hz) { conversationPresenter.getConversation() }}
 

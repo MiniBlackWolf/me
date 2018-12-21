@@ -1,5 +1,9 @@
 package study.kotin.my.address.ui.frament
 
+import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -18,6 +22,10 @@ import com.tencent.imsdk.TIMManager
 import com.tencent.imsdk.TIMUserProfile
 import com.tencent.imsdk.TIMValueCallBack
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
+import com.zhihu.matisse.Matisse
+import com.zhihu.matisse.MimeType
+import com.zhihu.matisse.engine.impl.GlideEngine
+import jp.wasabeef.richeditor.RichEditor
 import kotlinx.android.synthetic.main.addresshead.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.startActivity
@@ -37,7 +45,7 @@ import java.util.*
 
 class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener {
     override fun onClick(v: View?) {
-        if(TIMManager.getInstance().loginUser==""){
+        if (TIMManager.getInstance().loginUser == "") {
             toast("请先登录")
             ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
             return
@@ -55,6 +63,7 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
             }
         }
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -89,10 +98,9 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
                 for (j in 0 until lv1Count) {
                     val lv1: AddressListLv1
                     if (p0.get(j).remark == null) {
-                        lv1 = AddressListLv1("", p0.get(j).nickName,p0[j].identifier)
-                    }
-                    else {
-                        lv1 = AddressListLv1("", p0.get(j).remark,p0[j].identifier)
+                        lv1 = AddressListLv1("", p0.get(j).nickName, p0[j].identifier)
+                    } else {
+                        lv1 = AddressListLv1("", p0.get(j).remark, p0[j].identifier)
                     }
                     lv0.addSubItem(lv1)
                 }
@@ -111,8 +119,8 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
     fun showview(lsit: ArrayList<MultiItemEntity>) {
         val addresslistadapter = Addresslistadapter(lsit)
         addresslistadapter.setOnItemChildClickListener { adapter, view, position ->
-           val fdid= ( adapter.data[position] as AddressListLv1).id
-            ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id",fdid).navigation()
+            val fdid = (adapter.data[position] as AddressListLv1).id
+            ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id", fdid).navigation()
         }
         addresslistadapter.expandAll()
         addresslistadapter.addHeaderView(activity!!.layoutInflater.inflate(R.layout.addresshead, null))
@@ -126,12 +134,21 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
 
     override fun onResume() {
         super.onResume()
-        if(TIMManager.getInstance().loginUser==""){
+        if (TIMManager.getInstance().loginUser == "") {
             showview(ArrayList())
-        }else{
+        } else {
             generateData()
         }
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1) {
+            //获取图片路径
+            val obtainPathResult = Matisse.obtainPathResult(data)
+            val bitmap = BitmapFactory.decodeFile(obtainPathResult.get(0))
+            //mEditor.insertImage(obtainPathResult[0], "huangxiaoguo\" style=\"max-width:100%")
+            Log.d("Matisse", "mSelected: $obtainPathResult")
+        }
+    }
 }

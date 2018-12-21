@@ -32,12 +32,15 @@ import com.tencent.qcloud.presentation.event.GroupEvent
 import com.tencent.qcloud.presentation.event.MessageEvent
 import com.tencent.qcloud.presentation.event.RefreshEvent
 import com.tencent.qcloud.ui.NotifyDialog
+import com.trello.rxlifecycle2.components.RxActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.contentView
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
+import retrofit2.Response
 import study.kotin.my.address.ui.frament.AddressFrament
 import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.baselibrary.utils.Base64Utils
 import study.kotin.my.baselibrary.utils.PushUtil
@@ -47,7 +50,17 @@ import study.kotin.my.mycenter.ui.frament.MyFragment
 import java.util.*
 
 @Route(path = "/App/Homepage")
-class MainActivity : BaseMVPActivity<Mainpersenter>() {
+class MainActivity : BaseMVPActivity<Mainpersenter>(),MainView {
+    override fun LoginResult(t: Response<BaseResp<String>>) {
+        if(t.body()==null)return
+        if(t.body()!!.success){
+            TIMlogin(Base64Utils.getFromBase64(user!!), sig!!)
+        }else{
+            hideLoading()
+        }
+
+    }
+
     private var pressTime: Long = 0
     //Fragment 栈管理
     private val mStack = Stack<Fragment>()
@@ -60,6 +73,9 @@ class MainActivity : BaseMVPActivity<Mainpersenter>() {
     //我的主界面
     private val mMyFragment by lazy { MyFragment() }
     var registerReceiver:Intent?=null
+    var user:String?=""
+    var pass:String?=""
+    var sig:String?=""
     private fun TIMlogin(user: String, sig: String) {
         TIMManager.getInstance().login(user, sig, object : TIMCallBack {
             override fun onSuccess() {
@@ -130,11 +146,12 @@ class MainActivity : BaseMVPActivity<Mainpersenter>() {
         //自动登录
         if (TIMManager.getInstance().loginUser == "") {
             val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)
-            val user = sharedPreferences.getString("user", "")
-            val sig = sharedPreferences.getString("sig", "")
-            if (user != "" && sig != "") {
+             user = sharedPreferences.getString("user", "")
+             pass = sharedPreferences.getString("pass", "")
+             sig = sharedPreferences.getString("sig", "")
+            if (user != "" && pass != "" && sig!="") {
                 showLoading()
-                TIMlogin(Base64Utils.getFromBase64(user!!), sig!!)
+                mpersenter.Login(this@MainActivity,Base64Utils.getFromBase64(user),Base64Utils.getFromBase64(pass))
             }
             // showLoading()
         } else {
@@ -231,6 +248,8 @@ class MainActivity : BaseMVPActivity<Mainpersenter>() {
 
     fun navToHome() {
         //登录之前要初始化群和好友关系链缓存
+        mpersenter=Mainpersenter()
+        mpersenter.mView=this
         var userConfig = TIMUserConfig()
         userConfig.setUserStatusListener(object : TIMUserStatusListener {
             override fun onForceOffline() {

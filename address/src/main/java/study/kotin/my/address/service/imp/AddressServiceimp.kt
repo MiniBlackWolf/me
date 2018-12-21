@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import okhttp3.MultipartBody
 import study.kotin.my.address.service.AddressService
 import study.kotin.my.baselibrary.protocol.BaseResp
-import study.kotin.my.mycenter.Repossitory.UserRepossitory
+import study.kotin.my.address.Repossitory.UserRepossitory
 import javax.inject.Inject
 
 class AddressServiceimp @Inject constructor(): AddressService {

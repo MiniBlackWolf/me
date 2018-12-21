@@ -1,5 +1,6 @@
 package com.example.home.ui.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -10,7 +11,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.home.HomeAdapter.SearchAdapter
 import com.example.home.R
 import com.example.home.data.searchdata
+import com.example.home.data.searchuserdata
+import com.example.home.data.sendsearchuserdata
 import com.example.home.persenter.HomePersenter
+import com.example.home.persenter.HomeSeachPersenter
+import com.example.home.persenter.view.HomeSeachView
 import com.tencent.imsdk.TIMFriendshipManager
 import com.tencent.imsdk.TIMUserProfile
 import com.tencent.imsdk.TIMValueCallBack
@@ -24,65 +29,39 @@ import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
 
 @Route(path = "/home/searchactivity")
-class SearchActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
+class SearchActivity : BaseMVPActivity<HomeSeachPersenter>(), View.OnClickListener, HomeSeachView {
+    override fun searchuser(searchuserdata: searchuserdata) {
+        updataview(searchuserdata)
+    }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.fh->{
+            R.id.fh -> {
                 finish()
             }
             R.id.startsearch -> {
-                textlist.isVisible = true
-                val input = contentview.text.toString()
-                if (input.length > 5) {
-                    if (input.substring(0, 5) == "@TGS#") {
-                        TIMGroupManagerExt.getInstance().getGroupPublicInfo(arrayListOf(input), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
-                            override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
-                                updataview(searchdata(p0!![0],"G"))
-                            }
-
-                            override fun onError(p0: Int, p1: String?) {
-                                updataview(null)
-                                Log.e("eeeeeeeee", p1)
-                                toast("$p1")
-                            }
-                        })
-
-                    } else {
-                        TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(input), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
-                            override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                                if(p0==null){
-                                    return
-                                }
-                                updataview(searchdata(p0[0],"U"))
-                            }
-
-                            override fun onError(p0: Int, p1: String?) {
-                                updataview(null)
-                                Log.e("eeeeeeeee", p1)
-                                toast("$p1")
-                            }
-                        })
-
-                    }
-                }
+                val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+          if(jwt!=""){
+              mpersenter.searchuser("Bearer $jwt", sendsearchuserdata(contentview.text.toString(),0,20,"","",""))
+          }else{
+              toast("请重试")
+          }
             }
-
         }
     }
 
-    private fun updataview(p0: searchdata?) {
-        val searchAdapter = SearchAdapter(arrayListOf(p0))
-        searchAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener{
+    private fun updataview(p0: searchuserdata?) {
+        val searchAdapter = SearchAdapter(p0?.results)
+        searchAdapter.onItemClickListener = object : BaseQuickAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                val data = adapter!!.data as List<searchdata>
-                if(data[position].type=="G"){
-                  val  ids=data[position].data as TIMGroupDetailInfo
-               //     startActivity<PersonalhomeActivity>("id" to ids.identifier)
-                }else{
-                    val  ids=data[position].data as TIMUserProfile
-                    startActivity<PersonalhomeActivity>("id" to ids.identifier)
-                }
+//                val data = adapter!!.data as List<searchuserdata.ResultsBean>
+//                if(data[position].type=="G"){
+//                  val  ids=data[position].data as TIMGroupDetailInfo
+//               //     startActivity<PersonalhomeActivity>("id" to ids.identifier)
+//                }else{
+//                    val  ids=data[position].data as TIMUserProfile
+//                    startActivity<PersonalhomeActivity>("id" to ids.identifier)
+//                }
             }
         }
         searchlstview.adapter = searchAdapter
@@ -100,6 +79,7 @@ class SearchActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
 
     fun initinject() {
         DaggerHomeCommponent.builder().activityCommpoent(activityCommpoent).homemodule(Homemodule()).build().inject(this)
+        mpersenter.mView =this
     }
 
 }

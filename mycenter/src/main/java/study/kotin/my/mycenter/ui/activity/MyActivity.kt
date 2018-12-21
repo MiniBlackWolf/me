@@ -86,7 +86,6 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
             val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
             mpersenter.uploadimg(this, "Bearer $jwt", parts)
             Log.d("Matisse", "mSelected: $obtainPathResult")
-
         }
     }
 

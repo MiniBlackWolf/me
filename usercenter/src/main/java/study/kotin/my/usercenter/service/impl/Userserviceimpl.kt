@@ -14,7 +14,7 @@ import study.kotin.my.usercenter.service.Userservice
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class Userserviceimpl @Inject constructor() : Userservice {
+open class Userserviceimpl @Inject constructor() : Userservice {
 
     @Inject
     lateinit var userRepossitory:UserRepossitory

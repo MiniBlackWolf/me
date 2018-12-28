@@ -4,11 +4,24 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.BitmapFactory
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ListView
+import android.widget.PopupWindow
+import android.widget.TextView
+import androidx.core.view.get
 import com.blankj.utilcode.util.ActivityUtils
 import com.bumptech.glide.Glide
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.tencent.imsdk.TIMGroupManager
 import com.tencent.imsdk.TIMGroupMemberInfo
 import com.tencent.imsdk.TIMManager
@@ -31,13 +44,35 @@ import study.kotin.my.address.R
 import study.kotin.my.address.injection.commponent.DaggerAddressCommponent
 import study.kotin.my.address.injection.module.Addressmodule
 import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.data.ProvinceList
+import study.kotin.my.baselibrary.data.SchoolList
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.baselibrary.utils.GifSizeFilter
+import study.kotin.my.baselibrary.utils.SelectSchool
 import java.io.File
+import java.util.ArrayList
 
-class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListener,AddressView {
-    var headurl=""
+class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListener, AddressView {
+
+    override fun loadProvince(result: List<ProvinceList.DataBean>) {
+        if (result.isEmpty()) return
+        selectSchool.mProvinceListView.removeAllViewsInLayout()
+        selectSchool.mProvinceAdapter.data.clear()
+        selectSchool.mProvinceAdapter.addData(result)
+        selectSchool.mProvinceAdapter.notifyDataSetChanged()
+    }
+
+    override fun loadschool(result: List<SchoolList.DataBean>) {
+        if (result.isEmpty()) return
+        selectSchool.mSchoolListView.removeAllViewsInLayout()
+        selectSchool.mSchoolAdapter.data.clear()
+        selectSchool.mSchoolAdapter.addData(result)
+        selectSchool.mSchoolAdapter.notifyDataSetChanged()
+    }
+
+
+    var headurl = ""
     override fun reslut() {
 
     }
@@ -45,7 +80,7 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
     override fun uploadimg(result: BaseResp<String>) {
         hideLoading()
         if (result.success) {
-            headurl=result.message
+            headurl = result.message
         } else {
             Log.e("eeeeeeeeee", result.message)
         }
@@ -63,7 +98,7 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
 //                .gridExpectedSize(resources.getDimensionPixelSize(R.dimen.grid_expected_size))
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                         .thumbnailScale(0.85f)
-                        .imageEngine( study.kotin.my.baselibrary.common.GlideEngine())
+                        .imageEngine(study.kotin.my.baselibrary.common.GlideEngine())
                         .forResult(1)
             }
             R.id.newgroupbutton -> {
@@ -105,12 +140,23 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
             R.id.fh -> {
                 finish()
             }
+            R.id.school -> {
+                val view = window.peekDecorView()
+                if (view != null) {
+                    val inputmanger = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputmanger.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+                selectSchool.mPopWindow.showAtLocation(window.decorView, Gravity.CENTER, 0, 0)
+            }
         }
     }
+
     fun initinject() {
         DaggerAddressCommponent.builder().activityCommpoent(activityCommpoent).addressmodule(Addressmodule()).build().inject(this)
-        mpersenter.mView=this
+        mpersenter.mView = this
     }
+
+    lateinit var selectSchool: SelectSchool
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addgrouplayout)
@@ -118,7 +164,20 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
         newgroupbutton.setOnClickListener(this)
         grouphead.setOnClickListener(this)
         fh.setOnClickListener(this)
+        school.setOnClickListener(this)
+        school.isCursorVisible = false;
+        school.isFocusable = false
+        school.isFocusableInTouchMode = false
+        selectSchool = SelectSchool(school, this,{loadper() },{loadschool(selectSchool.provinceId)})
+        selectSchool.initPopView()
 
+    }
+
+    fun loadper() {
+        mpersenter.loadProvince()
+    }
+    fun loadschool(url:String){
+        mpersenter.loadschool("http://www.hisihi.com/app.php?s=/school/school/provinceid/$url")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -139,4 +198,6 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
             Log.d("Matisse", "mSelected: $obtainPathResult")
         }
     }
+
+
 }

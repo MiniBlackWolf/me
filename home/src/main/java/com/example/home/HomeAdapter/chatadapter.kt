@@ -118,19 +118,19 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                         var Modify = ""
                         when (TIMGroupTipsElem.tipsType) {
                             TIMGroupTipsType.Join -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}加入了群"
+                                Modify = "用户${TIMGroupTipsElem.changedUserInfo.keys}加入了群"
                             }
                             TIMGroupTipsType.Kick -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}被踢出了群"
+                                Modify = "用户${TIMGroupTipsElem.changedUserInfo.keys}被踢出了群"
                             }
                             TIMGroupTipsType.Quit -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}退出了群"
+                                Modify = "用户${TIMGroupTipsElem.changedUserInfo.keys}退出了群"
                             }
                             TIMGroupTipsType.SetAdmin -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}成为了管理"
+                                Modify = "用户${TIMGroupTipsElem.changedUserInfo.keys}成为了管理"
                             }
                             TIMGroupTipsType.CancelAdmin -> {
-                                Modify = "用户${TIMGroupTipsElem.opUser}被取消了管理"
+                                Modify = "用户${TIMGroupTipsElem.changedUserInfo.keys }被取消了管理"
                             }
                             TIMGroupTipsType.ModifyGroupInfo -> {
                                 if (TIMGroupTipsElem.groupInfoList.size != 0) {

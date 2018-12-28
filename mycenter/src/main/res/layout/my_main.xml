@@ -475,14 +475,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.511" />
 
-        <TextView
+        <EditText
             android:id="@+id/z6_1"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:background="@android:color/background_light"
             android:paddingLeft="10dp"
             android:text="不明"
+            android:textColor="#FF888888 "
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

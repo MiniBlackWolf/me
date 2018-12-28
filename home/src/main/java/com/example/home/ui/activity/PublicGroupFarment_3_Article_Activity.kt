@@ -25,5 +25,6 @@ class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<HomePersenter>(), 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.publicgroupfarment_3_article)
         ctf.setOnClickListener(this)
+
     }
 }

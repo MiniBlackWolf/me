@@ -6,6 +6,8 @@ import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Header
 import retrofit2.http.Query
+import study.kotin.my.baselibrary.data.ProvinceList
+import study.kotin.my.baselibrary.data.SchoolList
 import study.kotin.my.baselibrary.data.net.RetrofitFactory
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.mycenter.net.Mycenterapi
@@ -23,5 +25,11 @@ class MyRepossitory @Inject constructor(){
     }
     fun uploadimg(Authorization: String,file: List<MultipartBody.Part>): Observable<BaseResp<String>> {
         return RetrofitFactory.instance.creat(Mycenterapi::class.java).uploadimg(Authorization,file)
+    }
+    fun loadProvince(): Observable<ProvinceList> {
+        return RetrofitFactory.instance.creat(Mycenterapi::class.java).loadProvince()
+    }
+    fun loadschool(url:String): Observable<SchoolList> {
+        return RetrofitFactory.instance.creat(Mycenterapi::class.java).loadschool(url)
     }
 }

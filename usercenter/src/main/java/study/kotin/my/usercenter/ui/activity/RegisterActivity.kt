@@ -152,13 +152,13 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA), 1)
         injectactivity()
      //   navToHome()
-        val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)
-        val user = sharedPreferences.getString("user", "")
-        val sig = sharedPreferences.getString("sig", "")
-        if (user != "" && sig != "") {
-            showLoading()
-            TIMlogin(Base64Utils.getFromBase64(user!!), sig!!)
-        }
+//        val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)
+//        val user = sharedPreferences.getString("user", "")
+//        val sig = sharedPreferences.getString("sig", "")
+//        if (user != "" && sig != "") {
+//            showLoading()
+//            TIMlogin(Base64Utils.getFromBase64(user!!), sig!!)
+//        }
 
         //----------------
         changFragment()

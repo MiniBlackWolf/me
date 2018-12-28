@@ -5,6 +5,8 @@ import android.util.Log
 import okhttp3.MultipartBody
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.data.ProvinceList
+import study.kotin.my.baselibrary.data.SchoolList
 import study.kotin.my.baselibrary.ext.excute
 import study.kotin.my.baselibrary.presenter.Basepersenter
 import study.kotin.my.baselibrary.protocol.BaseResp
@@ -47,6 +49,29 @@ class ChangeInfoperserter @Inject constructor() : Basepersenter<ChangeInfoview>(
         },lifecycleProvider)
 
 
+    }
+    fun loadProvince() {
+        myServiceimp.loadProvince().excute(object:BaseObserver<ProvinceList>(){
+            override fun onNext(t: ProvinceList) {
+                mView.loadProvince(t.data)
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+            }
+        },lifecycleProvider)
+    }
+    fun loadschool(url:String) {
+        myServiceimp.loadschool(url).excute(object:BaseObserver<SchoolList>(){
+            override fun onNext(t: SchoolList) {
+                mView.loadschool(t.data)
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+            }
+
+        },lifecycleProvider)
     }
 
 }

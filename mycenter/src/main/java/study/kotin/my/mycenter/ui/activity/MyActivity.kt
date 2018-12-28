@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.Log
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -37,8 +38,11 @@ import okhttp3.RequestBody
 import java.text.SimpleDateFormat
 import java.util.*
 import org.jetbrains.anko.find
+import study.kotin.my.baselibrary.data.ProvinceList
+import study.kotin.my.baselibrary.data.SchoolList
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.utils.GifSizeFilter
+import study.kotin.my.baselibrary.utils.SelectSchool
 import study.kotin.my.mycenter.persenter.ChangeInfoperserter
 import study.kotin.my.mycenter.persenter.view.ChangeInfoview
 import java.io.File
@@ -49,6 +53,21 @@ import kotlin.collections.HashMap
 class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.OnClickListener {
     var trun = true
     var faceurl = ""
+    override fun loadProvince(result: List<ProvinceList.DataBean>) {
+        if (result.isEmpty()) return
+        selectSchool.mProvinceListView.removeAllViewsInLayout()
+        selectSchool.mProvinceAdapter.data.clear()
+        selectSchool.mProvinceAdapter.addData(result)
+        selectSchool.mProvinceAdapter.notifyDataSetChanged()
+    }
+
+    override fun loadschool(result: List<SchoolList.DataBean>) {
+        if (result.isEmpty()) return
+        selectSchool.mSchoolListView.removeAllViewsInLayout()
+        selectSchool.mSchoolAdapter.data.clear()
+        selectSchool.mSchoolAdapter.addData(result)
+        selectSchool.mSchoolAdapter.notifyDataSetChanged()
+    }
     override fun uploadimg(result: BaseResp<String>) {
         hideLoading()
         if (result.success) {
@@ -161,7 +180,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 setdatadialog("修改职业", z5_1)
             }
             R.id.z6 -> {
-                setdatadialog("修改学校", z6_1)
+                selectSchool.mPopWindow.showAtLocation(window.decorView, Gravity.CENTER, 0, 0)
             }
             R.id.z7 -> {
                 alert {
@@ -210,6 +229,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 val param = TIMFriendshipManager.ModifyUserProfileParam()
                 param.setSelfSignature(z1_1.text.toString())
                 param.setNickname(z2_1.text.toString())
+                param.setAllowType(TIMFriendAllowType.TIM_FRIEND_NEED_CONFIRM)
                 if (faceurl != "") {
                     param.setFaceUrl(faceurl)
                 }
@@ -264,8 +284,14 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
             show()
         }
     }
+    fun loadper() {
+        mpersenter.loadProvince()
+    }
+    fun loadschool(url:String){
+        mpersenter.loadschool("http://www.hisihi.com/app.php?s=/school/school/provinceid/$url")
+    }
 
-
+    lateinit var selectSchool: SelectSchool
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.my_main)
@@ -283,6 +309,11 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
         z10.setOnClickListener(this)
         done.setOnClickListener(this)
         fh.setOnClickListener(this)
+        selectSchool = SelectSchool(z6_1, this,{loadper() },{loadschool(selectSchool.provinceId)})
+        selectSchool.initPopView()
+        z6_1.isCursorVisible = false;
+        z6_1.isFocusable = false
+        z6_1.isFocusableInTouchMode = false
         TIMFriendshipManager.getInstance().getSelfProfile(object : TIMValueCallBack<TIMUserProfile> {
             override fun onSuccess(p0: TIMUserProfile?) {
                 if (p0 == null) return
@@ -306,9 +337,9 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                     z5_1.text = String(p0.customInfo["Tag_Profile_Custom_work"]!!)
                 }
                 if (p0.customInfo["Tag_Profile_Custom_school"] == null) {
-                    z6_1.text = "不明"
+                    z6_1.setText( "不明")
                 } else {
-                    z6_1.text = String(p0.customInfo["Tag_Profile_Custom_school"]!!)
+                    z6_1.setText(String(p0.customInfo["Tag_Profile_Custom_school"]!!))
                 }
                 if (p0.customInfo["Tag_Profile_Custom_email"] == null) {
                     z7_1.text = "不明"

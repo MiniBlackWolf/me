@@ -52,8 +52,13 @@ import java.util.*
 @Route(path = "/App/Homepage")
 class MainActivity : BaseMVPActivity<Mainpersenter>(),MainView {
     override fun LoginResult(t: Response<BaseResp<String>>) {
+        hideLoading()
         if(t.body()==null)return
         if(t.body()!!.success){
+            val edit = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).edit()
+            edit.putString("sig", t.body()!!.sig)
+            edit.putString("jwt", t.body()!!.jwt)
+            edit.apply()
             TIMlogin(Base64Utils.getFromBase64(user!!), sig!!)
         }else{
             hideLoading()

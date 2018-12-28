@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.personalhomepage.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
+import java.util.*
 
 @Route(path = "/home/PersonalhomeActivity")
 class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
@@ -52,7 +53,11 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
                 //马镫号
                 tmadengid.text = p0[0].identifier
                 //生日
-                tage.text = p0[0].birthday.toString()
+                val birthday = p0[0].birthday.toString()
+                val get = Calendar.getInstance().get(Calendar.YEAR)
+                val substring = birthday.substring(0, 4)
+                val age=get-substring.toInt()
+                tage.text = age.toString()
                 //个性签名
                 tsg.text = p0[0].selfSignature
                 //职业

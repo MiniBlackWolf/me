@@ -34,9 +34,11 @@ class PublicGroupAdapter(val context:Context,data:MutableList<TIMGroupBaseInfo>)
                     if(String(custom["Authentication"]!!)=="true"){
                         publicgrouprz.isVisible=true
                         publicgrouprz.setBackgroundResource(R.drawable.buttonssss)
+                        publicgrouprz.text = "认证"
                     }else{
                         publicgrouprz.isVisible=true
                         publicgrouprz.setBackgroundResource(R.drawable.nobuttonssss)
+                        publicgrouprz.text = "未认证"
                     }
                 }else{
                     publicgrouprz.isVisible=false

@@ -1,11 +1,16 @@
 package study.kotin.my.address.Addresspersenter
 
 import android.util.Log
+import io.reactivex.Observable
 import okhttp3.MultipartBody
 import org.jetbrains.anko.toast
 import study.kotin.my.address.Addresspersenter.view.AddressView
+import study.kotin.my.address.net.addressapi
 import study.kotin.my.address.service.AddressService
 import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.data.ProvinceList
+import study.kotin.my.baselibrary.data.SchoolList
+import study.kotin.my.baselibrary.data.net.RetrofitFactory
 import study.kotin.my.baselibrary.ext.excute
 import study.kotin.my.baselibrary.presenter.Basepersenter
 import study.kotin.my.baselibrary.protocol.BaseResp
@@ -32,6 +37,29 @@ class Addresspresenter @Inject constructor() : Basepersenter<AddressView>() {
         },lifecycleProvider)
 
 
+    }
+    fun loadProvince() {
+        AddressServiceimp.loadProvince().excute(object:BaseObserver<ProvinceList>(){
+            override fun onNext(t: ProvinceList) {
+                mView.loadProvince(t.data)
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+            }
+        },lifecycleProvider)
+    }
+    fun loadschool(url:String) {
+        AddressServiceimp.loadschool(url).excute(object:BaseObserver<SchoolList>(){
+            override fun onNext(t: SchoolList) {
+                mView.loadschool(t.data)
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+            }
+
+        },lifecycleProvider)
     }
     fun ss() {
         AddressServiceimp.aa()

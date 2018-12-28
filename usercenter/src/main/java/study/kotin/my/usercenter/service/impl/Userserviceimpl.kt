@@ -34,7 +34,7 @@ open class Userserviceimpl @Inject constructor() : Userservice {
     override fun Login(user: String, pass: String): Observable<Response<BaseResp<String>>> {
         return  userRepossitory.login(user, pass).retryWhen { it->
             it.flatMap {its->
-                if(count>5){
+                if(count>2){
                     Observable.error(its)
                 }else{
                     Observable.just(count).delay(2,TimeUnit.SECONDS)

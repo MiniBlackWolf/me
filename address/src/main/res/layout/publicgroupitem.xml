@@ -47,7 +47,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/buttonssss"
+        android:background="@drawable/nobuttonssss"
         android:text="认证"
         android:textColor="@color/background"
         android:textSize="8sp"

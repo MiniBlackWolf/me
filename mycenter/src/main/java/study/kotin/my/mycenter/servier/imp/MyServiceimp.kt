@@ -2,6 +2,8 @@ package study.kotin.my.mycenter.servier.imp
 
 import io.reactivex.Observable
 import okhttp3.MultipartBody
+import study.kotin.my.baselibrary.data.ProvinceList
+import study.kotin.my.baselibrary.data.SchoolList
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.mycenter.Repossitory.MyRepossitory
 import study.kotin.my.mycenter.servier.MyService
@@ -27,6 +29,12 @@ class MyServiceimp @Inject constructor() : MyService {
 
     override fun Synchronizeinfo(Authorization: String): Observable<BaseResp<String>> {
         return UserRepossitory.Synchronizeinfo(Authorization)
+    }
+    override fun loadProvince(): Observable<ProvinceList> {
+        return UserRepossitory.loadProvince()
+    }
+    override fun loadschool(url:String): Observable<SchoolList> {
+        return UserRepossitory.loadschool(url)
     }
 
 }

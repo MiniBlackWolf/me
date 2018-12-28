@@ -149,7 +149,7 @@
         android:layout_width="167dp"
         android:layout_height="37dp"
         android:background="@drawable/buttonstroke"
-        android:text="登陆"
+        android:text="登录"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

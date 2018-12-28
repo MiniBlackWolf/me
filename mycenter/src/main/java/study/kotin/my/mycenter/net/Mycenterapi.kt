@@ -4,6 +4,8 @@ import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
+import study.kotin.my.baselibrary.data.ProvinceList
+import study.kotin.my.baselibrary.data.SchoolList
 import study.kotin.my.baselibrary.protocol.BaseResp
 import java.io.File
 
@@ -20,4 +22,11 @@ interface Mycenterapi {
     @Multipart
     @POST("http://madengwang.com:9200/upload/img")
     fun uploadimg(@Header("Authorization")   Authorization: String,@Part file: List<MultipartBody.Part>): Observable<BaseResp<String>>
+
+    @POST("http://www.hisihi.com/app.php?s=/school/province")
+    fun loadProvince(): Observable<ProvinceList>
+
+    @POST
+    fun loadschool(@Url url: String): Observable<SchoolList>
+
 }

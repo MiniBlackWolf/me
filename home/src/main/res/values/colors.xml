@@ -2,4 +2,6 @@
 <resources>
     <color name="touming">#00ffffff</color>
     <color name="selecttouming">#7dffffff</color>
+    <color name="headbg">#83ffffff</color>
+    <color name="pobg">#62ffffff</color>
 </resources>

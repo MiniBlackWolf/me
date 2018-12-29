@@ -1,5 +1,7 @@
 package study.kotin.my.mycenter.ui.frament
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.media.Image
 import android.os.Bundle
@@ -75,6 +77,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
     lateinit var pot: ImageView
     lateinit var name: TextView
     lateinit var sige: TextView
+    var trun=true
     override fun onClick(v: View?) {
         if (TIMManager.getInstance().loginUser == "") {
             toast("请先登录")
@@ -94,7 +97,30 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
                 mpersenter.Logout()
             }
             //   R.id.m11 -> activity!!.startActivity<PersonnelActivity>()
-            //          R.id.m10 -> ActivityUtils.finishAllActivities()
+            R.id.m10 -> {
+                if(trun){
+                    val scaleX = ObjectAnimator.ofFloat(m10, "scaleX", 1f, 5f)
+                    val scaleY = ObjectAnimator.ofFloat(m10, "scaleY", 1f, 5f)
+                    val translationX = ObjectAnimator.ofFloat(m10, "translationX", 0f, -360f)
+                    val translationY = ObjectAnimator.ofFloat(m10, "translationY", 0f, 500f)
+                    val animatorSet = AnimatorSet()
+                    animatorSet.playTogether(scaleX,scaleY,translationY,translationX)
+                    animatorSet.setDuration(1500)
+                    animatorSet.start()
+                    trun=false
+                }else{
+                    val scaleX = ObjectAnimator.ofFloat(m10, "scaleX", 1f)
+                    val scaleY = ObjectAnimator.ofFloat(m10, "scaleY", 1f)
+                    val translationX = ObjectAnimator.ofFloat(m10, "translationX", 0f)
+                    val translationY = ObjectAnimator.ofFloat(m10, "translationY", 0f)
+                    val animatorSet = AnimatorSet()
+                    animatorSet.playTogether(scaleX,scaleY,translationY,translationX)
+                    animatorSet.setDuration(1500)
+                    animatorSet.start()
+                    trun=true
+                }
+
+            }
             R.id.pot -> {
                 ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id", TIMManager.getInstance().loginUser).navigation()
             }

@@ -353,11 +353,17 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 }
                 if (z2_1.text.toString() == "" || z6_1.text.toString() == "不明" || z7_1.text.toString() == "不明") {
                     fh.isVisible = false
+                    changeuser.isVisible=true
+                    changeuser.setOnClickListener {
+                        ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
+                        finish()
+                    }
                     trun = true
                     return
                 } else {
                     trun = false
                     fh.isVisible = true
+                    changeuser.isVisible=false
                 }
             }
 

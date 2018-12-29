@@ -27,7 +27,7 @@ class addfriendActivity : BaseMVPActivity<HomePersenter>() {
             users.add(timAddFriendRequest)
             TIMFriendshipManagerExt.getInstance().addFriend(users, object : TIMValueCallBack<MutableList<TIMFriendResult>> {
                 override fun onSuccess(p0: MutableList<TIMFriendResult>?) {
-                    toast("添加成功")
+                    toast("发送申请成功")
                     ARouter.getInstance().build("/App/Homepage").navigation()
                     finish()
                 }

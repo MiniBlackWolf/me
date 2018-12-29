@@ -44,7 +44,10 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
                     if(jwt==""&&list[0].value()==""){
                         return
                     }
-                    p0!!.evaluateJavascript("javascript:setdata('${list[0].value()}','$jwt','3')") { its ->
+                    val edit = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
+                    val string = edit.getBoolean("status", true)
+                    val j=if(string)"1" else "2"
+                    p0!!.evaluateJavascript("javascript:setdata('${list[0].value()}','$jwt','3',$j)") { its ->
                         Log.i("iiiiiiiiiiiii", its)
                     }
                     trun = false
@@ -58,13 +61,14 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
         initWeb.addJavascriptInterface(webtest(this,""),"webtest")
 
     }
-    override fun onBackPressed() {
-        if(people.url=="http://madengwang.com:9200/admin/job/jobFind.html"){
-            super.onBackPressed()
-        }else {
-            people.goBack()
-        }
-    }
+//    override fun onBackPressed() {
+//
+//        if(people.url=="http://192.168.1.105:9200/admin/job/jobFind.html"){
+//            super.onBackPressed()
+//        }else {
+//            people.goBack()
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

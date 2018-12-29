@@ -30,6 +30,7 @@
     </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/sc"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top">
 
-        <study.kotin.my.baselibrary.common.CircleImageView
+        <ImageView
             android:id="@+id/circleImageView"
             android:layout_width="125dp"
             android:layout_height="125dp"
@@ -142,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:text="个性签名: "
-                    android:textColor="@color/background"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     tools:layout_editor_absoluteX="58dp"
                     tools:layout_editor_absoluteY="138dp" />
@@ -153,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="未知"
-                    android:textColor="@color/background"
+                    android:textSize="12sp"
                     tools:layout_editor_absoluteX="133dp"
                     tools:layout_editor_absoluteY="138dp" />
             </LinearLayout>
@@ -182,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:text="职 业       : "
-                    android:textColor="@color/background"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     tools:layout_editor_absoluteX="58dp"
                     tools:layout_editor_absoluteY="112dp" />
@@ -193,7 +194,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="未知"
-                    android:textColor="@color/background"
+                    android:textSize="12sp"
                     tools:layout_editor_absoluteX="118dp"
                     tools:layout_editor_absoluteY="112dp" />
             </LinearLayout>
@@ -222,7 +223,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:text="年 龄       : "
-                    android:textColor="@color/background"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="56dp" />
@@ -233,7 +234,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="未知"
-                    android:textColor="@color/background"
+                    android:textSize="12sp"
                     tools:layout_editor_absoluteX="65dp"
                     tools:layout_editor_absoluteY="56dp" />
             </LinearLayout>
@@ -262,7 +263,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:text="马 镫 号  : "
-                    android:textColor="@color/background"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     tools:layout_editor_absoluteX="32dp"
                     tools:layout_editor_absoluteY="212dp" />
@@ -273,7 +274,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="未知"
-                    android:textColor="@color/background"
+                    android:textSize="12sp"
                     tools:layout_editor_absoluteX="108dp"
                     tools:layout_editor_absoluteY="168dp" />
             </LinearLayout>

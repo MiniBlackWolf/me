@@ -38,10 +38,10 @@ class ResumeActivity:BaseMVPActivity<Mypersenter>() {
                  if (trun) {
                     val httpUrl= HttpUrl.get(p1)
                     val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-                    val string1 = getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString(httpUrl.host(), "")
+                    val string1 = getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString("192.168.1.105", "")
                     val gson = Gson()
                     val list = gson.fromJson(string1,object: TypeToken<List<Cookie>>(){}.type) as List<Cookie>
-                    p0!!.evaluateJavascript("javascript:setdata('${list[0].value()}','$jwt','1')") { its ->
+                    p0!!.evaluateJavascript("javascript:setdata('${list[0].value()}','$jwt','1','0')") { its ->
                         Log.i("iiiiiiiiiiiii", its)
                     }
                     trun=false

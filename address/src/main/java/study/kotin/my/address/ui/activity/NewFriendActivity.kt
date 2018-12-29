@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.TextView
 import com.alibaba.android.arouter.launcher.ARouter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.tencent.imsdk.TIMCallBack
@@ -43,10 +44,26 @@ class NewFriendActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListe
         myfdadd.layoutManager = LinearLayoutManager(this@NewFriendActivity)
         //更新Ui
         updataview()
-        newFriendAdapter.onItemChildClickListener = object : BaseQuickAdapter.OnItemChildClickListener {
+
+        newFriendAdapter.onItemChildClickListener = object :BaseQuickAdapter.OnItemChildClickListener {
             override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
                 val data = adapter!!.data as List<addnewFDdata>
                 when (view!!.id) {
+                    R.id.msg->{
+                        val msg = adapter.getViewByPosition(myfdadd, position, R.id.msg) as TextView
+                        val tag = msg.tag
+                        if(msg.tag as Boolean){
+                            msg.setSingleLine(true)
+                            msg.tag = false
+                        }else{
+                            msg.setSingleLine(false)
+                            msg.tag = true
+                        }
+
+                    }
+                    R.id.headurl -> {
+                        ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id", data[position].id).navigation()
+                    }
                     R.id.acc -> {
                         when (data[position].type) {
                             0 -> {
@@ -111,7 +128,10 @@ class NewFriendActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListe
                         }
                     }
                 }
+
             }
+
+
         }
 
     }
@@ -136,7 +156,7 @@ class NewFriendActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListe
                     override fun onSuccess(p0: TIMGetFriendFutureListSucc) {
                         val List = java.util.ArrayList<addnewFDdata>()
                         for (p in p0.items) {
-                            val addnewFDdata = addnewFDdata(0, p.profile.gender, p.identifier, p.profile.nickName, p.profile.faceUrl, p.addWording, p.addTime, null)
+                            val addnewFDdata = addnewFDdata(0,"" ,p.profile.gender, p.identifier, p.profile.nickName, p.profile.faceUrl, p.addWording, p.addTime, null)
                             List.add(addnewFDdata)
                         }
                         newFriendAdapter.addData(List)
@@ -146,7 +166,7 @@ class NewFriendActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListe
                     }
                 })
         val param = TIMGroupPendencyGetParam()
-        val nextStartTimestamp = getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getLong("nextStartTimestamp",0L)
+        val nextStartTimestamp = getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getLong("nextStartTimestamp", 0L)
         param.setTimestamp(nextStartTimestamp)//首次获取填 0
         param.setNumPerPage(100)
         TIMGroupManagerExt.getInstance().getGroupPendencyList(param, object : TIMValueCallBack<TIMGroupPendencyListGetSucc> {
@@ -166,7 +186,7 @@ class NewFriendActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListe
                     if (item.handledStatus != TIMGroupPendencyHandledStatus.NOT_HANDLED) {
                         continue
                     }
-                    val addnewFDdata = addnewFDdata(1, TIMFriendGenderType.Unknow, item.fromUser, "", "", item.requestMsg, item.addTime, item)
+                    val addnewFDdata = addnewFDdata(1,item.groupId, TIMFriendGenderType.Unknow, item.fromUser, "", "", item.requestMsg, item.addTime, item)
                     List.add(addnewFDdata)
                 }
                 newFriendAdapter.addData(List)

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">address</string>
+    <item name="tag_user" type="id"/>
+    <item name="tag_group" type="id"/>
 </resources>

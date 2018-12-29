@@ -102,6 +102,10 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
                         .forResult(1)
             }
             R.id.newgroupbutton -> {
+                if(groupname.text.toString()==""||school.text.toString()==""){
+                    toast("学校和社团名不能是空")
+                    return
+                }
                 val createGroupParam = TIMGroupManager.CreateGroupParam("Public", groupname.text.toString())
                 createGroupParam.setFaceUrl(headurl)
                 createGroupParam.setMaxMemberNum(100)

@@ -97,10 +97,10 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
                 val lv0 = AddressListLv0(lv0name[0], p0.size)
                 for (j in 0 until lv1Count) {
                     val lv1: AddressListLv1
-                    if (p0.get(j).remark == null) {
-                        lv1 = AddressListLv1("", p0.get(j).nickName, p0[j].identifier)
+                    if (p0.get(j).remark == "") {
+                        lv1 = AddressListLv1(p0[j].faceUrl, p0.get(j).nickName, p0[j].identifier)
                     } else {
-                        lv1 = AddressListLv1("", p0.get(j).remark, p0[j].identifier)
+                        lv1 = AddressListLv1(p0[j].faceUrl, p0.get(j).remark, p0[j].identifier)
                     }
                     lv0.addSubItem(lv1)
                 }

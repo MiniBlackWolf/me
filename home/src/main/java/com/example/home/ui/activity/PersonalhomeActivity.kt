@@ -1,6 +1,9 @@
 package com.example.home.ui.activity
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import androidx.core.view.isVisible
@@ -32,10 +35,68 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
         }
     }
 
+    var y1: Float = 0F
+    var y2: Float = 0F
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            //当手指按下的时候
+            y1 = event.getY()
+        }
+        if (event.action == MotionEvent.ACTION_MOVE) {
+            y2 = event.y
+            val y = sc.y
+         //   Log.i("iiiiiiiii", "$y2,$y")
+//                if (y1 - y2 > 10) {//向上滑动
+//                    val ofFloat = ObjectAnimator.ofFloat(v, "translationY", y, (y2 / 2))
+//                    ofFloat.start()
+//                }
+            if (y2 - y1 > 10) {//向下滑动
+                val ys=y2 / 3
+                Log.i("iiiiiiiii", "$ys,$y")
+                val ofFloats = ObjectAnimator.ofFloat(sc, "translationY", ys,y)
+                ofFloats.start()
+            }
+        }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            //当手指离开的时候
+            val ofFloat = ObjectAnimator.ofFloat(sc, "translationY", 0f)
+            ofFloat.start()
+        }
+        return super.dispatchTouchEvent(event)
+
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.personalhomepage)
         chatfh.setOnClickListener(this)
+//        sc.setOnTouchListener { v, event ->
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                //当手指按下的时候
+//                y1 = event.getY()
+//            }
+//            if (event.action == MotionEvent.ACTION_MOVE) {
+//                y2 = event.y
+//                val y = v.y
+//                Log.i("iiiiiiiii", "$y2,$y")
+////                if (y1 - y2 > 10) {//向上滑动
+////                    val ofFloat = ObjectAnimator.ofFloat(v, "translationY", y, (y2 / 2))
+////                    ofFloat.start()
+////                }
+//                    if (y2 - y1 > 10) {//向下滑动
+//                    val ofFloat = ObjectAnimator.ofFloat(v, "translationY", y, y2 / 4)
+//                        ofFloat.setDuration(100)
+//                    ofFloat.start()
+//                }
+//            }
+//            if (event.getAction() == MotionEvent.ACTION_UP) {
+//                //当手指离开的时候
+//                val ofFloat = ObjectAnimator.ofFloat(v, "translationY", 0f)
+//                ofFloat.start()
+//            }
+//            true
+//        }
         TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>) {
                 //头像
@@ -54,10 +115,12 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
                 tmadengid.text = p0[0].identifier
                 //生日
                 val birthday = p0[0].birthday.toString()
-                val get = Calendar.getInstance().get(Calendar.YEAR)
-                val substring = birthday.substring(0, 4)
-                val age=get-substring.toInt()
-                tage.text = age.toString()
+                if (birthday != "0") {
+                    val get = Calendar.getInstance().get(Calendar.YEAR)
+                    val substring = birthday.substring(0, 4)
+                    val age = get - substring.toInt()
+                    tage.text = age.toString()
+                }
                 //个性签名
                 tsg.text = p0[0].selfSignature
                 //职业

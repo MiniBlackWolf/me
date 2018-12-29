@@ -3,11 +3,15 @@ package study.kotin.my.address
 import android.animation.ObjectAnimator
 import android.util.Log
 import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import study.kotin.my.address.data.AddressListLv0
 import study.kotin.my.address.data.AddressListLv1
+import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.common.CircleImageView
 
 
 class Addresslistadapter(data: List<MultiItemEntity>) : BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(data) {
@@ -47,6 +51,10 @@ class Addresslistadapter(data: List<MultiItemEntity>) : BaseMultiItemQuickAdapte
                 val lv1 = item as AddressListLv1
                 helper.setText(R.id.fdname, lv1.name)
                 helper.addOnClickListener(R.id.thissd)
+                val headurl = helper.getView<CircleImageView>(R.id.headurl)
+                val options = RequestOptions()
+                        .error(R.drawable.a4_2)
+                Glide.with(BaseApplication.context).load(lv1.headurl).apply(options).into(headurl)
             }
         }
     }

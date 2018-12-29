@@ -27,6 +27,7 @@ import com.tencent.imsdk.*
 import com.tencent.imsdk.ext.group.TIMGroupBaseInfo
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
+import com.tencent.imsdk.ext.group.TIMGroupSelfInfo
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import kotlinx.android.synthetic.main.chatlayout.*
 import kotlinx.android.synthetic.main.publicgrouplayout.*
@@ -233,42 +234,38 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
             override fun onError(p0: Int, p1: String?) {
             }
         })
-        TIMGroupManagerExt.getInstance().getGroupList(object : TIMValueCallBack<MutableList<TIMGroupBaseInfo>> {
-            override fun onSuccess(p0: MutableList<TIMGroupBaseInfo>?) {
+        TIMGroupManagerExt.getInstance().getSelfInfo(id!!,object: TIMValueCallBack<TIMGroupSelfInfo>{
+            override fun onSuccess(p0: TIMGroupSelfInfo?) {
                 if(p0==null)return
-                var count =0
-                for(p in p0){
-                    count++
-                    if(p.selfInfo.role==TIMGroupMemberRoleType.Admin&&p.selfInfo.role==TIMGroupMemberRoleType.Normal){
-                        count++
-                        addjoin.text="退出该群"
-                        more.isVisible=true
+                if(p0.role==TIMGroupMemberRoleType.Admin||p0.role==TIMGroupMemberRoleType.Normal){
+                    addjoin.text="退出该群"
+                    more.isVisible=true
+                    return
+                }
+                if(p0.role==TIMGroupMemberRoleType.Owner){
+                    addjoin.text="解散该群"
+                    more.isVisible=true
+                    return
+                }
+                if(p0.role==TIMGroupMemberRoleType.NotMember){
+                    more.isVisible=false
+                    addjoin.text="申请加入"
+                    l3.setOnClickListener {
+                        guset.isVisible=true
                     }
-                    if(p.selfInfo.role==TIMGroupMemberRoleType.Owner){
-                        addjoin.text="解散该群"
-                        more.isVisible=true
+                    l4.setOnClickListener {
+
+                        guset.isVisible=true
                     }
-                    if(p.selfInfo.role==TIMGroupMemberRoleType.NotMember){
-                        more.isVisible=false
-                        addjoin.text="申请加入"
-                        l3.setOnClickListener {
-                            guset.isVisible=true
-
-                        }
-                        l4.setOnClickListener {
-
-                            guset.isVisible=true
-                        }
-                    }
-
+                    return
                 }
 
             }
 
             override fun onError(p0: Int, p1: String?) {
             }
-
         })
+
     }
 
     private fun initFraments() {

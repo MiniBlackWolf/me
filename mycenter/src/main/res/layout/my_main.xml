@@ -21,8 +21,8 @@
 
     <ImageView
         android:id="@+id/fh"
-        android:layout_width="30dp"
-        android:layout_height="35dp"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
@@ -619,5 +619,19 @@
             app:layout_constraintVertical_bias="0.513"
             app:srcCompat="@drawable/icon_arrow" />
     </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/changeuser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="切换账号"
+        android:textColor="@android:color/background_light"
+        android:textStyle="normal|bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/z10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.57" />
 
 </android.support.constraint.ConstraintLayout>

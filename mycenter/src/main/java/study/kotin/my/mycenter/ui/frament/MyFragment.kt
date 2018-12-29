@@ -98,6 +98,9 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
             R.id.pot -> {
                 ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id", TIMManager.getInstance().loginUser).navigation()
             }
+            R.id.name -> {
+                ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id", TIMManager.getInstance().loginUser).navigation()
+            }
         }
 
     }
@@ -165,7 +168,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
                         m3.setOnClickListener { activity!!.startActivity<PersonnelActivity>() }
                     } else {
                         m7.setText("切换身份-求职者")
-                        m3.text="我的简历"
+                        m3.text = "我的简历"
                         m3.setOnClickListener(this)
                     }
                 }.registerInBus(this)
@@ -197,6 +200,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
         pot = View.find(R.id.pot)
         pot.setOnClickListener(this)
         name = View.find(R.id.name)
+        name.setOnClickListener(this)
         sige = View.find(R.id.sige)
     }
 

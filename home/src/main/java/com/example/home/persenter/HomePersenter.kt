@@ -5,6 +5,7 @@ import android.os.Environment
 import android.util.Log
 import com.example.home.Messges.*
 import com.example.home.common.ChatViewSet
+import com.example.home.data.articledata
 import study.kotin.my.baselibrary.presenter.Basepersenter
 import com.example.home.persenter.view.HomeView
 import com.example.home.seriver.HomeSeriver
@@ -19,6 +20,7 @@ import io.reactivex.annotations.NonNull
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import study.kotin.my.baselibrary.ext.excute
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.rx.BaseObserver
 import javax.inject.Inject
 
@@ -27,6 +29,7 @@ class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
     lateinit var HomeSeriverImp: HomeSeriver
     @Inject
     lateinit var SearchServiceimp:SearchSeriver
+
     fun showmessge(id:String) {
         //消息监听
         TIMManager.getInstance().loginUser

@@ -1,6 +1,7 @@
 package com.example.home.net
 
 
+import com.example.home.data.articledata
 import com.example.home.data.searchgroupdata
 import com.example.home.data.searchuserdata
 import com.example.home.data.sendsearchuserdata
@@ -9,12 +10,16 @@ import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
+import study.kotin.my.baselibrary.protocol.BaseResp
 
 
 interface homeapi {
     @POST("http://madengwang.com:9200/user/searchUserinfo?pageNum=0&pageSize=20")
-    fun search(@Header("Authorization") Authorization: String,@Query("keywords") keyword:String ): Observable<searchuserdata>
+    fun search(@Header("Authorization") Authorization: String, @Query("keywords") keyword: String): Observable<searchuserdata>
 
     @POST("http://madengwang.com:9200/Group/search?pageNum=0&pageSize=20")
-    fun GroupSearch(@Header("Authorization") Authorization: String,@Query("name") name:String ):Observable<searchgroupdata>
+    fun GroupSearch(@Header("Authorization") Authorization: String, @Query("name") name: String): Observable<searchgroupdata>
+
+    @POST("http://192.168.1.105:9200/communityarticle/add")
+    fun addarticle(@Header("Authorization") Authorization: String, @Body articledata: articledata): Observable<BaseResp<String>>
 }

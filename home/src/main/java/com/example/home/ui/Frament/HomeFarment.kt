@@ -24,6 +24,7 @@ import com.example.home.data.UserList
 import com.example.home.persenter.HomePersenter
 import com.example.home.ui.activity.HomeActivity
 import com.example.home.ui.activity.SearchActivity
+import com.example.home.ui.activity.qcodeActivity
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.tencent.imsdk.*
 import org.jetbrains.anko.find
@@ -50,12 +51,14 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         }
         when (v!!.id) {
             R.id.search -> {
-
                 startActivity<SearchActivity>()
             }
             R.id.more -> {
 
 
+            }
+            R.id.sys->{
+                startActivity<qcodeActivity>()
             }
 
         }
@@ -173,6 +176,7 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
 
     lateinit var chatlist: RecyclerView
     lateinit var chatlist2: RecyclerView
+    lateinit var sys:ImageView
     lateinit var left: ImageView
     lateinit var rigth: ImageView
     lateinit var hz: SmartRefreshLayout
@@ -319,6 +323,8 @@ class HomeFarment : BaseMVPFragmnet<HomePersenter>(), ConversationView, View.OnC
         view.find<ImageView>(R.id.search).setOnClickListener(this)
         view.find<ImageView>(R.id.more).setOnClickListener(this)
         oooo = view.find(R.id.oooo)
+        sys=view.find<ImageView>(R.id.sys)
+        sys .setOnClickListener(this)
     }
 
     lateinit var oooo: TextView

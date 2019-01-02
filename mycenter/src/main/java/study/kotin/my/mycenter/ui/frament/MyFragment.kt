@@ -3,6 +3,7 @@ package study.kotin.my.mycenter.ui.frament
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Bitmap
 import android.media.Image
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -34,11 +35,16 @@ import com.tencent.imsdk.*
 import org.jetbrains.anko.support.v4.toast
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.protocol.BaseResp
+import study.kotin.my.mycenter.R.drawable.qrcode
 import study.kotin.my.mycenter.injection.commponent.DaggerMyCommponent
 import study.kotin.my.mycenter.injection.module.Mymodule
 import study.kotin.my.mycenter.persenter.view.MyView
 import study.kotin.my.mycenter.ui.activity.*
 import java.util.ArrayList
+import kotlin.concurrent.thread
+import cn.bingoogolapple.qrcode.core.BarcodeType
+import cn.bingoogolapple.qrcode.core.QRCodeView
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder
 
 
 class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView {
@@ -72,12 +78,12 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
     lateinit var m7: TextView
     lateinit var m8: TextView
     lateinit var m9: TextView
-    lateinit var m10: TextView
+    lateinit var m10: ImageView
     lateinit var m11: TextView
     lateinit var pot: ImageView
     lateinit var name: TextView
     lateinit var sige: TextView
-    var trun=true
+    var trun = true
     override fun onClick(v: View?) {
         if (TIMManager.getInstance().loginUser == "") {
             toast("请先登录")
@@ -98,26 +104,26 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
             }
             //   R.id.m11 -> activity!!.startActivity<PersonnelActivity>()
             R.id.m10 -> {
-                if(trun){
+                if (trun) {
                     val scaleX = ObjectAnimator.ofFloat(m10, "scaleX", 1f, 5f)
                     val scaleY = ObjectAnimator.ofFloat(m10, "scaleY", 1f, 5f)
                     val translationX = ObjectAnimator.ofFloat(m10, "translationX", 0f, -360f)
                     val translationY = ObjectAnimator.ofFloat(m10, "translationY", 0f, 500f)
                     val animatorSet = AnimatorSet()
-                    animatorSet.playTogether(scaleX,scaleY,translationY,translationX)
-                    animatorSet.setDuration(1500)
+                    animatorSet.playTogether(scaleX, scaleY, translationY, translationX)
+                    animatorSet.setDuration(500)
                     animatorSet.start()
-                    trun=false
-                }else{
+                    trun = false
+                } else {
                     val scaleX = ObjectAnimator.ofFloat(m10, "scaleX", 1f)
                     val scaleY = ObjectAnimator.ofFloat(m10, "scaleY", 1f)
                     val translationX = ObjectAnimator.ofFloat(m10, "translationX", 0f)
                     val translationY = ObjectAnimator.ofFloat(m10, "translationY", 0f)
                     val animatorSet = AnimatorSet()
-                    animatorSet.playTogether(scaleX,scaleY,translationY,translationX)
-                    animatorSet.setDuration(1500)
+                    animatorSet.playTogether(scaleX, scaleY, translationY, translationX)
+                    animatorSet.setDuration(500)
                     animatorSet.start()
-                    trun=true
+                    trun = true
                 }
 
             }
@@ -176,6 +182,18 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
             m3.text = "人事信息"
             m3.setOnClickListener { activity!!.startActivity<PersonnelActivity>() }
         }
+
+        thread {
+            val syncEncodeQRCode = QRCodeEncoder.syncEncodeQRCode(TIMManager.getInstance().loginUser+"madengwang", 400)
+            Bus.send(syncEncodeQRCode)
+        }
+        Bus.observe<Bitmap>()
+                .subscribe{
+                    if(it!=null){
+                        m10.setImageBitmap(it)
+
+                    }
+                }
         return View
     }
 

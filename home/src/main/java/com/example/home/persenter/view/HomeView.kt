@@ -5,6 +5,7 @@ import com.tencent.imsdk.TIMFileElem
 import com.tencent.imsdk.TIMGroupTipsElem
 import com.tencent.imsdk.TIMTextElem
 import study.kotin.my.baselibrary.presenter.view.BaseView
+import study.kotin.my.baselibrary.protocol.BaseResp
 import java.io.FileInputStream
 
 interface HomeView:BaseView {
@@ -15,7 +16,6 @@ interface HomeView:BaseView {
     fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem,id:String)
     fun sendmsg()
     fun sendSoundmsg()
-
 
 
 }

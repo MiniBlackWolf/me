@@ -17,5 +17,6 @@
         <activity android:name=".ui.activity.PublicGroupFarment_3_Article_Activity"/>
         <activity android:name=".ui.activity.PublicGroupFarment_3_Setting_Activity"/>
         <activity android:name=".ui.activity.addfriendActivity"/>
+        <activity android:name=".ui.activity.qcodeActivity"/>
     </application>
 </manifest>

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AnimationSet
+import android.view.animation.TranslateAnimation
 import android.widget.Button
 import androidx.core.view.isVisible
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -44,16 +46,22 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
         }
         if (event.action == MotionEvent.ACTION_MOVE) {
             y2 = event.y
+            var x2 = event.x
             val y = sc.y
-         //   Log.i("iiiiiiiii", "$y2,$y")
+            //   Log.i("iiiiiiiii", "$y2,$y")
 //                if (y1 - y2 > 10) {//向上滑动
 //                    val ofFloat = ObjectAnimator.ofFloat(v, "translationY", y, (y2 / 2))
 //                    ofFloat.start()
 //                }
             if (y2 - y1 > 10) {//向下滑动
-                val ys=y2 / 3
-                Log.i("iiiiiiiii", "$ys,$y")
-                val ofFloats = ObjectAnimator.ofFloat(sc, "translationY", ys,y)
+                val ys = y2 / 3
+//                x2=x2/3
+                //       Log.i("iiiiiiiii", "$ys,$y")
+//                val translateAnimation = TranslateAnimation(0f, sc.y, 0f, y)
+//                val animationSet = AnimationSet(true)
+//                animationSet.addAnimation(translateAnimation)
+//                sc.startAnimation(animationSet)0
+                val ofFloats = ObjectAnimator.ofFloat(sc, "translationY", ys, 0f)
                 ofFloats.start()
             }
         }

@@ -58,6 +58,7 @@ import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import com.zhihu.matisse.filter.Filter
 import org.jetbrains.anko.*
 import study.kotin.my.baselibrary.ext.getsoundtime
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.utils.EmoticonUtil
 import study.kotin.my.baselibrary.utils.FileUtil
 import study.kotin.my.baselibrary.utils.MediaUtil
@@ -71,6 +72,7 @@ import kotlin.collections.HashSet
 @Suppress("DEPRECATION")
 @Route(path = "/home/HomeActivity")
 class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickListener {
+
     val SEND_MSG_TYPE = 1
     val SHOW_MSG_TYPE = 0
     lateinit var id: String

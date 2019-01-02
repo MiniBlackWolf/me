@@ -19,6 +19,7 @@ import com.example.home.persenter.view.HomeSeachView
 import kotlinx.android.synthetic.main.searchlayout.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
@@ -26,6 +27,10 @@ import java.util.regex.Pattern
 
 @Route(path = "/home/searchactivity")
 class SearchActivity : BaseMVPActivity<HomeSeachPersenter>(), View.OnClickListener, HomeSeachView {
+    override fun article(baseResp: BaseResp<String>) {
+
+    }
+
     override fun search(searchuserdata: searchuserdata) {
         val list=ArrayList<seachAlldata>()
         for(s in searchuserdata.rows){

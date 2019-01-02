@@ -2,6 +2,8 @@ package com.example.home.seriver.imp
 
 import android.content.Context
 import android.util.Log
+import com.example.home.Repossitory.HomeRepossitory
+import com.example.home.data.articledata
 import com.example.home.seriver.HomeSeriver
 import com.tencent.imsdk.*
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
@@ -12,11 +14,15 @@ import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.chatlayout.*
 import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.utils.FileUtil
 import java.io.IOException
 import javax.inject.Inject
 
 class HomeSeriverImp @Inject constructor() : HomeSeriver {
+    @Inject
+    lateinit var HomeRepossitory: HomeRepossitory
+
 
 
     override fun getdata(): Observable<Boolean> {

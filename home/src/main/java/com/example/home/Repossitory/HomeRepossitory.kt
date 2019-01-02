@@ -2,6 +2,7 @@ package com.example.home.Repossitory
 
 
 
+import com.example.home.data.articledata
 import com.example.home.data.searchgroupdata
 import com.example.home.data.searchuserdata
 import com.example.home.net.homeapi
@@ -17,5 +18,8 @@ class HomeRepossitory @Inject constructor(){
     }
     fun GroupSearch(Authorization: String, name:String): Observable<searchgroupdata> {
         return RetrofitFactory.instance.creat(homeapi::class.java).GroupSearch(Authorization,name)
+    }
+    fun addarticle(Authorization: String, articledata: articledata):Observable<BaseResp<String>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).addarticle(Authorization,articledata)
     }
 }

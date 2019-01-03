@@ -10,5 +10,5 @@ import study.kotin.my.baselibrary.protocol.BaseResp
 interface HomeSeachView:BaseView {
      fun search(searchuserdata:searchuserdata )
      fun GroupSearch(searchgroupdata:searchgroupdata)
-     fun article(baseResp: BaseResp<String>)
+
 }

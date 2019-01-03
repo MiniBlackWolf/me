@@ -1,6 +1,7 @@
 package study.kotin.my.mycenter.injection.commponent
 
 import com.example.home.ui.Frament.HomeFarment
+import com.example.home.ui.Frament.PublicGroupFarment_4
 import com.example.home.ui.activity.HomeActivity
 import com.example.home.ui.activity.PublicGroupFarment_3_Article_Activity
 import com.example.home.ui.activity.SearchActivity
@@ -17,4 +18,5 @@ interface HomeCommponent{
     fun inject(HomeActivity: HomeActivity)
     fun inject(SearchActivity: SearchActivity)
     fun inject(PublicGroupFarment_3_Article_Activity: PublicGroupFarment_3_Article_Activity)
+    fun inject(PublicGroupFarment_4: PublicGroupFarment_4)
 }

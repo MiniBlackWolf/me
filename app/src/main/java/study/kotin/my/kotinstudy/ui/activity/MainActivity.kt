@@ -52,8 +52,10 @@ import java.util.*
 @Route(path = "/App/Homepage")
 class MainActivity : BaseMVPActivity<Mainpersenter>(),MainView {
     override fun LoginResult(t: Response<BaseResp<String>>) {
-        hideLoading()
-        if(t.body()==null)return
+        if(t.body()==null){
+            hideLoading()
+            return
+        }
         if(t.body()!!.success){
             val edit = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).edit()
             edit.putString("sig", t.body()!!.sig)

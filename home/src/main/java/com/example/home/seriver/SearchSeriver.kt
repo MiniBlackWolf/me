@@ -10,5 +10,5 @@ import study.kotin.my.baselibrary.protocol.BaseResp
 interface SearchSeriver {
  fun search(Authorization: String, keywords:String ): Observable<searchuserdata>
  fun GroupSearch(Authorization: String, name:String): Observable<searchgroupdata>
- fun addarticle(Authorization: String, articledata: articledata):Observable<BaseResp<String>>
+
 }

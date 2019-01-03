@@ -1,10 +1,7 @@
 package com.example.home.net
 
 
-import com.example.home.data.articledata
-import com.example.home.data.searchgroupdata
-import com.example.home.data.searchuserdata
-import com.example.home.data.sendsearchuserdata
+import com.example.home.data.*
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -22,4 +19,7 @@ interface homeapi {
 
     @POST("http://192.168.1.105:9200/communityarticle/add")
     fun addarticle(@Header("Authorization") Authorization: String, @Body articledata: articledata): Observable<BaseResp<String>>
+
+    @POST("http://192.168.1.105:9200/communityarticle/findAll?page=0&size=9999")
+    fun findarticle(@Body id:Map<String,String>):Observable<listarticledata<articledata>>
 }

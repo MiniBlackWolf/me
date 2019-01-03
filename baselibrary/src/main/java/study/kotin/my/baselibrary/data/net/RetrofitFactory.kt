@@ -13,6 +13,7 @@ import android.R.attr.host
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.tencent.open.utils.Global.getSharedPreferences
 import study.kotin.my.baselibrary.common.BaseApplication
 
 
@@ -25,14 +26,28 @@ class RetrofitFactory private constructor() {
     private val interceptor: Interceptor
 
     init {
-        interceptor = Interceptor {
-            val request = it.request()
-                    .newBuilder()
-                    .header("Content-type", "application/json")
-                    .header("charset", "utf-8")
-                    .build()
-            it.proceed(request)
+        val jwt = BaseApplication.context.getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+        if (jwt != "") {
+            interceptor = Interceptor {
+                val request = it.request()
+                        .newBuilder()
+                        .header("Content-type", "application/json")
+                        .header("charset", "utf-8")
+                        .header("Authorization","Bearer $jwt")
+                        .build()
+                it.proceed(request)
+            }
+        }else{
+            interceptor = Interceptor {
+                val request = it.request()
+                        .newBuilder()
+                        .header("Content-type", "application/json")
+                        .header("charset", "utf-8")
+                        .build()
+                it.proceed(request)
+            }
         }
+
         retrofit = Retrofit.Builder()
                 .baseUrl(baseurl.url)
                 .addConverterFactory(GsonConverterFactory.create())

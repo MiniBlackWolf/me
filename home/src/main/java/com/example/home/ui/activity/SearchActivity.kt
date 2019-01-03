@@ -27,9 +27,6 @@ import java.util.regex.Pattern
 
 @Route(path = "/home/searchactivity")
 class SearchActivity : BaseMVPActivity<HomeSeachPersenter>(), View.OnClickListener, HomeSeachView {
-    override fun article(baseResp: BaseResp<String>) {
-
-    }
 
     override fun search(searchuserdata: searchuserdata) {
         val list=ArrayList<seachAlldata>()

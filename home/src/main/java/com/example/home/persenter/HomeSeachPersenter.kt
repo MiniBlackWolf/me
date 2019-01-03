@@ -17,18 +17,7 @@ import javax.inject.Inject
 class HomeSeachPersenter @Inject constructor():Basepersenter<HomeSeachView>() {
     @Inject
     lateinit var SearchServiceimp: SearchSeriver
-    fun articledata(Authorization: String, articledata: articledata){
-        SearchServiceimp.addarticle(Authorization,articledata).excute(object :BaseObserver<BaseResp<String>>(){
-            override fun onNext(t: BaseResp<String>) {
-                mView.article(t)
-                super.onNext(t)
-            }
 
-            override fun onError(e: Throwable) {
-                super.onError(e)
-            }
-        },lifecycleProvider)
-    }
     fun searchuser(Authorization: String,keywords: String,SearchActivity: SearchActivity){
         SearchServiceimp.search(Authorization,keywords).excute(object: BaseObserver<searchuserdata>(){
             override fun onNext(t: searchuserdata) {

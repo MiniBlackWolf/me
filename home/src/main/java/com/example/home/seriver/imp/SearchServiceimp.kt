@@ -16,9 +16,6 @@ class SearchServiceimp @Inject constructor():SearchSeriver {
 
     @Inject
     lateinit var HomeRepossitory: HomeRepossitory
-    override fun addarticle(Authorization: String, articledata: articledata): Observable<BaseResp<String>> {
-        return HomeRepossitory.addarticle(Authorization,articledata)
-    }
    override fun search(Authorization: String, keywords:String ): Observable<searchuserdata> {
         return HomeRepossitory.search(Authorization,keywords).flatMap {
             it.itemType = 1

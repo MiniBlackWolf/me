@@ -49,6 +49,7 @@ import retrofit2.Response
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.utils.Base64Utils
+import study.kotin.my.baselibrary.utils.JWTUtils
 import study.kotin.my.baselibrary.utils.PushUtil
 import study.kotin.my.usercenter.common.PwdLoginListener
 import study.kotin.my.usercenter.common.RefreshUserSigListener
@@ -99,9 +100,10 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         edit.apply()
         var substring = ""
         try {
-            val fromBase64 = Base64.decode(result.body()!!.jwt, Base64.URL_SAFE)
-            val from = String(fromBase64)
-            substring = from.substring(from.indexOf("name") + 7, from.indexOf("name") + 13)
+            val fromBase64 = JWTUtils.decoded(result.body()!!.jwt)
+           Log.i("iiiiiiiii",fromBase64)
+            // val from = String(fromBase64)
+            substring = fromBase64.substring(fromBase64.indexOf("name") + 7, fromBase64.indexOf("name") + 13)
         } catch (e: IllegalArgumentException) {
             toast("发生未知错误请重试")
             hideLoading()

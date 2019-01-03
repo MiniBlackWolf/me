@@ -6,4 +6,6 @@ data class articledata( val title: String,
                         val address: String,
                         val communityid: String,
                         val userid: String,
-                        val content: String)
+                        val content: String,
+                        val createtime:String
+)

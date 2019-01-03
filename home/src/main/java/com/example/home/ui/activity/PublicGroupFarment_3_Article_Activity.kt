@@ -10,8 +10,10 @@ import com.example.home.data.searchgroupdata
 import com.example.home.data.searchuserdata
 import com.example.home.persenter.HomePersenter
 import com.example.home.persenter.HomeSeachPersenter
+import com.example.home.persenter.articlepersenter
 import com.example.home.persenter.view.HomeSeachView
 import com.example.home.persenter.view.HomeView
+import com.example.home.persenter.view.articleView
 import com.tencent.imsdk.TIMManager
 import jp.wasabeef.richeditor.RichEditor
 import kotlinx.android.synthetic.main.publicgroupfarment_3_article.*
@@ -21,13 +23,11 @@ import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
 
-class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<HomeSeachPersenter>(), View.OnClickListener,HomeSeachView {
-    override fun search(searchuserdata: searchuserdata) {
+class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<articlepersenter>(), View.OnClickListener,articleView {
+    override fun findarticle(r: List<articledata>) {
 
     }
 
-    override fun GroupSearch(searchgroupdata: searchgroupdata) {
-    }
 
     override fun article(baseResp: BaseResp<String>) {
         if(baseResp.success){
@@ -48,7 +48,7 @@ class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<HomeSeachPersenter
                 if (jwt == "") {
                     return
                 }
-                val articledata = articledata(Title.text.toString(), "", "", "", id, TIMManager.getInstance().loginUser, body.text.toString())
+                val articledata = articledata(Title.text.toString(), "", "", "", id, TIMManager.getInstance().loginUser, body.text.toString(),"")
                 mpersenter.articledata("Bearer " + jwt!!,articledata)
             }
 

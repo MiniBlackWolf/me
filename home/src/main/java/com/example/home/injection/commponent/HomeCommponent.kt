@@ -1,10 +1,9 @@
 package study.kotin.my.mycenter.injection.commponent
 
 import com.example.home.ui.Frament.HomeFarment
+import com.example.home.ui.Frament.PublicGroupFarment_3
 import com.example.home.ui.Frament.PublicGroupFarment_4
-import com.example.home.ui.activity.HomeActivity
-import com.example.home.ui.activity.PublicGroupFarment_3_Article_Activity
-import com.example.home.ui.activity.SearchActivity
+import com.example.home.ui.activity.*
 import dagger.Component
 import study.kotin.my.baselibrary.injection.commponent.ActivityCommpoent
 import study.kotin.my.mycenter.injection.HomeScope
@@ -19,4 +18,7 @@ interface HomeCommponent{
     fun inject(SearchActivity: SearchActivity)
     fun inject(PublicGroupFarment_3_Article_Activity: PublicGroupFarment_3_Article_Activity)
     fun inject(PublicGroupFarment_4: PublicGroupFarment_4)
+    fun inject(AddActivity: AddActivity)
+    fun inject(PublicGroupFarment_3: PublicGroupFarment_3)
+    fun inject(madengviewActivity: madengviewActivity)
 }

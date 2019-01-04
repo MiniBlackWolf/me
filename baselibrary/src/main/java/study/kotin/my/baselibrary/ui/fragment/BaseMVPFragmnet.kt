@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.blankj.utilcode.util.ActivityUtils
 import com.zyao89.view.zloading.ZLoadingDialog
 import com.zyao89.view.zloading.Z_TYPE
 import org.jetbrains.anko.support.v4.act
@@ -18,13 +19,15 @@ import study.kotin.my.baselibrary.injection.module.ActivityModule
 import study.kotin.my.baselibrary.injection.module.LifecycleProviderModule
 import study.kotin.my.baselibrary.presenter.Basepersenter
 import study.kotin.my.baselibrary.presenter.view.BaseView
+import study.kotin.my.baselibrary.ui.activity.BaseActivity
+import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import javax.inject.Inject
 
 open class BaseMVPFragmnet<T: Basepersenter<*>>:BaseFragment(),BaseView {
 
 
     lateinit var mActivityComponent: ActivityCommpoent
-    val dialog = ZLoadingDialog(BaseApplication.context)
+    val dialog=ZLoadingDialog( ActivityUtils.getTopActivity())
     override fun showLoading() {
         dialog.setLoadingBuilder(Z_TYPE.LEAF_ROTATE)//设置类型
                 .setLoadingColor(Color.WHITE)//颜色
@@ -39,7 +42,8 @@ open class BaseMVPFragmnet<T: Basepersenter<*>>:BaseFragment(),BaseView {
     }
 
     override fun hideLoading() {
-        dialog.dismiss()
+            dialog.dismiss()
+
     }
 
     override fun onError(text:String) {

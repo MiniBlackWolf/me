@@ -90,29 +90,6 @@ class HomePersenter @Inject constructor() : Basepersenter<HomeView>() {
         }
 
     }
-@SuppressLint("CheckResult")
-fun getdatas(){
-//    Observable.create(object :ObservableOnSubscribe<Int> {
-//        override fun subscribe(emitter: ObservableEmitter<Int>) {
-//            Log.e("iiiiii", "Observable thread is : " + Thread.currentThread().getName())
-//            emitter.onNext(1)
-//            emitter.onComplete()
-//        }
-//
-//    }).subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe(object :Consumer<Int>{
-//                override fun accept(t: Int?) {
-//                    Log.e("iiiiiiiii",Thread.currentThread().getName())
-//                }
-//            })
-    HomeSeriverImp.getdata().excute(object :  BaseObserver<Boolean>() {
-        override fun onNext(t: Boolean) {
-            Log.e("iiiiiiiii",Thread.currentThread().getName())
-            super.onNext(t)
-        }
-    },lifecycleProvider)
 
-}
 
 }

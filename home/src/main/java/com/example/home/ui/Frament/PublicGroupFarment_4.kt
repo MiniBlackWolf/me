@@ -20,6 +20,22 @@ import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
 
 class PublicGroupFarment_4 : BaseMVPFragmnet<articlepersenter>(), articleView {
+    override fun join(t: BaseResp<String>) {
+    }
+
+    override fun quit(t: BaseResp<String>) {
+    }
+
+    override fun addactive(t: BaseResp<String>) {
+
+    }
+
+    override fun findactive(t: List<articledata>) {
+    }
+
+    override fun uploadimg(t: BaseResp<String>) {
+    }
+
     override fun article(baseResp: BaseResp<String>) {
     }
 

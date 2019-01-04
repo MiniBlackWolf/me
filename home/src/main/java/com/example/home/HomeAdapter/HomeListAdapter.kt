@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.home.R
 import com.example.home.data.UserList
 import com.example.home.ui.activity.HomeActivity
+import com.example.home.ui.activity.madengviewActivity
 import com.tencent.imsdk.TIMFriendshipManager
 import com.tencent.imsdk.TIMUserProfile
 import com.tencent.imsdk.TIMValueCallBack
@@ -23,10 +24,23 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuickAdapter<UserList, BaseViewHolder>(R.layout.homechat, userList) {
+class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : BaseQuickAdapter<UserList, BaseViewHolder>(R.layout.homechat, userList) {
     override fun convert(helper: BaseViewHolder?, item: UserList?) {
 //        helper!!.setText(R.id.peername, item!!.Name)
-        helper!!.setText(R.id.lastmsg, item!!.msg)
+        if(item!!.Name=="马镫助手"){
+            helper!!.setText(R.id.peername, item.Name)
+            helper.setImageResource(R.id.head,R.drawable.helper)
+            val noreadmsg = helper.getView<TextView>(R.id.noreadmsg)
+            noreadmsg.isVisible = item.noreadmsg != 0
+            noreadmsg.text=""+item.noreadmsg
+            helper.setText(R.id.lastmsg,item.msg)
+            helper.setText(R.id.lastmsgtime,item.lastmsgtime.substring(0,item.lastmsgtime.indexOf("T")))
+            helper.getView<ConstraintLayout>(R.id.rt).setOnClickListener {
+                context.startActivity<madengviewActivity>()
+            }
+            return
+        }
+        helper!!.setText(R.id.lastmsg, item.msg)
         val format: String
         format = if (item.lastmsgtime != "") {
             val simpleDateFormat = SimpleDateFormat("MM月dd日 HH:mm")
@@ -56,6 +70,7 @@ class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuic
         } else {
             downloaddata(item, helper)
         }
+
         if (face != "") {
             val head = helper.getView<ImageView>(R.id.head)
             val options = RequestOptions()
@@ -88,12 +103,17 @@ class HomeListAdapter(val context: Context, userList: List<UserList>) : BaseQuic
                 edit.putString("${item.Name}face", p0[0].faceUrl)
                 edit.apply()
                 val head = helper.getView<ImageView>(R.id.head)
-                val options = RequestOptions()
-                        .error(R.drawable.a4_2)
-                Glide.with(context)
-                        .load(p0[0].faceUrl)
-                        .apply(options)
-                        .into(head)
+                if(p0[0].faceUrl==""){
+                    head.setImageResource(R.drawable.a4_2)
+                }else{
+                    val options = RequestOptions()
+                            .error(R.drawable.a4_2)
+                    Glide.with(context)
+                            .load(p0[0].faceUrl)
+                            .apply(options)
+                            .into(head)
+                }
+
 
             }
         })

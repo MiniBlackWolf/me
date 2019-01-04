@@ -145,7 +145,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:singleLine="true"
-            android:text="重庆大学唱歌比赛"
+            android:text="标题"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"

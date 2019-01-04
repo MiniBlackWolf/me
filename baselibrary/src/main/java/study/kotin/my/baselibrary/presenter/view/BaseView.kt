@@ -1,5 +1,7 @@
 package study.kotin.my.baselibrary.presenter.view
 
+import android.app.Activity
+
 interface BaseView {
     fun showLoading()
     fun hideLoading()

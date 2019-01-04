@@ -2,6 +2,7 @@ package study.kotin.my.baselibrary.ui.activity
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.*
 import android.graphics.Color

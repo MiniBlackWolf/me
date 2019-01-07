@@ -15,7 +15,9 @@ import com.example.home.data.articledata
 import com.example.home.persenter.HomePersenter
 import com.example.home.persenter.articlepersenter
 import com.example.home.persenter.view.articleView
+import com.example.home.ui.activity.ActivityInfoActivity
 import org.jetbrains.anko.find
+import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
@@ -62,10 +64,9 @@ class PublicGroupFarment_3 : BaseMVPFragmnet<articlepersenter>(), articleView {
         publicGroupFarment_3_adapter = PublicGroupFarment_3_adapter(ArrayList())
         publicGroupFarment_3_adapter.setOnItemChildClickListener { adapter, views, position ->
             val data = adapter.data as List<articledata>
-            showLoading()
             when (views.id) {
                 R.id.enroll -> {
-
+                    showLoading()
                     val enroll = adapter.getViewByPosition(f3list, position, R.id.enroll) as TextView
                     if (enroll.text.toString() == "报名参加") {
                         mpersenter.join(this,data[position].id)
@@ -75,6 +76,9 @@ class PublicGroupFarment_3 : BaseMVPFragmnet<articlepersenter>(), articleView {
                         enroll.text="报名参加"
                     }
 
+                }
+                R.id.tc ->{
+                    startActivity<ActivityInfoActivity>("articledata" to data[position])
                 }
             }
         }

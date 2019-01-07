@@ -9,10 +9,10 @@ import study.kotin.my.baselibrary.protocol.BaseResp
 
 
 interface homeapi {
-    @POST("http://madengwang.com:9200/user/searchUserinfo?pageNum=0&pageSize=20")
+    @POST("http://192.168.1.105:9200/user/searchUserinfo?pageNum=0&pageSize=20")
     fun search(@Header("Authorization") Authorization: String, @Query("keywords") keyword: String): Observable<searchuserdata>
 
-    @POST("http://madengwang.com:9200/Group/search?pageNum=0&pageSize=20")
+    @POST("http://192.168.1.105:9200/Group/search?pageNum=0&pageSize=20")
     fun GroupSearch(@Header("Authorization") Authorization: String, @Query("name") name: String): Observable<searchgroupdata>
 
     @POST("http://192.168.1.105:9200/communityarticle/add")
@@ -22,7 +22,7 @@ interface homeapi {
     fun findarticle(@Body id: Map<String, String>): Observable<listarticledata<articledata>>
 
     @Multipart
-    @POST("http://madengwang.com:9200/upload/img")
+    @POST("http://192.168.1.105:9200/upload/img")
     fun uploadimg(@Part file: List<MultipartBody.Part>): Observable<BaseResp<String>>
 
     @POST("http://192.168.1.105:9200/communityactive/add")
@@ -37,7 +37,7 @@ interface homeapi {
     @POST("http://192.168.1.105:9200/ActiveUser/quit")
     fun quit(@Query("Activeid") Activeid: Int): Observable<BaseResp<String>>
 
-    @POST("http://192.168.1.105:9200/helper/findAll?page=1&size=1")
-    fun helper(): Observable<listarticledata<madengdata>>
+    @POST("http://192.168.1.105:9200/helper/findAll?size=1")
+    fun helper(@Query("page") page:Int): Observable<listarticledata<madengdata>>
 
 }

@@ -111,7 +111,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
                     val translationY = ObjectAnimator.ofFloat(m10, "translationY", 0f, 500f)
                     val animatorSet = AnimatorSet()
                     animatorSet.playTogether(scaleX, scaleY, translationY, translationX)
-                    animatorSet.setDuration(500)
+                    animatorSet.setDuration(200)
                     animatorSet.start()
                     trun = false
                 } else {
@@ -121,7 +121,7 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
                     val translationY = ObjectAnimator.ofFloat(m10, "translationY", 0f)
                     val animatorSet = AnimatorSet()
                     animatorSet.playTogether(scaleX, scaleY, translationY, translationX)
-                    animatorSet.setDuration(500)
+                    animatorSet.setDuration(200)
                     animatorSet.start()
                     trun = true
                 }

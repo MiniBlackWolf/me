@@ -47,7 +47,14 @@ import kotlin.collections.LinkedHashSet
 
 
 class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, View.OnClickListener, madenghelperView {
-    var count = 1
+    override fun helpererror(e: Throwable) {
+        RecyclerViewset1(userlist.toMutableList())
+    }
+
+    companion object {
+        var count = 1
+    }
+
     lateinit var homeListAdapter: HomeListAdapter
     override fun helper(t: List<madengdata>) {
         if (t.isNotEmpty()) {
@@ -60,6 +67,7 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
             toMutableList.add(0, UserList("", "", "马镫助手", content, count, t[0].createtime))
             //homeListAdapter.addData(0,userlist)
             RecyclerViewset1(toMutableList)
+
         }
 
     }
@@ -166,11 +174,11 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
 
 
         RecyclerViewset2(userlist2)
-        mpersenter.madenghelper()
+        mpersenter.madenghelper(1)
         hz.finishRefresh()
     }
 
-    /**
+    /*
      * 更新好友关系链消息
      */
     override fun updateFriendshipMessage() {
@@ -230,6 +238,7 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
         }
         hz.setRefreshHeader(homeRefreshView)
         hz.setHeaderMaxDragRate(4f)
+        hz.setEnableOverScrollDrag(true)
         mpersenter.getdatas()
         return view
     }

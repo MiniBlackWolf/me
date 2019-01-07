@@ -17,5 +17,5 @@ interface articleService {
     fun uploadimg(file: List<MultipartBody.Part>): Observable<BaseResp<String>> //上传图片
     fun join(Activeid: Int): Observable<BaseResp<String>> //加入活动
     fun quit(Activeid: Int): Observable<BaseResp<String>>//退出活动
-    fun helper(): Observable<List<madengdata>>//马镫助手
+    fun helper(page:Int): Observable<List<madengdata>>//马镫助手
 }

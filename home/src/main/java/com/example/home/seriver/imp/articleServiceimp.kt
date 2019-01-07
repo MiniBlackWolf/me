@@ -44,8 +44,8 @@ class articleServiceimp @Inject constructor(): articleService {
     override fun quit(Activeid: Int): Observable<BaseResp<String>> {
         return HomeRepossitory.quit(Activeid)
     }
-    override fun helper(): Observable<List<madengdata>>{
-        return HomeRepossitory.helper().flatMap {
+    override fun helper(page:Int): Observable<List<madengdata>>{
+        return HomeRepossitory.helper(page).flatMap {
             Observable.just(it.rows)
         }
     }

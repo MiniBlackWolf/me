@@ -40,8 +40,8 @@ class HomeRepossitory @Inject constructor(){
         return RetrofitFactory.instance.creat(homeapi::class.java).quit(Activeid)
     }
 
-    fun helper(): Observable<listarticledata<madengdata>>{
-        return RetrofitFactory.instance.creat(homeapi::class.java).helper()
+    fun helper(page:Int): Observable<listarticledata<madengdata>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).helper(page)
     }
 
 }

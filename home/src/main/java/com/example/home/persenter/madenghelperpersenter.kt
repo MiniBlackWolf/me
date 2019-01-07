@@ -2,6 +2,7 @@ package com.example.home.persenter
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.example.home.data.UserList
 import com.example.home.data.articledata
 import com.example.home.data.madengdata
 import com.example.home.persenter.view.madenghelperView
@@ -20,14 +21,15 @@ class madenghelperpersenter @Inject constructor():Basepersenter<madenghelperView
     lateinit var articleServiceimp: articleService
     @Inject
     lateinit var HomeSeriverImp: HomeSeriver
-    fun madenghelper(){
-        articleServiceimp.helper().excute(object : BaseObserver<List<madengdata>>(){
+    fun madenghelper(page:Int){
+        articleServiceimp.helper(page).excute(object : BaseObserver<List<madengdata>>(){
             override fun onNext(t: List<madengdata>) {
                 mView.helper(t)
             }
 
             override fun onError(e: Throwable) {
                 super.onError(e)
+                mView.helpererror(e)
             }
         },lifecycleProvider)
     }

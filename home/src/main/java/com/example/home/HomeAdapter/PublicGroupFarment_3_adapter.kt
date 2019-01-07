@@ -15,8 +15,9 @@ class PublicGroupFarment_3_adapter(data: List<articledata>) : BaseQuickAdapter<a
         helper.setText(R.id.worksg, item.title)
         helper.setText(R.id.worktime, item.createtime.substring(0,item.createtime.indexOf("T")))
         helper.addOnClickListener(R.id.enroll)
+        helper.addOnClickListener(R.id.tc)
         for(i in item.num){
-            if(i==TIMManager.getInstance().loginUser){
+            if(i.toAccount==TIMManager.getInstance().loginUser){
                 helper.setText(R.id.enroll,"取消参加")
             }
         }

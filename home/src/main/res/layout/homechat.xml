@@ -6,30 +6,32 @@
     android:id="@+id/contentview"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    app:cardBackgroundColor="@android:color/background_light"
+
     app:cardElevation="0dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
-    <com.mcxtzhang.swipemenulib.SwipeMenuLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:paddingBottom="1dp"
         app:ios="false"
         app:leftSwipe="true"
-        app:swipeEnable="true"
-        android:paddingBottom="1dp">
+        app:swipeEnable="true">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/rt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/click">
 
             <TextView
                 android:id="@+id/peername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="45dp"
                 android:layout_marginBottom="15dp"
                 android:text="名字"
@@ -61,6 +63,7 @@
                 android:id="@+id/lastmsg"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="最后一条消息"
@@ -117,13 +120,13 @@
 
         </android.support.constraint.ConstraintLayout>
 
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:background="@color/common_blue"
-        android:text="删除"
-        android:textColor="@android:color/white"/>
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@color/common_blue"
+            android:text="删除"
+            android:textColor="@android:color/white" />
 
     </com.mcxtzhang.swipemenulib.SwipeMenuLayout>
 

@@ -66,6 +66,7 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
         if (t.success) {
             hideLoading()
             textedit.insertImage(t.message, "huangxiaoguo\" style=\"max-width:50%")
+            textedit.html="${textedit.html}\n"
         } else {
             hideLoading()
             toast("图片上传失败！请检查网络后重试")

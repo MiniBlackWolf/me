@@ -19,5 +19,6 @@
         <activity android:name=".ui.activity.addfriendActivity"/>
         <activity android:name=".ui.activity.qcodeActivity"/>
         <activity android:name=".ui.activity.madengviewActivity"/>
+        <activity android:name=".ui.activity.ActivityInfoActivity"/>
     </application>
 </manifest>

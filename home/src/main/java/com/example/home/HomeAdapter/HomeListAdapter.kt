@@ -9,8 +9,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.eightbitlab.rxbus.Bus
 import com.example.home.R
+import com.example.home.common.UpdateMessgeSizeEvent
 import com.example.home.data.UserList
+import com.example.home.ui.Frament.HomeFarment
 import com.example.home.ui.activity.HomeActivity
 import com.example.home.ui.activity.madengviewActivity
 import com.tencent.imsdk.TIMFriendshipManager
@@ -36,6 +39,7 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
             helper.setText(R.id.lastmsg,item.msg)
             helper.setText(R.id.lastmsgtime,item.lastmsgtime.substring(0,item.lastmsgtime.indexOf("T")))
             helper.getView<ConstraintLayout>(R.id.rt).setOnClickListener {
+                HomeFarment.count=0
                 context.startActivity<madengviewActivity>()
             }
             return

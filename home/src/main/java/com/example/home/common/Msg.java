@@ -10,13 +10,15 @@ public class Msg implements MultiItemEntity {
     private int type;
     private int datatype;
     private UserInfoData UserInfoData;
+    private Long timesp;
 
     //datatype 1:文本 2:图片 3：语音 4：文件
-    public Msg(Object content, int type, int datatype, UserInfoData UserInfoData) {
+    public Msg(Object content, int type, int datatype, UserInfoData UserInfoData,Long timesp) {
         this.content = content;
         this.type = type;
         this.datatype = datatype;
         this.UserInfoData = UserInfoData;
+        this.timesp=timesp;
     }
 
     public com.example.home.data.UserInfoData getUserInfoData() {
@@ -25,6 +27,14 @@ public class Msg implements MultiItemEntity {
 
     public void setUserInfoData(com.example.home.data.UserInfoData userInfoData) {
         UserInfoData = userInfoData;
+    }
+
+    public Long getTimesp() {
+        return timesp;
+    }
+
+    public void setTimesp(Long timesp) {
+        this.timesp = timesp;
     }
 
     public static int getTypeReceived() {

@@ -9,11 +9,11 @@ import study.kotin.my.baselibrary.protocol.BaseResp
 import java.io.FileInputStream
 
 interface HomeView:BaseView {
-    fun showtextmsg(TIMTextElem: TIMTextElem,id:String)
-    fun showimgmsg(bitmap: Bitmap,id:String)
-    fun showSoundmsg(path:String,time:Long,id:String)
-    fun showFilemsg( TIMFileElem: TIMFileElem,id:String)
-    fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem,id:String)
+    fun showtextmsg(TIMTextElem: TIMTextElem,id:String,timesp: Long)
+    fun showimgmsg(bitmap: Bitmap,id:String,timesp: Long)
+    fun showSoundmsg(path:String,time:Long,id:String,timesp:Long)
+    fun showFilemsg( TIMFileElem: TIMFileElem,id:String,timesp: Long)
+    fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem,id:String,timesp: Long)
     fun sendmsg()
     fun sendSoundmsg()
 

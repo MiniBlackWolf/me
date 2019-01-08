@@ -301,29 +301,29 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
                 when (datas.type) {
                     1 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as String, SEND_MSG_TYPE, 1)
-                        } else updataview(datas.data as String, SHOW_MSG_TYPE, 1)
+                            updataview(datas.data as String, SEND_MSG_TYPE, 1,datas.time)
+                        } else updataview(datas.data as String, SHOW_MSG_TYPE, 1,datas.time)
 
                     }
                     2 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as Bitmap, SEND_MSG_TYPE, 2)
-                        } else updataview(datas.data as Bitmap, SHOW_MSG_TYPE, 2)
+                            updataview(datas.data as Bitmap, SEND_MSG_TYPE, 2,datas.time)
+                        } else updataview(datas.data as Bitmap, SHOW_MSG_TYPE, 2,datas.time)
                     }
                     3 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as Sounddata, SEND_MSG_TYPE, 3)
-                        } else updataview(datas.data as Sounddata, SHOW_MSG_TYPE, 3)
+                            updataview(datas.data as Sounddata, SEND_MSG_TYPE, 3,datas.time)
+                        } else updataview(datas.data as Sounddata, SHOW_MSG_TYPE, 3,datas.time)
                     }
                     4 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as TIMFileElem, SEND_MSG_TYPE, 4)
-                        } else updataview(datas.data as TIMFileElem, SHOW_MSG_TYPE, 4)
+                            updataview(datas.data as TIMFileElem, SEND_MSG_TYPE, 4,datas.time)
+                        } else updataview(datas.data as TIMFileElem, SHOW_MSG_TYPE, 4,datas.time)
                     }
                     5->{
                         if (datas.isseft) {
-                            updataview(datas.data as TIMGroupTipsElem, SEND_MSG_TYPE, 5)
-                        } else updataview(datas.data as TIMGroupTipsElem, SHOW_MSG_TYPE, 5)
+                            updataview(datas.data as TIMGroupTipsElem, SEND_MSG_TYPE, 5,datas.time)
+                        } else updataview(datas.data as TIMGroupTipsElem, SHOW_MSG_TYPE, 5,datas.time)
                     }
                 }
             }
@@ -331,7 +331,7 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
         }
     }
 
-    fun updataview(data: Any, Type: Int, datatype: Int) {
+    fun updataview(data: Any, Type: Int, datatype: Int,timesp:Long) {
         val name: String?
         val fdheadurl: String?
         val fdid: String?
@@ -347,7 +347,7 @@ class ChatRecordActivity : BaseMVPActivity<HomePersenter>() {
         }
 
         val msglists = ArrayList<Msg>()
-        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!, fdid!!)))
+        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!, fdid!!),timesp))
         if (!trun) {
             chatadapter.addData(0, msglists)
             chatadapter.notifyDataSetChanged()

@@ -36,7 +36,7 @@ class madengviewActivity:BaseMVPActivity<madenghelperpersenter>(),madenghelperVi
         setContentView(R.layout.madengview)
         initinject()
         //初始适配器
-        madengviewAdapter = madengviewAdapter(ArrayList())
+        madengviewAdapter = madengviewAdapter(this,ArrayList())
         madenglist.adapter=madengviewAdapter
         madenglist.layoutManager=LinearLayoutManager(this)
         //初始数据

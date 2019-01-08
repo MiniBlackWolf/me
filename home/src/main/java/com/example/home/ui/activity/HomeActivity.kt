@@ -63,6 +63,7 @@ import study.kotin.my.baselibrary.utils.EmoticonUtil
 import study.kotin.my.baselibrary.utils.FileUtil
 import study.kotin.my.baselibrary.utils.MediaUtil
 import java.io.File
+import java.io.IOException
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayList
@@ -92,7 +93,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             trun2 = false
             mpersenter.sendmessge(id, TIMSoundElem)
             //--updataview
-            updataview(Sounddata(adpath!!, adtime), TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 3)
+            updataview(Sounddata(adpath!!, adtime), TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 3,System.currentTimeMillis()/1000)
 
         }
     }
@@ -106,29 +107,29 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         //----updataview
         trun = true
         trun2 = false
-        updataview(chatsendview.editText.text.toString(), TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 1)
+        updataview(chatsendview.editText.text.toString(), TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 1,System.currentTimeMillis()/1000)
         chatsendview.editText.setText("")
 
     }
 
     var msglist = ArrayList<Msg>()
     //群消息
-    override fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem,id:String) {
-        updataview(TIMGroupTipsElem, id,SHOW_MSG_TYPE, 5)
+    override fun showgrouptipmsg(TIMGroupTipsElem: TIMGroupTipsElem,id:String,timesp: Long) {
+        updataview(TIMGroupTipsElem, id,SHOW_MSG_TYPE, 5,timesp)
     }
 
     //文本信息
-    override fun showtextmsg(TIMTextElem: TIMTextElem,id:String) {
-        updataview(TIMTextElem.text.toString(),id, SHOW_MSG_TYPE, 1)
+    override fun showtextmsg(TIMTextElem: TIMTextElem,id:String,timesp: Long) {
+        updataview(TIMTextElem.text.toString(),id, SHOW_MSG_TYPE, 1,timesp)
     }
 
     //图片信息
-    override fun showimgmsg(bitmap: Bitmap,id:String) {
-        updataview(bitmap,id, SHOW_MSG_TYPE, 2)
+    override fun showimgmsg(bitmap: Bitmap,id:String,timesp: Long) {
+        updataview(bitmap,id, SHOW_MSG_TYPE, 2,timesp)
     }
 
     //语音消息
-    override fun showSoundmsg(path: String, time: Long,id:String) {
+    override fun showSoundmsg(path: String, time: Long,id:String,timesp: Long) {
 //        try {
 //            MediaUtil.getInstance().play(soundfile)
 //            MediaUtil.getInstance().setEventListener(object : MediaUtil.EventListener {
@@ -145,12 +146,12 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 //        msglist.add(Msg("1", 0, 2))
 //        chatadapter.addData(msglist)
 //        chatadapter.notifyDataSetChanged()
-        updataview(Sounddata(path, time),id, SHOW_MSG_TYPE, 3)
+        updataview(Sounddata(path, time),id, SHOW_MSG_TYPE, 3,timesp)
     }
 
     //文件消息
-    override fun showFilemsg(TIMFileElem: TIMFileElem,id:String) {
-        updataview(TIMFileElem,id, SHOW_MSG_TYPE, 4)
+    override fun showFilemsg(TIMFileElem: TIMFileElem,id:String,timesp: Long) {
+        updataview(TIMFileElem,id, SHOW_MSG_TYPE, 4,timesp)
 
 
     }
@@ -466,7 +467,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             trun2 = false
             mpersenter.sendmessge(id, timImageElem)
             //显示界面
-            updataview(bitmap,TIMManager.getInstance().loginUser, SEND_MSG_TYPE, 2)
+            updataview(bitmap,TIMManager.getInstance().loginUser, SEND_MSG_TYPE, 2,System.currentTimeMillis()/1000)
             Log.d("Matisse", "mSelected: $obtainPathResult")
         }
         if (resultCode == Activity.RESULT_CANCELED) {
@@ -487,30 +488,36 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
             trun = true
             trun2 = false
             mpersenter.sendmessge(id, timimgElem)
-            updataview(bitmap, TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 2)
+            updataview(bitmap, TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 2,System.currentTimeMillis()/1000)
         }
 
         if (requestCode == 99) {
-            val uri = data!!.data//得到uri，后面就是将uri转化成file的过程。
-            val proj = arrayOf(MediaStore.Images.Media.DATA)
-            val actualimagecursor = managedQuery(uri, proj, null, null, null)
-            val actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            actualimagecursor.moveToFirst()
-            val img_path = actualimagecursor.getString(actual_image_column_index)
-            val file = File(img_path)
-            val length = file.length()
-            if (length > 10485697) {
-                toast("文件不能大于10mb!")
-                return
+            try {
+                val uri = data!!.data//得到uri，后面就是将uri转化成file的过程。
+                val proj = arrayOf(MediaStore.Images.Media.DATA)
+                val actualimagecursor = managedQuery(uri, proj, null, null, null)
+                val actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                actualimagecursor.moveToFirst()
+                val img_path = actualimagecursor.getString(actual_image_column_index)
+                val file = File(img_path)
+                val length = file.length()
+                if (length > 10485697) {
+                    toast("文件不能大于10mb!")
+                    return
+                }
+                val TIMFileElem = TIMFileElem()
+                TIMFileElem.path = img_path
+                TIMFileElem.fileName = file.name
+                trun = true
+                trun2 = false
+                mpersenter.sendmessge(id, TIMFileElem)
+                updataview(TIMFileElem, TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 4,System.currentTimeMillis()/1000)
+                Toast.makeText(this, file.toString(), Toast.LENGTH_SHORT).show()
+            }catch (e:Exception){
+                e.printStackTrace()
+                toast("出现错误请重试")
             }
-            val TIMFileElem = TIMFileElem()
-            TIMFileElem.path = img_path
-            TIMFileElem.fileName = file.name
-            trun = true
-            trun2 = false
-            mpersenter.sendmessge(id, TIMFileElem)
-            updataview(TIMFileElem, TIMManager.getInstance().loginUser,SEND_MSG_TYPE, 4)
-            Toast.makeText(this, file.toString(), Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -673,29 +680,29 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
                 when (datas.type) {
                     1 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as String,datas.id, SEND_MSG_TYPE, 1)
-                        } else updataview(datas.data as String,datas.id, SHOW_MSG_TYPE, 1)
+                            updataview(datas.data as String,datas.id, SEND_MSG_TYPE, 1,datas.time)
+                        } else updataview(datas.data as String,datas.id, SHOW_MSG_TYPE, 1,datas.time)
 
                     }
                     2 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as Bitmap,datas.id, SEND_MSG_TYPE, 2)
-                        } else updataview(datas.data as Bitmap,datas.id, SHOW_MSG_TYPE, 2)
+                            updataview(datas.data as Bitmap,datas.id, SEND_MSG_TYPE, 2,datas.time)
+                        } else updataview(datas.data as Bitmap,datas.id, SHOW_MSG_TYPE, 2,datas.time)
                     }
                     3 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as Sounddata,datas.id, SEND_MSG_TYPE, 3)
-                        } else updataview(datas.data as Sounddata,datas.id, SHOW_MSG_TYPE, 3)
+                            updataview(datas.data as Sounddata,datas.id, SEND_MSG_TYPE, 3,datas.time)
+                        } else updataview(datas.data as Sounddata,datas.id, SHOW_MSG_TYPE, 3,datas.time)
                     }
                     4 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as TIMFileElem,datas.id, SEND_MSG_TYPE, 4)
-                        } else updataview(datas.data as TIMFileElem,datas.id, SHOW_MSG_TYPE, 4)
+                            updataview(datas.data as TIMFileElem,datas.id, SEND_MSG_TYPE, 4,datas.time)
+                        } else updataview(datas.data as TIMFileElem,datas.id, SHOW_MSG_TYPE, 4,datas.time)
                     }
                     5 -> {
                         if (datas.isseft) {
-                            updataview(datas.data as TIMGroupTipsElem,datas.id, SEND_MSG_TYPE, 5)
-                        } else updataview(datas.data as TIMGroupTipsElem,datas.id, SHOW_MSG_TYPE, 5)
+                            updataview(datas.data as TIMGroupTipsElem,datas.id, SEND_MSG_TYPE, 5,datas.time)
+                        } else updataview(datas.data as TIMGroupTipsElem,datas.id, SHOW_MSG_TYPE, 5,datas.time)
                     }
 
                 }
@@ -709,7 +716,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
     }
 
 
-    fun updataview(data: Any,id:String, Type: Int, datatype: Int) {
+    fun updataview(data: Any,id:String, Type: Int, datatype: Int,timesp:Long) {
         val name: String?
         val fdheadurl: String?
         val fdid: String?
@@ -724,7 +731,7 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
        //     fdid = TIMManager.getInstance().loginUser
         }
         val msglists = ArrayList<Msg>()
-        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!, id)))
+        msglists.add(Msg(data, Type, datatype, UserInfoData(fdheadurl!!, name!!, id),timesp))
         if (!trun) {
             chatadapter.addData(0, msglists)
             chatadapter.notifyDataSetChanged()

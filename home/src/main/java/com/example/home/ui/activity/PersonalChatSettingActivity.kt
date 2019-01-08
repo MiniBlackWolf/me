@@ -99,6 +99,10 @@ class PersonalChatSettingActivity : BaseMVPActivity<HomePersenter>(), View.OnCli
                         param.setRemark(edittext.text.toString())
                         TIMFriendshipManagerExt.getInstance().modifySnsProfile(param, object : TIMCallBack {
                             override fun onSuccess() {
+                                val fdname = getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                                fdname.putString("${id}fdname",edittext.text.toString())
+                                fdname.apply()
+                                Remarksshow.text = edittext.text.toString()
                                 toast("修改成功")
                             }
 

@@ -15,7 +15,7 @@ object TextMessge {
             val elemType = elem.getType()
             Log.d("iiiii", "elem type: " + elemType.name)
             if (elemType == TIMElemType.Text) {
-                mview.showtextmsg(elem as TIMTextElem,message.sender)
+                mview.showtextmsg(elem as TIMTextElem,message.sender,message.timestamp())
             }
         }
 

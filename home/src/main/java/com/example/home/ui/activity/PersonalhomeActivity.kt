@@ -107,8 +107,9 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
 //        }
         TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onSuccess(p0: MutableList<TIMUserProfile>) {
-                //头像
+                //名字
                 tname.text = p0[0].nickName
+                //头像
                 val options = RequestOptions()
                         .error(R.drawable.a4_2)
                 Glide.with(this@PersonalhomeActivity).load(p0[0].faceUrl).apply(options).into(thead)
@@ -145,6 +146,9 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
                 //是否是好友
                 TIMFriendshipManagerExt.getInstance().getFriendList(object : TIMValueCallBack<MutableList<TIMUserProfile>> {
                     override fun onSuccess(p1: MutableList<TIMUserProfile>?) {
+
+
+                        //好友判断
                         var count = 0
                         for (p in p1!!) {
                             count++
@@ -154,6 +158,16 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
                                 send.text = "发送消息"
                                 send.setOnClickListener(this@PersonalhomeActivity)
                             }
+                            //名字
+                            if(p.identifier==id){
+                                if(p.remark==""){
+                                    tname.text = p.nickName
+                                }else{
+                                    tname.text =p.remark
+                                    tsite.text="(${p.nickName  })"
+                                }
+                            }
+
                         }
                         if (count == p1.size && send.isVisible) {
                             send.isVisible = true

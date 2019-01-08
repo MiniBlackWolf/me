@@ -21,7 +21,7 @@ object FileMessge {
                 Toast.makeText(BaseApplication.context, BaseApplication.context.getString(R.string.save_exist), Toast.LENGTH_SHORT).show()
                 return
             }
-            mview.showFilemsg(elem,message.sender)
+            mview.showFilemsg(elem,message.sender,message.timestamp())
 //            elem.getToFile(FileUtil.getCacheFilePath(filename), object : TIMCallBack {
 //                override fun onSuccess() {
 //

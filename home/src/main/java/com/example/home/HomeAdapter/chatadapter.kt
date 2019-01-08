@@ -19,6 +19,7 @@ import com.tencent.imsdk.*
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.common.CircleImageView
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
 
 class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMultiItemQuickAdapter<Msg, BaseViewHolder>(data) {
     lateinit var showimgmsgs: ImageView
@@ -46,6 +47,10 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
     override fun convert(helper: BaseViewHolder, item: Msg) {
         ches = helper.getView(R.id.ches)
         helper.addOnClickListener(R.id.ches)
+        val timesp = helper.getView<TextView>(R.id.timesp)
+        val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 HH:mm")
+        val format = simpleDateFormat.format(item.timesp * 1000)
+        timesp.text = format
         when (helper.itemViewType) {
             Msg.TYPE_RECEIVED -> {
                 chatpaly = helper.getView(R.id.chatpaly)
@@ -81,6 +86,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                 when (item.datatype) {
                     1 -> {
                         initview(helper)
+                        helper.setVisible(R.id.myname,true)
                         chatmsg2.isVisible = true
                         dd.isVisible = true
                         ches.isVisible = true
@@ -88,6 +94,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     }
                     2 -> {
                         initview(helper)
+                        helper.setVisible(R.id.myname,true)
                         showimgmsgs.isVisible = true
                         ches.isVisible = true
                         helper.setImageBitmap(R.id.showimgmsgs, item.content as Bitmap)
@@ -96,6 +103,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     }
                     3 -> {
                         initview(helper)
+                        helper.setVisible(R.id.myname,true)
                         chatpaly.isVisible = true
                         chatpaly2.isVisible = true
                         ches.isVisible = true
@@ -104,6 +112,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     }
                     4 -> {
                         initview(helper)
+                        helper.setVisible(R.id.myname,true)
                         filepackage.isVisible = true
                         ches.isVisible = true
                         filaename.text = ((item.content as TIMFileElem).fileName)
@@ -112,6 +121,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     }
                     5 -> {
                         initview(helper)
+                        helper.setVisible(R.id.myname,false)
                         ches.isVisible = false
                         grouptip.isVisible = true
                         val TIMGroupTipsElem = (item.content as TIMGroupTipsElem)
@@ -130,7 +140,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                                 Modify = "用户${TIMGroupTipsElem.changedUserInfo.keys}成为了管理"
                             }
                             TIMGroupTipsType.CancelAdmin -> {
-                                Modify = "用户${TIMGroupTipsElem.changedUserInfo.keys }被取消了管理"
+                                Modify = "用户${TIMGroupTipsElem.changedUserInfo.keys}被取消了管理"
                             }
                             TIMGroupTipsType.ModifyGroupInfo -> {
                                 if (TIMGroupTipsElem.groupInfoList.size != 0) {

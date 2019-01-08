@@ -69,7 +69,7 @@ public class ConversationPresenter implements Observer {
 
             }
         }else if (observable instanceof RefreshEvent){
-            getConversation();
+          //  getConversation();
             view.refresh();
         }
     }
@@ -77,29 +77,29 @@ public class ConversationPresenter implements Observer {
 
 
     public void getConversation(){
-        List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
-        List<TIMConversation> result = new ArrayList<>();
-        for (TIMConversation conversation : list){
-          //  if (conversation.getType() == TIMConversationType.System) continue;
-            result.add(conversation);
-            TIMConversationExt conversationExt = new TIMConversationExt(conversation);
-            conversationExt.getMessage(1, null, new TIMValueCallBack<List<TIMMessage>>() {
-                @Override
-                public void onError(int i, String s) {
-                    Log.e(TAG, "get message error" + s);
-                }
-
-                @Override
-                public void onSuccess(List<TIMMessage> timMessages) {
-                    if (timMessages.size() > 0) {
-                        view.updateMessage(timMessages.get(0));
-                    }
-
-                }
-            });
-
-        }
-        view.initView(result);
+//        List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
+//        List<TIMConversation> result = new ArrayList<>();
+//        for (TIMConversation conversation : list){
+//            if (conversation.getType() == TIMConversationType.System) continue;
+//            result.add(conversation);
+//            TIMConversationExt conversationExt = new TIMConversationExt(conversation);
+//            conversationExt.getMessage(1, null, new TIMValueCallBack<List<TIMMessage>>() {
+//                @Override
+//                public void onError(int i, String s) {
+//                    Log.e(TAG, "get message error" + s);
+//                }
+//
+//                @Override
+//                public void onSuccess(List<TIMMessage> timMessages) {
+//                    if (timMessages.size() > 0) {
+//                        view.updateMessage(timMessages.get(0));
+//                    }
+//
+//                }
+//            });
+//
+//        }
+//        view.initView(result);
     }
 
     /**

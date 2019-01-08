@@ -7,7 +7,6 @@ import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.common.BaseApplication
 
 object SendImgMsg {
-
     fun sendimgmsg(id: String, data: TIMMessage) {
         val conversation:TIMConversation
         if(id.substring(0,5)=="@TGS#"){

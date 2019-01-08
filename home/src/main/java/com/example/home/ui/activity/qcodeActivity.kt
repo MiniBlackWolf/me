@@ -14,6 +14,10 @@ class qcodeActivity:BaseMVPActivity<HomePersenter>(), QRCodeView.Delegate {
     override fun onScanQRCodeSuccess(result: String) {
         if(result.substring(6,result.length)=="madengwang"){
             startActivity<PersonalhomeActivity>("id" to result.substring(0,6))
+            finish()
+        }else if(result.substring(0,result.indexOf(":"))=="madeng"){
+            startActivity<madengscanActivity>("code" to result)
+            finish()
         }
 
     }

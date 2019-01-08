@@ -36,6 +36,7 @@ import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import com.tencent.imsdk.ext.group.TIMGroupCacheInfo
 import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.message.TIMManagerExt
+import com.tencent.imsdk.ext.message.TIMMessageExt
 import com.tencent.qcloud.presentation.presenter.ConversationPresenter
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView
 import kotlinx.android.synthetic.main.homerefreshhead.view.*
@@ -44,6 +45,7 @@ import org.jetbrains.anko.support.v4.toast
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
 import study.kotin.my.mycenter.injection.module.Homemodule
 import kotlin.collections.LinkedHashSet
+import kotlin.concurrent.thread
 
 
 class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, View.OnClickListener, madenghelperView {
@@ -119,63 +121,68 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
      * @param message 最后一条消息
      */
     var userlist = LinkedHashSet<UserList>()
-
-    override fun updateMessage(message: TIMMessage?) {
-        userlist = LinkedHashSet<UserList>()
-        val userlist2 = LinkedHashSet<UserList>()
+    override fun updateMessage(message: TIMMessage) {
         Log.i("iiiiii", "更新最新消息显示")
-        val list = TIMManagerExt.getInstance().conversationList
-        for (lists in list) {
-            if (lists.peer == TIMManager.getInstance().loginUser) {
-                TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, TIMManager.getInstance().loginUser)
-            }
-            if (lists.peer == "") {
-                TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, "")
-                //     list.remove(lists)
-                continue
-            }
-            val s = TIMConversationExt(lists).getLastMsgs(1)
-            var timestamp: String
-            if (s.size == 0) {
-                lastmsg = ""
-                timestamp = ""
-            } else {
-                when (s.get(0).getElement(0).type) {
-                    TIMElemType.Text, TIMElemType.Face -> {
-                        lastmsg = (s.get(0).getElement(0) as TIMTextElem).text
-                        if (lastmsg.length > 10) {
-                            val substring = lastmsg.substring(0, 10)
-                            lastmsg = ("$substring....")
+
+    }
+
+    private fun updataview() {
+            userlist = LinkedHashSet<UserList>()
+            val userlist2 = LinkedHashSet<UserList>()
+            Log.i("iiiiii", "更新最新视图显示")
+            val list = TIMManagerExt.getInstance().conversationList
+            for (lists in list) {
+                if (lists.peer == TIMManager.getInstance().loginUser) {
+                    TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, TIMManager.getInstance().loginUser)
+                }
+                if (lists.peer == "") {
+                    TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, "")
+                    //     list.remove(lists)
+                    continue
+                }
+                val s = TIMConversationExt(lists).getLastMsgs(1)
+                var timestamp: String
+                if (s.size == 0) {
+                    lastmsg = ""
+                    timestamp = ""
+                } else {
+                    when (s.get(0).getElement(0).type) {
+                        TIMElemType.Text, TIMElemType.Face -> {
+                            lastmsg = (s.get(0).getElement(0) as TIMTextElem).text
+                            if (lastmsg.length > 10) {
+                                val substring = lastmsg.substring(0, 10)
+                                lastmsg = ("$substring....")
+                            }
+                        }
+                        TIMElemType.Image -> lastmsg = "图片"
+                        TIMElemType.Sound -> lastmsg = "语音"
+                        TIMElemType.Video -> lastmsg = "视频"
+                        TIMElemType.GroupTips -> lastmsg = "群消息"
+                        //  return new GroupTipMessage(message);
+                        TIMElemType.File -> lastmsg = "文件"
+                        TIMElemType.UGC -> {
+                        }
+                        else -> {
                         }
                     }
-                    TIMElemType.Image -> lastmsg = "图片"
-                    TIMElemType.Sound -> lastmsg = "语音"
-                    TIMElemType.Video -> lastmsg = "视频"
-                    TIMElemType.GroupTips -> lastmsg = "群消息"
-                    //  return new GroupTipMessage(message);
-                    TIMElemType.File -> lastmsg = "文件"
-                    TIMElemType.UGC -> {
-                    }
-                    else -> {
-                    }
+                    timestamp = s.get(0).timestamp().toString()
+
                 }
-                timestamp = s.get(0).timestamp().toString()
+                val unreadMessageNum = TIMConversationExt(lists).unreadMessageNum
+                val user = UserList("", "", lists.peer, lastmsg, unreadMessageNum.toInt(), timestamp)
+                if (lists.peer.substring(0, 5) == "@TGS#") {
+                    userlist2.add(user)
+                }
+                userlist.add(user)
+
 
             }
-            val unreadMessageNum = TIMConversationExt(lists).unreadMessageNum
-            val user = UserList("", "", lists.peer, lastmsg, unreadMessageNum.toInt(), timestamp)
-            if (lists.peer.substring(0, 5) == "@TGS#") {
-                userlist2.add(user)
-            }
-            userlist.add(user)
 
 
-        }
+            RecyclerViewset2(userlist2)
+            mpersenter.madenghelper(1)
+            hz.finishRefresh()
 
-
-        RecyclerViewset2(userlist2)
-        mpersenter.madenghelper(1)
-        hz.finishRefresh()
     }
 
     /*
@@ -215,14 +222,14 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
     lateinit var rigth: ImageView
     lateinit var hz: SmartRefreshLayout
     val conversationPresenter = ConversationPresenter(this)
-    val homeRefreshView by lazy { HomeRefreshView(activity as Activity).initview(chatlist2, hz) { conversationPresenter.getConversation() } }
+    val homeRefreshView by lazy { HomeRefreshView(activity as Activity).initview(chatlist2, hz) {  updataview() } }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
         initinject()
         initlayout(view)
-        conversationPresenter.getConversation()
+        updataview()
         //    homeRefreshView = HomeRefreshView(activity as Activity).initview(chatlist2, hz) { conversationPresenter.getConversation() }
         val list = TIMManagerExt.getInstance().conversationList
         if (list.size == 0) {
@@ -233,13 +240,17 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
             }
         } else {
             hz.setOnRefreshListener {
-                conversationPresenter.getConversation()
+                updataview()
             }
         }
         hz.setRefreshHeader(homeRefreshView)
         hz.setHeaderMaxDragRate(4f)
         hz.setEnableOverScrollDrag(true)
         mpersenter.getdatas()
+        TIMManager.getInstance().addMessageListener{
+            updataview()
+           false
+        }
         return view
     }
 
@@ -371,8 +382,7 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
     }
 
     override fun onResume() {
-        val conversationPresenter = ConversationPresenter(this)
-        conversationPresenter.getConversation()
+        updataview()
         super.onResume()
     }
 

@@ -21,6 +21,7 @@ import com.tencent.imsdk.TIMUserProfile
 import com.tencent.imsdk.TIMValueCallBack
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
+import kotlinx.android.synthetic.main.personalchatsettingslayout.*
 import org.jetbrains.anko.startActivity
 import study.kotin.my.baselibrary.common.BaseApplication
 import java.text.SimpleDateFormat
@@ -69,8 +70,13 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
         }
         val name = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.Name}name", "")
         val face = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.Name}face", "")
+        val fdname = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.Name}fdname", "")
         if (name != "") {
-            helper.setText(R.id.peername, name)
+            if(fdname!=""){
+                helper.setText(R.id.peername, fdname)
+            }else{
+                helper.setText(R.id.peername, name)
+            }
         } else {
             downloaddata(item, helper)
         }
@@ -78,6 +84,7 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
         if (face != "") {
             val head = helper.getView<ImageView>(R.id.head)
             val options = RequestOptions()
+                    .placeholder(R.drawable.a4_2)
                     .error(R.drawable.a4_2)
             Glide.with(context)
                     .load(face)
@@ -107,16 +114,14 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
                 edit.putString("${item.Name}face", p0[0].faceUrl)
                 edit.apply()
                 val head = helper.getView<ImageView>(R.id.head)
-                if(p0[0].faceUrl==""){
-                    head.setImageResource(R.drawable.a4_2)
-                }else{
                     val options = RequestOptions()
+                            .placeholder(R.drawable.a4_2)
                             .error(R.drawable.a4_2)
                     Glide.with(context)
                             .load(p0[0].faceUrl)
                             .apply(options)
                             .into(head)
-                }
+
 
 
             }
@@ -130,12 +135,15 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
                 edit.putString("${item.Name}face", p0[0].faceUrl)
                 edit.apply()
                 val head = helper.getView<ImageView>(R.id.head)
-                val options = RequestOptions()
-                        .error(R.drawable.a4_2)
-                Glide.with(context)
-                        .load(p0[0].faceUrl)
-                        .apply(options)
-                        .into(head)
+
+                    val options = RequestOptions()
+                            .placeholder(R.drawable.qface)
+                            .error(R.drawable.qface)
+                    Glide.with(context)
+                            .load(p0[0].faceUrl)
+                            .apply(options)
+                            .into(head)
+
 
             }
 

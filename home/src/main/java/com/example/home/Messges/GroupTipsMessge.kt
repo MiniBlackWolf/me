@@ -8,7 +8,7 @@ object GroupTipsMessge {
     fun showGroupTipsMessge(message: TIMMessage?, mview: HomeView) {
         for (i in 0 until message!!.getElementCount()) {
             val TIMGroupTipsElem = message.getElement(i.toInt()) as TIMGroupTipsElem
-            mview.showgrouptipmsg(TIMGroupTipsElem,message.sender)
+            mview.showgrouptipmsg(TIMGroupTipsElem,message.sender,message.timestamp())
         }
 
 

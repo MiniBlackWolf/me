@@ -37,48 +37,51 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
         }
     }
 
-    var y1: Float = 0F
-    var y2: Float = 0F
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            //当手指按下的时候
-            y1 = event.getY()
-        }
-        if (event.action == MotionEvent.ACTION_MOVE) {
-            y2 = event.y
-            var x2 = event.x
-            val y = sc.y
-            //   Log.i("iiiiiiiii", "$y2,$y")
-//                if (y1 - y2 > 10) {//向上滑动
-//                    val ofFloat = ObjectAnimator.ofFloat(v, "translationY", y, (y2 / 2))
-//                    ofFloat.start()
-//                }
-            if (y2 - y1 > 10) {//向下滑动
-                val ys = y2 / 3
-//                x2=x2/3
-                //       Log.i("iiiiiiiii", "$ys,$y")
-//                val translateAnimation = TranslateAnimation(0f, sc.y, 0f, y)
-//                val animationSet = AnimationSet(true)
-//                animationSet.addAnimation(translateAnimation)
-//                sc.startAnimation(animationSet)0
-                val ofFloats = ObjectAnimator.ofFloat(sc, "translationY", ys, 0f)
-                ofFloats.start()
-            }
-        }
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            //当手指离开的时候
-            val ofFloat = ObjectAnimator.ofFloat(sc, "translationY", 0f)
-            ofFloat.start()
-        }
-        return super.dispatchTouchEvent(event)
-
-    }
+//    var y1: Float = 0F
+//    var y2: Float = 0F
+//    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            //当手指按下的时候
+//            y1 = event.getY()
+//        }
+//        if (event.action == MotionEvent.ACTION_MOVE) {
+//            y2 = event.y
+//            var x2 = event.x
+//            val y = sc.y
+//            //   Log.i("iiiiiiiii", "$y2,$y")
+////                if (y1 - y2 > 10) {//向上滑动
+////                    val ofFloat = ObjectAnimator.ofFloat(v, "translationY", y, (y2 / 2))
+////                    ofFloat.start()
+////                }
+//            if (y2 - y1 > 10) {//向下滑动
+//                val ys = y2 / 3
+////                x2=x2/3
+//                //       Log.i("iiiiiiiii", "$ys,$y")
+////                val translateAnimation = TranslateAnimation(0f, sc.y, 0f, y)
+////                val animationSet = AnimationSet(true)
+////                animationSet.addAnimation(translateAnimation)
+////                sc.startAnimation(animationSet)0
+//                val ofFloats = ObjectAnimator.ofFloat(sc, "translationY", ys, 0f)
+//                ofFloats.start()
+//            }
+//        }
+//        if (event.getAction() == MotionEvent.ACTION_UP) {
+//            //当手指离开的时候
+//            val ofFloat = ObjectAnimator.ofFloat(sc, "translationY", 0f)
+//            ofFloat.start()
+//        }
+//        return super.dispatchTouchEvent(event)
+//
+//    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.personalhomepage)
         chatfh.setOnClickListener(this)
+        hz.setEnableOverScrollDrag(true)
+        hz.setEnableOverScrollBounce(true)
+        hz.setEnableRefresh(false)
 //        sc.setOnTouchListener { v, event ->
 //            if (event.getAction() == MotionEvent.ACTION_DOWN) {
 //                //当手指按下的时候

@@ -21,6 +21,7 @@ import com.tencent.imsdk.TIMUserProfile
 import com.tencent.imsdk.TIMValueCallBack
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
+import com.tencent.imsdk.ext.sns.TIMFriendshipProxy
 import kotlinx.android.synthetic.main.personalchatsettingslayout.*
 import org.jetbrains.anko.startActivity
 import study.kotin.my.baselibrary.common.BaseApplication
@@ -31,16 +32,16 @@ import java.util.*
 class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : BaseQuickAdapter<UserList, BaseViewHolder>(R.layout.homechat, userList) {
     override fun convert(helper: BaseViewHolder?, item: UserList?) {
 //        helper!!.setText(R.id.peername, item!!.Name)
-        if(item!!.Name=="马镫助手"){
+        if (item!!.Name == "马镫助手") {
             helper!!.setText(R.id.peername, item.Name)
-            helper.setImageResource(R.id.head,R.drawable.helper)
+            helper.setImageResource(R.id.head, R.drawable.helper)
             val noreadmsg = helper.getView<TextView>(R.id.noreadmsg)
             noreadmsg.isVisible = item.noreadmsg != 0
-            noreadmsg.text=""+item.noreadmsg
-            helper.setText(R.id.lastmsg,item.msg)
-            helper.setText(R.id.lastmsgtime,item.lastmsgtime.substring(0,item.lastmsgtime.indexOf("T")))
+            noreadmsg.text = "" + item.noreadmsg
+            helper.setText(R.id.lastmsg, item.msg)
+            helper.setText(R.id.lastmsgtime, item.lastmsgtime.substring(0, item.lastmsgtime.indexOf("T")))
             helper.getView<ConstraintLayout>(R.id.rt).setOnClickListener {
-                HomeFarment.count=0
+                HomeFarment.count = 0
                 context.startActivity<madengviewActivity>()
             }
             return
@@ -68,52 +69,48 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
             context.startActivity<HomeActivity>("id" to item.Name)
 
         }
-        val name = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.Name}name", "")
-        val face = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.Name}face", "")
-        val fdname = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.Name}fdname", "")
-        if (name != "") {
-            if(fdname!=""){
-                helper.setText(R.id.peername, fdname)
-            }else{
-                helper.setText(R.id.peername, name)
+        val friendsById = TIMFriendshipProxy.getInstance().getFriendsById(arrayListOf(item.Name))
+        if (friendsById != null) {
+            if (friendsById[0].remark != "") {
+                helper.setText(R.id.peername, friendsById[0].remark )
+            } else {
+                helper.setText(R.id.peername, friendsById[0].nickName )
             }
-        } else {
-            downloaddata(item, helper)
-        }
-
-        if (face != "") {
             val head = helper.getView<ImageView>(R.id.head)
             val options = RequestOptions()
                     .placeholder(R.drawable.a4_2)
                     .error(R.drawable.a4_2)
             Glide.with(context)
-                    .load(face)
+                    .load(friendsById[0].faceUrl)
                     .apply(options)
                     .into(head)
         } else {
-            downloaddata(item, helper)
+            downloaddata(item, helper, 1)
         }
+
     }
 
-    private fun downloaddata(item: UserList, helper: BaseViewHolder) {
+    private fun downloaddata(item: UserList, helper: BaseViewHolder, type: Int) {
         TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onError(p0: Int, p1: String?) {
 
             }
 
             override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
                 if (p0 == null) return
-                if (p0[0].remark == "") {
-                    helper.setText(R.id.peername, p0[0].nickName)
-                    edit.putString("${item.Name}name", p0[0].nickName)
-                } else {
-                    helper.setText(R.id.peername, p0[0].remark)
-                    edit.putString("${item.Name}name", p0[0].remark)
-                }
-                edit.putString("${item.Name}face", p0[0].faceUrl)
-                edit.apply()
-                val head = helper.getView<ImageView>(R.id.head)
+                val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+              //  if (type == 1) {
+                    if (p0[0].remark == "") {
+                        helper.setText(R.id.peername, p0[0].nickName)
+                        edit.putString("${item.Name}name", p0[0].nickName)
+                    } else {
+                        helper.setText(R.id.peername, p0[0].remark)
+                        edit.putString("${item.Name}name", p0[0].remark)
+                    }
+              //  } else {
+                    edit.putString("${item.Name}face", p0[0].faceUrl)
+
+                    val head = helper.getView<ImageView>(R.id.head)
                     val options = RequestOptions()
                             .placeholder(R.drawable.a4_2)
                             .error(R.drawable.a4_2)
@@ -121,9 +118,9 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
                             .load(p0[0].faceUrl)
                             .apply(options)
                             .into(head)
+                edit.apply()
 
-
-
+              //  }
             }
         })
         TIMGroupManagerExt.getInstance().getGroupPublicInfo(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
@@ -136,13 +133,13 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
                 edit.apply()
                 val head = helper.getView<ImageView>(R.id.head)
 
-                    val options = RequestOptions()
-                            .placeholder(R.drawable.qface)
-                            .error(R.drawable.qface)
-                    Glide.with(context)
-                            .load(p0[0].faceUrl)
-                            .apply(options)
-                            .into(head)
+                val options = RequestOptions()
+                        .placeholder(R.drawable.qface)
+                        .error(R.drawable.qface)
+                Glide.with(context)
+                        .load(p0[0].faceUrl)
+                        .apply(options)
+                        .into(head)
 
 
             }

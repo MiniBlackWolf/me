@@ -14,13 +14,14 @@ import study.kotin.my.baselibrary.rx.BaseObserver
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.mycenter.persenter.view.ChangeInfoview
 import study.kotin.my.mycenter.servier.MyService
+import study.kotin.my.mycenter.ui.activity.MyActivity
 import javax.inject.Inject
 
 class ChangeInfoperserter @Inject constructor() : Basepersenter<ChangeInfoview>() {
     @Inject
     lateinit var myServiceimp: MyService
 
-    fun Synchronizeinfo(Authorization:String) {
+    fun Synchronizeinfo(activity: MyActivity, Authorization:String) {
         myServiceimp.Synchronizeinfo(Authorization).excute(object : BaseObserver<BaseResp<String>>(){
             override fun onNext(t: BaseResp<String>) {
                 mView.Synchronizeinfo(t)
@@ -28,6 +29,7 @@ class ChangeInfoperserter @Inject constructor() : Basepersenter<ChangeInfoview>(
 
             override fun onError(e: Throwable) {
                 super.onError(e)
+                activity.hideLoading()
                 BaseApplication.context.toast("修改失败，请重试")
                 Log.e("eeeeeeeeeeeee","同步错误")
             }

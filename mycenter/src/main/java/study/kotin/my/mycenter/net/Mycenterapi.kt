@@ -13,14 +13,14 @@ interface Mycenterapi {
     @POST("auth/userlogout")
     fun logout(): Observable<BaseResp<String>>
 
-    @POST("http://madengwang.com:9200/user/changePassword")
+    @POST("/user/changePassword")
     fun changePassword(@Header("Authorization") Authorization: String, @Query("oldepsd") oldepsd: String, @Query("newpsd") newpsd: String): Observable<BaseResp<String>>
 
-    @POST("http://madengwang.com:9200/user/Synchronizeinfo")
+    @POST("http://192.168.1.105:9200/user/Synchronizeinfo")
     fun Synchronizeinfo(@Header("Authorization") Authorization: String): Observable<BaseResp<String>>
 
     @Multipart
-    @POST("http://madengwang.com:9200/upload/img")
+    @POST("/upload/img")
     fun uploadimg(@Header("Authorization")   Authorization: String,@Part file: List<MultipartBody.Part>): Observable<BaseResp<String>>
 
     @POST("http://www.hisihi.com/app.php?s=/school/province")

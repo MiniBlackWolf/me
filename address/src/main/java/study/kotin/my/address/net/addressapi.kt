@@ -9,7 +9,7 @@ import study.kotin.my.baselibrary.protocol.BaseResp
 
 interface addressapi {
     @Multipart
-    @POST("http://madengwang.com:9200/upload/img")
+    @POST("/upload/img")
     fun uploadimg(@Header("Authorization") Authorization: String, @Part file: List<MultipartBody.Part>): Observable<BaseResp<String>>
 
     @POST("http://www.hisihi.com/app.php?s=/school/province")

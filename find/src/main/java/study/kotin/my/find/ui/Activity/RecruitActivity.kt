@@ -63,7 +63,7 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
     }
     override fun onBackPressed() {
 
-        if(people.url=="http://madengwang.com:9200/admin/job/jobFind.html"){
+        if(people.url=="http://madengwang.com/admin/job/jobFind.html"){
             super.onBackPressed()
         }else {
             people.goBack()

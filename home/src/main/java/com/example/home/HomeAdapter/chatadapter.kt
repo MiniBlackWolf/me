@@ -16,6 +16,7 @@ import com.example.home.R
 import com.example.home.common.Msg
 import com.example.home.data.Sounddata
 import com.tencent.imsdk.*
+import com.tencent.imsdk.ext.sns.TIMFriendshipProxy
 import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.common.CircleImageView
 import java.math.BigDecimal
@@ -62,31 +63,61 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                 filesize = helper.getView(R.id.filesize)
                 grouptip = helper.getView(R.id.grouptip)
                 dd = helper.getView(R.id.dd)
-                TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.userInfoData.id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
-                    override fun onError(p0: Int, p1: String?) {
-
+                val friendsById = TIMFriendshipProxy.getInstance().getFriendsById(arrayListOf(item.userInfoData.id))
+                if (friendsById != null) {
+                    if (friendsById[0].remark == "") {
+                        helper.setText(R.id.myname, friendsById[0].nickName)
+                    } else {
+                        helper.setText(R.id.myname, friendsById[0].remark)
                     }
 
-                    override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
-                        if (p0 == null) return
-                        if (p0[0].remark == "") {
-                            helper.setText(R.id.myname, p0[0].nickName)
-                        } else {
-                            helper.setText(R.id.myname, p0[0].remark)
-                        }
+                    val options = RequestOptions()
+                            .error(R.drawable.a4_2)
+                    Glide.with(context)
+                            .load(friendsById[0].faceUrl)
+                            .apply(options)
+                            .into(ches)
+
+                } else {
+                    val name = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.userInfoData.id}name", "")
+                    val face = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("${item.userInfoData.id}face", "")
+                    if (name != "" && face != "") {
+                        helper.setText(R.id.myname, name)
                         val options = RequestOptions()
                                 .error(R.drawable.a4_2)
                         Glide.with(context)
-                                .load(p0[0].faceUrl)
+                                .load(face)
                                 .apply(options)
                                 .into(ches)
+                    } else {
+                        TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.userInfoData.id), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
+                            override fun onError(p0: Int, p1: String?) {
 
+                            }
+
+                            override fun onSuccess(p0: MutableList<TIMUserProfile>?) {
+                                if (p0 == null) return
+                                val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                                helper.setText(R.id.myname, p0[0].nickName)
+                                val options = RequestOptions()
+                                        .error(R.drawable.a4_2)
+                                Glide.with(context)
+                                        .load(p0[0].faceUrl)
+                                        .apply(options)
+                                        .into(ches)
+                                edit.putString("${item.userInfoData.id}name", p0[0].nickName)
+                                edit.putString("${item.userInfoData.id}face", p0[0].faceUrl)
+                                edit.apply()
+                            }
+                        })
                     }
-                })
+                }
+
+
                 when (item.datatype) {
                     1 -> {
                         initview(helper)
-                        helper.setVisible(R.id.myname,true)
+                        helper.setVisible(R.id.myname, true)
                         chatmsg2.isVisible = true
                         dd.isVisible = true
                         ches.isVisible = true
@@ -94,7 +125,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     }
                     2 -> {
                         initview(helper)
-                        helper.setVisible(R.id.myname,true)
+                        helper.setVisible(R.id.myname, true)
                         showimgmsgs.isVisible = true
                         ches.isVisible = true
                         helper.setImageBitmap(R.id.showimgmsgs, item.content as Bitmap)
@@ -103,7 +134,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     }
                     3 -> {
                         initview(helper)
-                        helper.setVisible(R.id.myname,true)
+                        helper.setVisible(R.id.myname, true)
                         chatpaly.isVisible = true
                         chatpaly2.isVisible = true
                         ches.isVisible = true
@@ -112,7 +143,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     }
                     4 -> {
                         initview(helper)
-                        helper.setVisible(R.id.myname,true)
+                        helper.setVisible(R.id.myname, true)
                         filepackage.isVisible = true
                         ches.isVisible = true
                         filaename.text = ((item.content as TIMFileElem).fileName)
@@ -121,7 +152,7 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
                     }
                     5 -> {
                         initview(helper)
-                        helper.setVisible(R.id.myname,false)
+                        helper.setVisible(R.id.myname, false)
                         ches.isVisible = false
                         grouptip.isVisible = true
                         val TIMGroupTipsElem = (item.content as TIMGroupTipsElem)
@@ -177,12 +208,31 @@ class chatadapter(data: ArrayList<Msg>?, private val context: Activity) : BaseMu
             }
             Msg.TYPE_SENT -> {
                 val face = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getString("myface", "")
-                val options = RequestOptions()
-                        .error(R.drawable.a4_2)
-                Glide.with(context)
-                        .load(face)
-                        .apply(options)
-                        .into(ches)
+                if (face == "") {
+                    TIMFriendshipManager.getInstance().getSelfProfile(object : TIMValueCallBack<TIMUserProfile> {
+                        override fun onSuccess(p0: TIMUserProfile) {
+                            val options = RequestOptions()
+                                    .error(R.drawable.a4_2)
+                            Glide.with(context)
+                                    .load(p0.faceUrl)
+                                    .apply(options)
+                                    .into(ches)
+                            val face = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                            face.putString("myface", p0.faceUrl)
+                            face.apply()
+                        }
+
+                        override fun onError(p0: Int, p1: String?) {
+                        }
+                    })
+                } else {
+                    val options = RequestOptions()
+                            .error(R.drawable.a4_2)
+                    Glide.with(context)
+                            .load(face)
+                            .apply(options)
+                            .into(ches)
+                }
                 dd = helper.getView(R.id.dd)
                 chatbg = helper.getView(R.id.chatbg)
                 chatmsgs3 = helper.getView(R.id.chatmsgs3)

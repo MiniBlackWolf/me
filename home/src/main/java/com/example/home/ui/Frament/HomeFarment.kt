@@ -66,7 +66,7 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
                 content = t[0].content
             }
             val toMutableList = userlist.toMutableList()
-            toMutableList.add(0, UserList("", "", "马镫助手", content, count, t[0].createtime))
+            toMutableList.add(0, UserList("", "", "马镫助手", t[0].title, count, t[0].createtime))
             //homeListAdapter.addData(0,userlist)
             RecyclerViewset1(toMutableList)
 
@@ -223,7 +223,8 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
     lateinit var hz: SmartRefreshLayout
     val conversationPresenter = ConversationPresenter(this)
     val homeRefreshView by lazy { HomeRefreshView(activity as Activity).initview(chatlist2, hz) {  updataview() } }
-
+    var mseq=0L
+    var mrand=0L
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.homemain_layout, container, false)
@@ -248,8 +249,8 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
         hz.setEnableOverScrollDrag(true)
         mpersenter.getdatas()
         TIMManager.getInstance().addMessageListener{
-            updataview()
-           false
+                    updataview()
+           true
         }
         return view
     }

@@ -79,6 +79,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
     }
 
     override fun Synchronizeinfo(result: BaseResp<String>) {
+        hideLoading()
         if (result.success) {
             ARouter.getInstance().build("/App/Homepage").navigation()
             finish()
@@ -210,6 +211,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                 setdatadialog("修改个人标签", z8_1)
             }
             R.id.done -> {
+
                 if (z1_1.text == null) {
                     z1_1.text = " "
                 }
@@ -225,7 +227,7 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                     toast("请填写邮箱")
                     return
                 }
-
+                showLoading()
                 val param = TIMFriendshipManager.ModifyUserProfileParam()
                 param.setSelfSignature(z1_1.text.toString())
                 param.setNickname(z2_1.text.toString())
@@ -251,11 +253,12 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                         if (jwt == "") {
                             return
                         }
-                        mpersenter.Synchronizeinfo("Bearer " + jwt!!)
+                        mpersenter.Synchronizeinfo(this@MyActivity,"Bearer " + jwt!!)
                     }
 
                     override fun onError(p0: Int, p1: String?) {
                         toast("修改失败，请重试")
+                        hideLoading()
                     }
                 })
             }

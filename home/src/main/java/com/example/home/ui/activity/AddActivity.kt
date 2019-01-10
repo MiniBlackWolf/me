@@ -1,5 +1,6 @@
 package com.example.home.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.BitmapFactory
@@ -26,6 +27,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
@@ -112,7 +114,11 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
                 showLoading()
                 val articledata = articledata(0,titles.text.toString(), timestart.text.toString(), timeend.text.toString(), address.text.toString(),
                         id, TIMManager.getInstance().loginUser, textedit.html, "",ArrayList())
-                mpersenter.addactive(this@AddActivity, articledata)
+                val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+                if (jwt == "") {
+                    return
+                }
+                mpersenter.addactive("Bearer " + jwt!!,this@AddActivity, articledata)
 
             }
             R.id.timestart -> {
@@ -126,6 +132,9 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
             }
             R.id.address -> {
                 setdatadialog("设置地点", address)
+            }
+            R.id.edit->{
+                startActivity<qcodeActivity>()
             }
 
         }
@@ -179,11 +188,15 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
         timeend.setOnClickListener(this)
         titles.setOnClickListener(this)
         address.setOnClickListener(this)
+        edit.setOnClickListener(this)
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
+            if(data==null){
+                return
+            }
             showLoading()
             //获取图片路径
             val obtainPathResult = Matisse.obtainPathResult(data)
@@ -199,7 +212,11 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
             val create = RequestBody.create(MediaType.parse("multipart/form-data"), file)
             val addFormDataPart = Builder.addFormDataPart("file", file.name, create)
             val parts = addFormDataPart.build().parts()
-            mpersenter.uploadimg(this@AddActivity, parts)
+            val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+            if (jwt == "") {
+                return
+            }
+            mpersenter.uploadimg("Bearer " + jwt!!,this@AddActivity, parts)
             Log.d("Matisse", "mSelected: $obtainPathResult")
         }
 

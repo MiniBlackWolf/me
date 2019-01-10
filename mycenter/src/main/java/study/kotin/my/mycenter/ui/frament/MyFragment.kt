@@ -182,14 +182,18 @@ class MyFragment : BaseMVPFragmnet<Mypersenter>(), View.OnClickListener, MyView 
             m3.text = "人事信息"
             m3.setOnClickListener { activity!!.startActivity<PersonnelActivity>() }
         }
-
-        thread {
-            val syncEncodeQRCode = QRCodeEncoder.syncEncodeQRCode(TIMManager.getInstance().loginUser+"madengwang", 400)
-            Bus.send(syncEncodeQRCode)
+        try {
+            thread {
+                val syncEncodeQRCode = QRCodeEncoder.syncEncodeQRCode(TIMManager.getInstance().loginUser + "madengwang", 400)
+                Bus.send(syncEncodeQRCode)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+
         Bus.observe<Bitmap>()
-                .subscribe{
-                    if(it!=null){
+                .subscribe {
+                    if (it != null) {
                         m10.setImageBitmap(it)
 
                     }

@@ -1,5 +1,6 @@
 package com.example.home.ui.Frament
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.example.home.R
 import com.example.home.data.articledata
 import com.example.home.persenter.articlepersenter
 import com.example.home.persenter.view.articleView
+import com.tencent.open.utils.Global
 import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
@@ -45,7 +47,7 @@ class PublicGroupFarment_4 : BaseMVPFragmnet<articlepersenter>(), articleView {
             publicGroupFarment_4_adapter.addData(r)
         }
     }
-
+    val jwt by lazy { activity!!.getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "") }
     lateinit var publicGroupFarment_4_adapter: PublicGroupFarment_4_adapter
     val id by lazy { activity!!.intent!!.extras!!.getString("id") }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -81,7 +83,7 @@ class PublicGroupFarment_4 : BaseMVPFragmnet<articlepersenter>(), articleView {
         //网络请求
         val map=HashMap<String,String>()
         map["id"] = id
-        mpersenter.findarticle(map)
+        mpersenter.findarticle("Bearer " + jwt!!,map)
         return views
     }
 

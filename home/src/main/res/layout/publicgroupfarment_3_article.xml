@@ -7,14 +7,14 @@
     android:background="@color/background">
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/edit"
         android:layout_width="100dp"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="56dp"
         android:background="@drawable/frame"
-        android:text="申请助手推送"
+        android:text="在电脑上编辑"
         android:textColor="@color/mainred"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,8 +37,8 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.245"
-        app:layout_constraintStart_toEndOf="@+id/button4"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toEndOf="@+id/edit"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
 
     <TextView
@@ -49,13 +49,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="72dp"
-        android:text="ps:助手推送功能仅适用于认证过的社团"
+        android:text="ps:在电脑页面打开编辑哦"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.297"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button6"
+        app:layout_constraintTop_toBottomOf="@+id/edit"
         app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout

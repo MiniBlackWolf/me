@@ -1,5 +1,6 @@
 package com.example.home.ui.Frament
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -16,6 +17,7 @@ import com.example.home.persenter.HomePersenter
 import com.example.home.persenter.articlepersenter
 import com.example.home.persenter.view.articleView
 import com.example.home.ui.activity.ActivityInfoActivity
+import com.tencent.open.utils.Global
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
@@ -30,20 +32,20 @@ class PublicGroupFarment_3 : BaseMVPFragmnet<articlepersenter>(), articleView {
     override fun addactive(t: BaseResp<String>) {}
     override fun uploadimg(t: BaseResp<String>) {}
     override fun join(t: BaseResp<String>) {
-        if(t.success){
+        if (t.success) {
             hideLoading()
             toast("参加成功")
-        }else{
+        } else {
             hideLoading()
             toast("参加失败，请检查网络")
         }
     }
 
     override fun quit(t: BaseResp<String>) {
-        if(t.success){
+        if (t.success) {
             hideLoading()
             toast("退出成功")
-        }else{
+        } else {
             hideLoading()
             toast("退出失败，请检查网络")
         }
@@ -53,6 +55,7 @@ class PublicGroupFarment_3 : BaseMVPFragmnet<articlepersenter>(), articleView {
         publicGroupFarment_3_adapter.addData(t)
     }
 
+    val jwt by lazy { activity!!.getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "") }
     val id by lazy { activity!!.intent.extras!!.getString("id") }
     lateinit var publicGroupFarment_3_adapter: PublicGroupFarment_3_adapter
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,18 +69,22 @@ class PublicGroupFarment_3 : BaseMVPFragmnet<articlepersenter>(), articleView {
             val data = adapter.data as List<articledata>
             when (views.id) {
                 R.id.enroll -> {
+                    if (jwt == "") {
+                    return@setOnItemChildClickListener
+                }
                     showLoading()
                     val enroll = adapter.getViewByPosition(f3list, position, R.id.enroll) as TextView
                     if (enroll.text.toString() == "报名参加") {
-                        mpersenter.join(this,data[position].id)
-                        enroll.text="取消参加"
+
+                        mpersenter.join("Bearer " + jwt!!,this, data[position].id)
+                        enroll.text = "取消参加"
                     } else {
-                        mpersenter.quit(this,data[position].id)
-                        enroll.text="报名参加"
+                        mpersenter.quit("Bearer " + jwt!!,this, data[position].id)
+                        enroll.text = "报名参加"
                     }
 
                 }
-                R.id.tc ->{
+                R.id.tc -> {
                     startActivity<ActivityInfoActivity>("articledata" to data[position])
                 }
             }
@@ -92,7 +99,7 @@ class PublicGroupFarment_3 : BaseMVPFragmnet<articlepersenter>(), articleView {
         //请求活动列表
         val map = HashMap<String, String>()
         map.put("communityid", id)
-        mpersenter.findactive(map)
+        mpersenter.findactive("Bearer " + jwt!!,map)
         return view
     }
 

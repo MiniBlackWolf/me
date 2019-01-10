@@ -1,5 +1,6 @@
 package com.example.home.ui.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -21,6 +22,7 @@ import study.kotin.my.mycenter.injection.module.Homemodule
 import java.util.*
 
 class madengviewActivity:BaseMVPActivity<madenghelperpersenter>(),madenghelperView {
+    val jwt by lazy { getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "") }
     override fun helpererror(e: Throwable) {
         hz.finishRefresh(1000,false)
     }
@@ -40,11 +42,11 @@ class madengviewActivity:BaseMVPActivity<madenghelperpersenter>(),madenghelperVi
         madenglist.adapter=madengviewAdapter
         madenglist.layoutManager=LinearLayoutManager(this)
         //初始数据
-        mpersenter.madenghelper(1)
+        mpersenter.madenghelper("Bearer " + jwt!!,1)
         //刷新
         hz.setOnRefreshListener {
             val random = Random()
-            mpersenter.madenghelper(random.nextInt(10))
+            mpersenter.madenghelper("Bearer " + jwt!!,random.nextInt(10))
         }
         hz.setRefreshHeader(MaterialHeader(this))
         hz.setEnableOverScrollDrag(true)

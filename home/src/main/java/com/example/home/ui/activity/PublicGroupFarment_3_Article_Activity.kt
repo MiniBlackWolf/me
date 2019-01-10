@@ -20,6 +20,7 @@ import com.tencent.imsdk.TIMManager
 import jp.wasabeef.richeditor.RichEditor
 import kotlinx.android.synthetic.main.publicgroupfarment_3_article.*
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
@@ -61,6 +62,9 @@ class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<articlepersenter>(
             R.id.Title->{
                 setdatadialog("设置标题",Title)
             }
+            R.id.edit->{
+                startActivity<qcodeActivity>()
+            }
 
         }
     }
@@ -73,7 +77,7 @@ class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<articlepersenter>(
         ctf.setOnClickListener(this)
         ok.setOnClickListener(this)
         Title.setOnClickListener(this)
-
+        edit.setOnClickListener(this)
     }
     private fun setdatadialog(name: String, text: TextView) {
         alert {

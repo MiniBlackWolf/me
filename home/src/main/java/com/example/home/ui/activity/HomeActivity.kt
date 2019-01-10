@@ -32,6 +32,7 @@ import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
 import android.support.v7.widget.GridLayoutManager
+import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.ajguan.library.EasyRefreshLayout
@@ -156,6 +157,22 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
 
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if(ev.action==MotionEvent.ACTION_DOWN) {
+            var y1=1700
+            if(emoticon.isVisible){
+                y1=y1-emoticon.height
+            }
+            if(ev.y>morelayout.y&&ev.y<y1){
+                morePanel.isVisible = false
+                chatsendview.layoutParams.height = 168
+                val input = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                input.hideSoftInputFromWindow(chatsendview.windowToken, 0)
+                emoticon.isVisible=false
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chatlayout)
@@ -409,16 +426,6 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         DaggerHomeCommponent.builder().activityCommpoent(activityCommpoent).homemodule(Homemodule()).build().inject(this)
 
     }
-
-
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        //以下代码为处理Android6.0、7.0动态权限所需
-//        val type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        PermissionManager.handlePermissionsResult(this, type, TakePhotoUt.invokeParam, TakePhotoUt)
-//
-//    }
-
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_photo -> {
@@ -456,6 +463,9 @@ class HomeActivity : BaseMVPActivity<HomePersenter>(), HomeView, View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //获取图片路径
+            if(data==null){
+                return
+            }
             mSelected = Matisse.obtainResult(data!!)
             val obtainPathResult = Matisse.obtainPathResult(data)
             val bitmap = BitmapFactory.decodeFile(obtainPathResult.get(0))

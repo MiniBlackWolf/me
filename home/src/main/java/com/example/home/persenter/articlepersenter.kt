@@ -36,8 +36,8 @@ class articlepersenter @Inject constructor():Basepersenter<articleView>() {
             }
         },lifecycleProvider)
     }
-    fun findarticle(id:Map<String,String>){
-        articleServiceimp.findarticle(id).excute(object : BaseObserver<List<articledata>>(){
+    fun findarticle(Authorization: String,id:Map<String,String>){
+        articleServiceimp.findarticle(Authorization,id).excute(object : BaseObserver<List<articledata>>(){
             override fun onNext(t: List<articledata>) {
                 mView.findarticle(t)
                 super.onNext(t)
@@ -48,8 +48,8 @@ class articlepersenter @Inject constructor():Basepersenter<articleView>() {
             }
         },lifecycleProvider)
     }
-     fun addactive(activity: AddActivity,articledata: articledata) {
-         articleServiceimp.addactive(articledata).excute(object : BaseObserver<BaseResp<String>>(){
+     fun addactive(Authorization: String,activity: AddActivity,articledata: articledata) {
+         articleServiceimp.addactive(Authorization,articledata).excute(object : BaseObserver<BaseResp<String>>(){
              override fun onNext(t: BaseResp<String>) {
                  mView.addactive(t)
                  super.onNext(t)
@@ -63,8 +63,8 @@ class articlepersenter @Inject constructor():Basepersenter<articleView>() {
 
     }
 
-     fun findactive(id: Map<String, String>) {
-         articleServiceimp.findactive(id).excute(object : BaseObserver<List<articledata>>(){
+     fun findactive(Authorization: String,id: Map<String, String>) {
+         articleServiceimp.findactive(Authorization,id).excute(object : BaseObserver<List<articledata>>(){
              override fun onNext(t: List<articledata>) {
                  mView.findactive(t)
                  super.onNext(t)
@@ -76,8 +76,8 @@ class articlepersenter @Inject constructor():Basepersenter<articleView>() {
          },lifecycleProvider)
     }
 
-     fun uploadimg(activity: AddActivity, file: List<MultipartBody.Part>) {
-         articleServiceimp.uploadimg(file).excute(object : BaseObserver<BaseResp<String>>(){
+     fun uploadimg(Authorization: String,activity: AddActivity, file: List<MultipartBody.Part>) {
+         articleServiceimp.uploadimg(Authorization,file).excute(object : BaseObserver<BaseResp<String>>(){
              override fun onNext(t: BaseResp<String>) {
                  mView.uploadimg(t)
              }
@@ -91,8 +91,8 @@ class articlepersenter @Inject constructor():Basepersenter<articleView>() {
          },lifecycleProvider)
     }
 
-     fun join(activity: PublicGroupFarment_3, Activeid: Int){
-         articleServiceimp.join(Activeid).excute(object : BaseObserver<BaseResp<String>>(){
+     fun join(Authorization: String,activity: PublicGroupFarment_3, Activeid: Int){
+         articleServiceimp.join(Authorization,Activeid).excute(object : BaseObserver<BaseResp<String>>(){
              override fun onNext(t: BaseResp<String>) {
                  mView.join(t)
              }
@@ -106,8 +106,8 @@ class articlepersenter @Inject constructor():Basepersenter<articleView>() {
          },lifecycleProvider)
     }
 
-     fun quit(activity: PublicGroupFarment_3,Activeid: Int){
-         articleServiceimp.quit(Activeid).excute(object : BaseObserver<BaseResp<String>>(){
+     fun quit(Authorization: String,activity: PublicGroupFarment_3,Activeid: Int){
+         articleServiceimp.quit(Authorization,Activeid).excute(object : BaseObserver<BaseResp<String>>(){
              override fun onNext(t: BaseResp<String>) {
                  mView.quit(t)
              }

@@ -20,32 +20,32 @@ class articleServiceimp @Inject constructor(): articleService {
     override fun addarticle(Authorization: String, articledata: articledata): Observable<BaseResp<String>> {
         return HomeRepossitory.addarticle(Authorization,articledata)
     }
-    override fun findarticle(id:Map<String,String>):Observable<List<articledata>>{
-        return HomeRepossitory.findarticle(id).flatMap {
+    override fun findarticle(Authorization: String,id:Map<String,String>):Observable<List<articledata>>{
+        return HomeRepossitory.findarticle(Authorization,id).flatMap {
             Observable.just(it.rows)
         }
     }
-    override fun addactive(articledata: articledata): Observable<BaseResp<String>> {
-        return HomeRepossitory.addactive(articledata)
+    override fun addactive(Authorization: String,articledata: articledata): Observable<BaseResp<String>> {
+        return HomeRepossitory.addactive(Authorization,articledata)
     }
 
-    override fun findactive(id: Map<String, String>):Observable<List<articledata>>{
-        return HomeRepossitory.findactive(id).flatMap {
+    override fun findactive(Authorization: String,id: Map<String, String>):Observable<List<articledata>>{
+        return HomeRepossitory.findactive(Authorization,id).flatMap {
             Observable.just(it.rows)
         }
     }
-    override fun uploadimg(file: List<MultipartBody.Part>): Observable<BaseResp<String>> {
-        return HomeRepossitory.uploadimg(file)
+    override fun uploadimg(Authorization: String,file: List<MultipartBody.Part>): Observable<BaseResp<String>> {
+        return HomeRepossitory.uploadimg(Authorization,file)
     }
-    override fun join(Activeid: Int): Observable<BaseResp<String>> {
-        return HomeRepossitory.join(Activeid)
+    override fun join(Authorization: String,Activeid: Int): Observable<BaseResp<String>> {
+        return HomeRepossitory.join(Authorization,Activeid)
     }
 
-    override fun quit(Activeid: Int): Observable<BaseResp<String>> {
-        return HomeRepossitory.quit(Activeid)
+    override fun quit(Authorization: String,Activeid: Int): Observable<BaseResp<String>> {
+        return HomeRepossitory.quit(Authorization,Activeid)
     }
-    override fun helper(page:Int): Observable<List<madengdata>>{
-        return HomeRepossitory.helper(page).flatMap {
+    override fun helper(Authorization: String,page:Int): Observable<List<madengdata>>{
+        return HomeRepossitory.helper(Authorization,page).flatMap {
             Observable.just(it.rows)
         }
     }

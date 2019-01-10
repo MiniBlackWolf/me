@@ -145,6 +145,9 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
             //获取图片路径
+            if(data==null){
+                return
+            }
             val obtainPathResult = Matisse.obtainPathResult(data)
             val bitmap = BitmapFactory.decodeFile(obtainPathResult.get(0))
             //mEditor.insertImage(obtainPathResult[0], "huangxiaoguo\" style=\"max-width:100%")

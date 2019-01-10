@@ -89,9 +89,12 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
             Log.e("eeeeeeeeee", result.message)
         }
     }
-
+var datas=0L
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
+            if(data==null){
+                return
+            }
             showLoading()
             //获取图片路径
             val obtainPathResult = Matisse.obtainPathResult(data)
@@ -169,14 +172,14 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                         .setShowType(DateTimePicker.ShowType.DAY)
                 DateTimePicker(this, object : DateTimePicker.ResultHandler {
                     override fun handle(date: Date) {
-                        val simpleDateFormat = SimpleDateFormat("yyyyMMdd")
-                        val format = simpleDateFormat.format(date)
+                        datas=date.time
+                        val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日")
+                        val format = simpleDateFormat.format(datas)
                         z4_1.text = format
-                        Log.i("iiiiiiiii", date.toString())
                     }
-                }, startDate, Calendar.getInstance().time, TBuilder).show(Calendar.getInstance().time)
-
+                }, startDate, Calendar.getInstance().time, TBuilder).show(Date(946709507000))
             }
+
             R.id.z5 -> {
                 setdatadialog("修改职业", z5_1)
             }
@@ -240,7 +243,9 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                     z3_1.text.toString() == "女" -> param.setGender(TIMFriendGenderType.Female)
                     else -> param.setGender(TIMFriendGenderType.Unknow)
                 }
-                param.setBirthday(z4_1.text.toString().toLong())
+                if(datas!=0L){
+                    param.setBirthday(datas/1000)
+                }
                 val map = HashMap<String, ByteArray>()
                 map.put("Tag_Profile_Custom_work", z5_1.text.toString().toByteArray())
                 map.put("Tag_Profile_Custom_school", z6_1.text.toString().toByteArray())
@@ -333,7 +338,9 @@ class MyActivity : BaseMVPActivity<ChangeInfoperserter>(), ChangeInfoview, View.
                     p0.gender == TIMFriendGenderType.Female -> z3_1.text = "女"
                     else -> z3_1.text = "不明"
                 }
-                z4_1.text = p0.birthday.toString()
+                val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日")
+                val format = simpleDateFormat.format(p0.birthday*1000)
+                z4_1.text = format
                 if (p0.customInfo["Tag_Profile_Custom_work"] == null) {
                     z5_1.text = "不明"
                 } else {

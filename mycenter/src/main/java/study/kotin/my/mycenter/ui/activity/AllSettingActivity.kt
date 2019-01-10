@@ -179,6 +179,9 @@ class AllSettingActivity : BaseMVPActivity<Mypersenter>(), View.OnClickListener 
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //获取图片路径
+            if(data==null){
+                return
+            }
             val mSelected = Matisse.obtainResult(data!!) //uri
             val obtainPathResult = Matisse.obtainPathResult(data) //path
             val bitmap = BitmapFactory.decodeFile(obtainPathResult.get(0)) //bitmap

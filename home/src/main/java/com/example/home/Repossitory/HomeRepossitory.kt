@@ -21,27 +21,27 @@ class HomeRepossitory @Inject constructor(){
     fun addarticle(Authorization: String, articledata: articledata):Observable<BaseResp<String>>{
         return RetrofitFactory.instance.creat(homeapi::class.java).addarticle(Authorization,articledata)
     }
-    fun findarticle(id:Map<String,String>):Observable<listarticledata<articledata>>{
-        return RetrofitFactory.instance.creat(homeapi::class.java).findarticle(id)
+    fun findarticle(Authorization: String,id:Map<String,String>):Observable<listarticledata<articledata>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).findarticle(Authorization,id)
     }
-    fun addactive( articledata: articledata):Observable<BaseResp<String>>{
-        return RetrofitFactory.instance.creat(homeapi::class.java).addactive(articledata)
+    fun addactive(Authorization: String, articledata: articledata):Observable<BaseResp<String>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).addactive(Authorization,articledata)
     }
-    fun findactive(id:Map<String,String>):Observable<listarticledata<articledata>>{
-        return RetrofitFactory.instance.creat(homeapi::class.java).findactive(id)
+    fun findactive(Authorization: String,id:Map<String,String>):Observable<listarticledata<articledata>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).findactive(Authorization,id)
     }
-    fun uploadimg(file: List<MultipartBody.Part>): Observable<BaseResp<String>>{
-        return RetrofitFactory.instance.creat(homeapi::class.java).uploadimg(file)
+    fun uploadimg(Authorization: String,file: List<MultipartBody.Part>): Observable<BaseResp<String>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).uploadimg(Authorization,file)
     }
-    fun join(Activeid: Int): Observable<BaseResp<String>>{
-        return RetrofitFactory.instance.creat(homeapi::class.java).join(Activeid)
+    fun join(Authorization: String,Activeid: Int): Observable<BaseResp<String>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).join(Authorization,Activeid)
     }
-    fun quit(Activeid: Int): Observable<BaseResp<String>>{
-        return RetrofitFactory.instance.creat(homeapi::class.java).quit(Activeid)
+    fun quit(Authorization: String,Activeid: Int): Observable<BaseResp<String>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).quit(Authorization,Activeid)
     }
 
-    fun helper(page:Int): Observable<listarticledata<madengdata>>{
-        return RetrofitFactory.instance.creat(homeapi::class.java).helper(page)
+    fun helper(Authorization: String,page:Int): Observable<listarticledata<madengdata>>{
+        return RetrofitFactory.instance.creat(homeapi::class.java).helper(Authorization,page)
     }
 
 }

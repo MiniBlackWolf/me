@@ -19,25 +19,25 @@ interface homeapi {
     fun addarticle(@Header("Authorization") Authorization: String, @Body articledata: articledata): Observable<BaseResp<String>>
 
     @POST("/communityarticle/findAll?page=0&size=9999")
-    fun findarticle(@Body id: Map<String, String>): Observable<listarticledata<articledata>>
+    fun findarticle(@Header("Authorization") Authorization: String,@Body id: Map<String, String>): Observable<listarticledata<articledata>>
 
     @Multipart
     @POST("/upload/img")
-    fun uploadimg(@Part file: List<MultipartBody.Part>): Observable<BaseResp<String>>
+    fun uploadimg(@Header("Authorization") Authorization: String,@Part file: List<MultipartBody.Part>): Observable<BaseResp<String>>
 
     @POST("/communityactive/add")
-    fun addactive(@Body articledata: articledata): Observable<BaseResp<String>>
+    fun addactive(@Header("Authorization") Authorization: String,@Body articledata: articledata): Observable<BaseResp<String>>
 
     @POST("/communityactive/findAll?page=0&size=9999")
-    fun findactive(@Body id: Map<String, String>): Observable<listarticledata<articledata>>
+    fun findactive(@Header("Authorization") Authorization: String,@Body id: Map<String, String>): Observable<listarticledata<articledata>>
 
     @POST("/ActiveUser/join")
-    fun join(@Query("Activeid") Activeid: Int): Observable<BaseResp<String>>
+    fun join(@Header("Authorization") Authorization: String,@Query("Activeid") Activeid: Int): Observable<BaseResp<String>>
 
     @POST("/ActiveUser/quit")
-    fun quit(@Query("Activeid") Activeid: Int): Observable<BaseResp<String>>
+    fun quit(@Header("Authorization") Authorization: String,@Query("Activeid") Activeid: Int): Observable<BaseResp<String>>
 
     @POST("/helper/findAll?size=1")
-    fun helper(@Query("page") page:Int): Observable<listarticledata<madengdata>>
+    fun helper(@Header("Authorization") Authorization: String,@Query("page") page:Int): Observable<listarticledata<madengdata>>
 
 }

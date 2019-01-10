@@ -21,8 +21,8 @@ class madenghelperpersenter @Inject constructor():Basepersenter<madenghelperView
     lateinit var articleServiceimp: articleService
     @Inject
     lateinit var HomeSeriverImp: HomeSeriver
-    fun madenghelper(page:Int){
-        articleServiceimp.helper(page).excute(object : BaseObserver<List<madengdata>>(){
+    fun madenghelper(Authorization: String,page:Int){
+        articleServiceimp.helper(Authorization,page).excute(object : BaseObserver<List<madengdata>>(){
             override fun onNext(t: List<madengdata>) {
                 mView.helper(t)
             }

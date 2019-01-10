@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.personalhomepage.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
+import java.text.SimpleDateFormat
 import java.util.*
 
 @Route(path = "/home/PersonalhomeActivity")
@@ -126,7 +127,8 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
                 //马镫号
                 tmadengid.text = p0[0].identifier
                 //生日
-                val birthday = p0[0].birthday.toString()
+                val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日")
+                val birthday = simpleDateFormat.format(p0[0].birthday)
                 if (birthday != "0") {
                     val get = Calendar.getInstance().get(Calendar.YEAR)
                     val substring = birthday.substring(0, 4)

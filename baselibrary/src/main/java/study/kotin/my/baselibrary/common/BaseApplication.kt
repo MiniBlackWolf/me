@@ -21,8 +21,7 @@ import com.tencent.smtt.sdk.QbSdk
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.content.IntentFilter
-
-
+import com.tencent.bugly.Bugly
 
 
 class BaseApplication : MultiDexApplication() {
@@ -31,6 +30,7 @@ class BaseApplication : MultiDexApplication() {
         super.onCreate()
         context = this
         initjection()
+        Bugly.init(this, "0e73bf32cd", false)
         ARouter.openLog()    // 打印日志
         ARouter.openDebug()
         ARouter.init(this)

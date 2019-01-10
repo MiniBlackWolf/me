@@ -371,14 +371,14 @@
         app:srcCompat="@drawable/btn_nav_home_press" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/edit"
         android:layout_width="100dp"
         android:layout_height="45dp"
         android:layout_marginStart="68dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="56dp"
         android:background="@drawable/frame"
-        android:text="申请助手推送"
+        android:text="在电脑上编辑"
         android:textColor="@color/mainred"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -400,7 +400,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.245"
-        app:layout_constraintStart_toEndOf="@+id/button4" />
+        app:layout_constraintStart_toEndOf="@+id/edit" />
 
     <TextView
         android:id="@+id/textView26"
@@ -410,13 +410,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="ps:助手推送功能仅适用于认证过的社团
+        android:text="ps:在电脑页面打开编辑哦
 附件支持jpg，png格式的图片，大小不大于2mb"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4"
+        app:layout_constraintTop_toBottomOf="@+id/edit"
         app:layout_constraintVertical_bias="0.0" />
 </android.support.constraint.ConstraintLayout>

@@ -26,18 +26,6 @@ class RetrofitFactory private constructor() {
     private val interceptor: Interceptor
 
     init {
-        val jwt = BaseApplication.context.getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-        if (jwt != "") {
-            interceptor = Interceptor {
-                val request = it.request()
-                        .newBuilder()
-                        .header("Content-type", "application/json")
-                        .header("charset", "utf-8")
-                        .header("Authorization","Bearer $jwt")
-                        .build()
-                it.proceed(request)
-            }
-        }else{
             interceptor = Interceptor {
                 val request = it.request()
                         .newBuilder()
@@ -45,7 +33,7 @@ class RetrofitFactory private constructor() {
                         .header("charset", "utf-8")
                         .build()
                 it.proceed(request)
-            }
+
         }
 
         retrofit = Retrofit.Builder()
@@ -101,6 +89,7 @@ class RetrofitFactory private constructor() {
 
 
     fun <T> creat(service: Class<T>): T {
+
         return retrofit.create(service)
 
     }

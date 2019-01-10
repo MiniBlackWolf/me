@@ -186,6 +186,9 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
+            if(data==null){
+                return
+            }
             showLoading()
             //获取图片路径
             val obtainPathResult = Matisse.obtainPathResult(data)

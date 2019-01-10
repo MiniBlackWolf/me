@@ -25,7 +25,7 @@ import android.app.Activity
 import android.content.Intent
 import android.annotation.TargetApi
 import android.os.Build
-
+import study.kotin.my.baselibrary.data.net.webset
 
 
 class RecruitActivity : BaseMVPActivity<Findpresenter>() {
@@ -38,7 +38,7 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
                 if (trun) {
                     val httpUrl=HttpUrl.get(p1)
                     val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-                    val string1 = getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString(httpUrl.host(), "")
+                    val string1 = getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString("madengwang.com", "")
                     val gson = Gson()
                     val list = gson.fromJson(string1,object: TypeToken<List<Cookie>>(){}.type) as List<Cookie>
                     if(jwt==""&&list[0].value()==""){
@@ -59,15 +59,16 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
         val initWeb = MyWebViewSettings.initWeb(people,this)
         initWeb.loadUrl(resources.getString(R.string.jobFind))
         initWeb.addJavascriptInterface(webtest(this,""),"webtest")
-
+        initWeb.addJavascriptInterface(webset(),"webset")
     }
     override fun onBackPressed() {
-
-        if(people.url=="http://madengwang.com/admin/job/jobFind.html"){
-            super.onBackPressed()
-        }else {
-            people.goBack()
-        }
+        super.onBackPressed()
+//
+//        if(people.url=="http://madengwang.com/admin/job/jobFind.html"){
+//            super.onBackPressed()
+//        }else {
+//            people.goBack()
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

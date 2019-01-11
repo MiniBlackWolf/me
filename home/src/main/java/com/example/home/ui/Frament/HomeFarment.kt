@@ -257,6 +257,19 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
         mpersenter.getdatas()
         TIMManager.getInstance().addMessageListener {
             updataview()
+            for (iss in it) {
+                when (iss.getElement(0).type) {
+                    TIMElemType.SNSTips -> {
+                        Bus.send(1)
+                    }
+                    TIMElemType.GroupSystem -> {
+                        Bus.send(1)
+                    }
+                    else -> {
+                    }
+                }
+            }
+
             true
         }
         Beta.checkUpgrade(false, false)

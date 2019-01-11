@@ -11,12 +11,14 @@ import org.jetbrains.anko.startActivity
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 
 class qcodeActivity:BaseMVPActivity<HomePersenter>(), QRCodeView.Delegate {
+    val id by lazy { intent.extras?.getString("id") }
     override fun onScanQRCodeSuccess(result: String) {
         if(result.substring(6,result.length)=="madengwang"){
             startActivity<PersonalhomeActivity>("id" to result.substring(0,6))
             finish()
         }else if(result.substring(0,result.indexOf(":"))=="madeng"){
-            startActivity<madengscanActivity>("code" to result)
+            if(id==null)return
+            startActivity<madengscanActivity>("code" to result,"id" to id)
             finish()
         }
 

@@ -1,5 +1,6 @@
 package study.kotin.my.address.ui.frament
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.BitmapFactory
@@ -16,17 +17,25 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.alibaba.android.arouter.launcher.ARouter
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.tencent.imsdk.TIMManager
-import com.tencent.imsdk.TIMUserProfile
-import com.tencent.imsdk.TIMValueCallBack
+import com.eightbitlab.rxbus.Bus
+import com.eightbitlab.rxbus.registerInBus
+import com.tencent.imsdk.*
+import com.tencent.imsdk.ext.group.TIMGroupManagerExt
+import com.tencent.imsdk.ext.group.TIMGroupPendencyGetParam
+import com.tencent.imsdk.ext.group.TIMGroupPendencyHandledStatus
+import com.tencent.imsdk.ext.group.TIMGroupPendencyListGetSucc
+import com.tencent.imsdk.ext.sns.TIMFriendFutureMeta
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
+import com.tencent.imsdk.ext.sns.TIMGetFriendFutureListSucc
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import jp.wasabeef.richeditor.RichEditor
 import kotlinx.android.synthetic.main.addresshead.*
+import kotlinx.android.synthetic.main.newfriend.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
@@ -35,6 +44,7 @@ import study.kotin.my.address.Addresspersenter.Addresspresenter
 import study.kotin.my.address.R
 import study.kotin.my.address.data.AddressListLv0
 import study.kotin.my.address.data.AddressListLv1
+import study.kotin.my.address.data.addnewFDdata
 import study.kotin.my.address.injection.commponent.DaggerAddressCommponent
 import study.kotin.my.address.injection.module.Addressmodule
 import study.kotin.my.address.ui.activity.AddressActivity
@@ -71,7 +81,12 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
         val view = inflater.inflate(R.layout.addresspasge, container, false)
         // iniview(view)
         view.find<TextView>(R.id.add).setOnClickListener(this)
-        generateData()
+      //  generateData()
+        Bus.observe<Int>()
+                .subscribe { t: Int ->
+                    newfdtips.isVisible=true
+                    newfdtips.text=(newfdtips.text.toString().toInt()+t).toString()
+                }.registerInBus(this)
         return view
     }
 
@@ -116,6 +131,7 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
 
     }
 
+    lateinit var newfdtips:TextView
     fun showview(lsit: ArrayList<MultiItemEntity>) {
         val addresslistadapter = Addresslistadapter(lsit)
         addresslistadapter.setOnItemChildClickListener { adapter, view, position ->
@@ -127,9 +143,58 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
         addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.groupjojn).setOnClickListener(this)
         addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.Friendjoin).setOnClickListener(this)
         addresslistadapter.headerLayout.findViewById<LinearLayout>(R.id.publicgroupjoin).setOnClickListener(this)
+        newfdtips = addresslistadapter.headerLayout.findViewById<TextView>(R.id.newfdtips)
+        newfdtips.isVisible = newfdtips.text.toString() != "0"
         val recyclerView = view!!.find<RecyclerView>(R.id.addressgrouplist)
         recyclerView.adapter = addresslistadapter
         recyclerView.layoutManager = LinearLayoutManager(mpersenter.context)
+        getnoreadmsgcount()
+    }
+    //新消息小红点
+    fun getnoreadmsgcount(){
+        TIMFriendshipManagerExt.getInstance().getFutureFriends(TIMFriendshipManager.TIM_PROFILE_FLAG_NICK.toLong(),
+                TIMFriendshipManagerExt.TIM_FUTURE_FRIEND_PENDENCY_IN_TYPE.toLong(), null, TIMFriendFutureMeta(),
+                object : TIMValueCallBack<TIMGetFriendFutureListSucc> {
+                    override fun onSuccess(p0: TIMGetFriendFutureListSucc) {
+                        val size = p0.items.size
+                        newfdtips.text = (newfdtips.text.toString().toInt()+size).toString()
+                        if(newfdtips.text.toString().toInt()!=0){
+                            newfdtips.isVisible=true
+                        }
+                    }
+
+                    override fun onError(p0: Int, p1: String?) {
+                    }
+                })
+        val param = TIMGroupPendencyGetParam()
+        val nextStartTimestamp = activity!!.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getLong("nextStartTimestamp", 0L)
+        param.setTimestamp(nextStartTimestamp)//首次获取填 0
+        param.setNumPerPage(9999)
+        TIMGroupManagerExt.getInstance().getGroupPendencyList(param, object : TIMValueCallBack<TIMGroupPendencyListGetSucc> {
+            override fun onError(code: Int, desc: String) {
+
+            }
+
+            override fun onSuccess(timGroupPendencyListGetSucc: TIMGroupPendencyListGetSucc) {
+                if (timGroupPendencyListGetSucc.pendencyMeta.nextStartTimestamp.toInt() != 0) {
+                    val edit = activity!!.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
+                    edit.putLong("nextStartTimestamp", timGroupPendencyListGetSucc.pendencyMeta.nextStartTimestamp)
+                    edit.apply()
+                }
+                val pendencyItems = timGroupPendencyListGetSucc.pendencies
+                var Gcount=0
+                for (item in pendencyItems) {
+                    if (item.handledStatus == TIMGroupPendencyHandledStatus.NOT_HANDLED) {
+                        Gcount++
+                    }
+                }
+
+                newfdtips.text=(newfdtips.text.toString().toInt()+Gcount).toString()
+                if(newfdtips.text.toString().toInt()!=0){
+                    newfdtips.isVisible=true
+                }
+            }
+        })
     }
 
     override fun onResume() {
@@ -141,6 +206,7 @@ class AddressFrament : BaseMVPFragmnet<Addresspresenter>(), View.OnClickListener
         }
 
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {

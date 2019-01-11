@@ -18,6 +18,7 @@ import study.kotin.my.baselibrary.utils.MyWebViewSettings
 
 class madengscanActivity:BaseMVPActivity<HomePersenter>() {
     var trun = true
+    val id by lazy { intent.extras!!.getString("id") }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.madengscan)
@@ -26,7 +27,7 @@ class madengscanActivity:BaseMVPActivity<HomePersenter>() {
                 if (trun) {
                     val string = intent.extras!!.getString("code")
                     val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-                    p0!!.evaluateJavascript("javascript:sweep('${intent.extras!!.getString("code")}','$jwt')") { its ->
+                    p0!!.evaluateJavascript("javascript:sweep('${intent.extras!!.getString("code")}','$jwt','$id')") { its ->
                         Log.i("iiiiiiiiiiiii", its)
                     }
                     trun = false

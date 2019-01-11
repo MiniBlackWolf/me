@@ -6,195 +6,14 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <LinearLayout
-        android:id="@+id/publicgroups"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="24dp"
-        android:background="@android:color/background_light"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/people">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="0.1"
-            app:srcCompat="@drawable/h5" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="社团" />
-
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="15dp"
-            app:srcCompat="@drawable/h6" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/frienddt"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="28dp"
-        android:background="@android:color/background_light"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="0.1"
-            app:srcCompat="@drawable/l4" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="10dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="朋友圈" />
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="15dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="15dp"
-            app:srcCompat="@drawable/h6" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="24dp"
-        android:background="@android:color/background_light"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frienddt">
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="0.1"
-            app:srcCompat="@drawable/l2" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="附近" />
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="15dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="15dp"
-            app:srcCompat="@drawable/h6" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/people"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="24dp"
-        android:background="@android:color/background_light"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="0.1"
-            app:srcCompat="@drawable/l3" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="人才网" />
-
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="15dp"
-            app:srcCompat="@drawable/h6" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayo"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupjojn">
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="0.1"
-            app:srcCompat="@drawable/l1" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="社团" />
-
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_weight="0.1"
-            app:srcCompat="@drawable/h6" />
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:layout_marginBottom="487dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@color/mainred" />
 
     <TextView
@@ -202,10 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="发现"
         android:textColor="@android:color/white"
@@ -216,14 +33,194 @@
         app:layout_constraintTop_toTopOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.0" />
 
-    <com.tencent.smtt.sdk.WebView
-        android:id="@+id/webview"
-        android:layout_width="0dp"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+
+        android:id="@+id/myscrol"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/publicgroups" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/frienddt"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/background_light"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="0.1"
+                    app:srcCompat="@drawable/l4" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="朋友圈" />
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="10dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="30dp"
+                    app:srcCompat="@drawable/h6" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/publicgroups"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@android:color/background_light"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/people">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="0.1"
+                    app:srcCompat="@drawable/h5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="社团" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="30dp"
+                    app:srcCompat="@drawable/h6" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/publicgroups"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.tencent.smtt.sdk.WebView
+                    android:id="@+id/webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/publicgroups" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@android:color/background_light"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frienddt">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="0.1"
+                    app:srcCompat="@drawable/l2" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="附近" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="10dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="30dp"
+                    app:srcCompat="@drawable/h6" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/people"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@android:color/background_light"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="0.1"
+                    app:srcCompat="@drawable/l3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="人才网" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="30dp"
+                    app:srcCompat="@drawable/h6" />
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 </android.support.constraint.ConstraintLayout>

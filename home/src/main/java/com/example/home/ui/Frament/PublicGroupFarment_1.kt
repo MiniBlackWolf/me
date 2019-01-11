@@ -21,6 +21,7 @@ import org.jetbrains.anko.find
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import com.tencent.imsdk.TIMCallBack
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
+import org.jetbrains.anko.support.v4.toast
 
 
 class PublicGroupFarment_1 : BaseMVPFragmnet<HomePersenter>() {
@@ -36,6 +37,10 @@ class PublicGroupFarment_1 : BaseMVPFragmnet<HomePersenter>() {
             edoks.isVisible = true
         }
         edoks.setOnClickListener {
+            if(edtxs.text.toString().toByteArray().size>150){
+                toast("公告太长啦")
+                return@setOnClickListener
+            }
             edtxs.isEnabled = false
             edoks.isVisible = false
             val param = TIMGroupManagerExt.ModifyGroupInfoParam(id!!)

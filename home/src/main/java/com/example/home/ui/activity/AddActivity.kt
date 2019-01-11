@@ -134,7 +134,7 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
                 setdatadialog("设置地点", address)
             }
             R.id.edit->{
-                startActivity<qcodeActivity>()
+                startActivity<qcodeActivity>("id" to id)
             }
 
         }

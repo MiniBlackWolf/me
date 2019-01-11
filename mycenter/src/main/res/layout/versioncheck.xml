@@ -7,7 +7,7 @@
     android:background="@color/background">
 
     <LinearLayout
-        android:id="@+id/s10"
+        android:id="@+id/ckversion"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
@@ -16,10 +16,10 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7">
+        app:layout_constraintTop_toBottomOf="@+id/version">
 
         <TextView
-            android:id="@+id/cleanmsg"
+            android:id="@+id/ckversion_1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -71,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top"
-        app:srcCompat="@drawable/btn_nav_home_press" />
+        app:srcCompat="@drawable/madengicon" />
 
     <TextView
         android:id="@+id/textView6"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

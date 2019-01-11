@@ -1,6 +1,7 @@
 package study.kotin.my.baselibrary.ext
 
 
+import com.eightbitlab.rxbus.Bus
 import com.example.home.Messges.*
 import com.example.home.persenter.view.HomeView
 import com.tencent.imsdk.TIMElemType

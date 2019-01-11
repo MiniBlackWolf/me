@@ -63,7 +63,7 @@ class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<articlepersenter>(
                 setdatadialog("设置标题",Title)
             }
             R.id.edit->{
-                startActivity<qcodeActivity>()
+                startActivity<qcodeActivity>("id" to id)
             }
 
         }

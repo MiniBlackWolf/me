@@ -40,6 +40,7 @@ import org.jetbrains.anko.toast
 import retrofit2.Response
 import study.kotin.my.address.ui.frament.AddressFrament
 import study.kotin.my.baselibrary.common.BaseApplication
+import study.kotin.my.baselibrary.data.net.RetrofitFactory
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.baselibrary.utils.Base64Utils
@@ -95,6 +96,7 @@ class MainActivity : BaseMVPActivity<Mainpersenter>(),MainView {
                 ARouter.getInstance().build("/App/Homepage").navigation()
                 hideLoading()
                 finish()
+
             }
 
             override fun onError(p0: Int, p1: String?) {
@@ -162,6 +164,12 @@ class MainActivity : BaseMVPActivity<Mainpersenter>(),MainView {
             }
             // showLoading()
         } else {
+            //开启离线推送
+            val timOfflinePushSettings = TIMOfflinePushSettings()
+            timOfflinePushSettings.isEnabled=true
+            timOfflinePushSettings.c2cMsgRemindSound=null
+            timOfflinePushSettings.groupMsgRemindSound=null
+            TIMManager.getInstance().setOfflinePushSettings(timOfflinePushSettings)
             myinfock()
         }
     }

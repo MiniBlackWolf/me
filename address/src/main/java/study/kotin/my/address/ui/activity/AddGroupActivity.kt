@@ -20,6 +20,7 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.core.view.get
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.RegexUtils
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.tencent.imsdk.TIMGroupManager
@@ -152,6 +153,23 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
                 }
                 selectSchool.mPopWindow.showAtLocation(window.decorView, Gravity.CENTER, 0, 0)
             }
+            R.id.sfzok->{
+                if(sfzid.text.toString()==""){
+                    toast("身份证不能为空")
+                    return
+                }
+                if(sfzname.text.toString()==""){
+                    toast("姓名不能为空")
+                    return
+                }
+//                if(RegexUtils.isIDCard18(sfzname.text.toString())){
+//                    toast("身份证格式错误")
+//                    return
+//                }
+                sfzok.setBackgroundResource(R.drawable.nobuttonssss)
+                sfzok.isClickable=false
+                toast("申请认证成功")
+            }
         }
     }
 
@@ -168,6 +186,7 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
         newgroupbutton.setOnClickListener(this)
         grouphead.setOnClickListener(this)
         fh.setOnClickListener(this)
+        sfzok.setOnClickListener(this)
         school.setOnClickListener(this)
         school.isCursorVisible = false;
         school.isFocusable = false

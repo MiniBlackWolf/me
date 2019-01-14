@@ -19,6 +19,7 @@ import com.example.home.ui.activity.madengviewActivity
 import com.tencent.imsdk.TIMFriendshipManager
 import com.tencent.imsdk.TIMUserProfile
 import com.tencent.imsdk.TIMValueCallBack
+import com.tencent.imsdk.ext.group.TIMGroupAssistant
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import com.tencent.imsdk.ext.sns.TIMFriendshipProxy
@@ -70,6 +71,7 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
 
         }
         val friendsById = TIMFriendshipProxy.getInstance().getFriendsById(arrayListOf(item.Name))
+        val groups = TIMGroupAssistant.getInstance().getGroups(arrayListOf(item.Name))
         if (friendsById != null) {
             if (friendsById[0].remark != "") {
                 helper.setText(R.id.peername, friendsById[0].remark )
@@ -84,13 +86,23 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
                     .load(friendsById[0].faceUrl)
                     .apply(options)
                     .into(head)
-        } else {
-            downloaddata(item, helper, 1)
+        } else if(groups!=null&&!groups.isEmpty()){
+            val head = helper.getView<ImageView>(R.id.head)
+            val options = RequestOptions()
+                    .placeholder(R.drawable.qface)
+                    .error(R.drawable.qface)
+            Glide.with(context)
+                    .load(groups[0].groupInfo.faceUrl)
+                    .apply(options)
+                    .into(head)
+            helper.setText(R.id.peername, groups[0].groupInfo.groupName)
+        }else{
+            downloaddata(item, helper)
         }
 
     }
 
-    private fun downloaddata(item: UserList, helper: BaseViewHolder, type: Int) {
+    private fun downloaddata(item: UserList, helper: BaseViewHolder) {
         TIMFriendshipManager.getInstance().getUsersProfile(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMUserProfile>> {
             override fun onError(p0: Int, p1: String?) {
 
@@ -123,14 +135,9 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
               //  }
             }
         })
-        TIMGroupManagerExt.getInstance().getGroupPublicInfo(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
+        TIMGroupManagerExt.getInstance().getGroupDetailInfo(arrayListOf(item.Name), object : TIMValueCallBack<MutableList<TIMGroupDetailInfo>> {
             override fun onSuccess(p0: MutableList<TIMGroupDetailInfo>?) {
                 if (p0 == null) return
-                val edit = BaseApplication.context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE).edit()
-                helper.setText(R.id.peername, p0[0].groupName)
-                edit.putString("${item.Name}name", p0[0].groupName)
-                edit.putString("${item.Name}face", p0[0].faceUrl)
-                edit.apply()
                 val head = helper.getView<ImageView>(R.id.head)
 
                 val options = RequestOptions()
@@ -140,7 +147,7 @@ class HomeListAdapter(val context: Context, userList: MutableList<UserList>) : B
                         .load(p0[0].faceUrl)
                         .apply(options)
                         .into(head)
-
+                helper.setText(R.id.peername, p0[0].groupName)
 
             }
 

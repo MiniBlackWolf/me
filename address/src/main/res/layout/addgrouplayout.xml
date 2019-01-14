@@ -7,7 +7,7 @@
     android:background="@color/background">
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/sfzok"
         android:layout_width="239dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
@@ -206,6 +206,7 @@
             tools:layout_editor_absoluteY="225dp" />
 
         <EditText
+            android:id="@+id/sfzname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -235,6 +236,7 @@
             tools:layout_editor_absoluteY="225dp" />
 
         <EditText
+            android:id="@+id/sfzid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

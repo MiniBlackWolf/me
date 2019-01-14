@@ -16,7 +16,7 @@ interface Mycenterapi {
     @POST("/user/changePassword")
     fun changePassword(@Header("Authorization") Authorization: String, @Query("oldepsd") oldepsd: String, @Query("newpsd") newpsd: String): Observable<BaseResp<String>>
 
-    @POST("http://192.168.1.105:9200/user/Synchronizeinfo")
+    @POST("/user/Synchronizeinfo")
     fun Synchronizeinfo(@Header("Authorization") Authorization: String): Observable<BaseResp<String>>
 
     @Multipart

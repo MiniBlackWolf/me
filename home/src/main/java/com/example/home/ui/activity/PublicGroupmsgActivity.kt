@@ -28,6 +28,7 @@ import com.tencent.imsdk.ext.group.TIMGroupBaseInfo
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfo
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt
 import com.tencent.imsdk.ext.group.TIMGroupSelfInfo
+import com.tencent.imsdk.ext.message.TIMManagerExt
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt
 import kotlinx.android.synthetic.main.chatlayout.*
 import kotlinx.android.synthetic.main.publicgrouplayout.*
@@ -140,6 +141,7 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                                         toast("解散成功！")
                                         addjoin.text="申请加入"
                                         ARouter.getInstance().build("/App/Homepage").navigation()
+                                        TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
                                         ActivityUtils.finishActivity(HomeActivity::class.java)
                                         finish()
 
@@ -170,6 +172,9 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                                     override fun onSuccess() {
                                         toast("退出成功！")
                                         addjoin.text="申请加入"
+                                        TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
+                                        ActivityUtils.finishActivity(HomeActivity::class.java)
+                                        finish()
                                     }
 
                                     override fun onError(p0: Int, p1: String?) {

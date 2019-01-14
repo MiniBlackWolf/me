@@ -68,7 +68,7 @@ class NewFriendAdapter(data: List<addnewFDdata>) : BaseQuickAdapter<addnewFDdata
                         helper.setImageResource(R.id.sex,R.drawable.unkownsex)
                     }
                 }
-                val millis2String = TimeUtils.millis2String(item.addtime)
+                val millis2String = TimeUtils.millis2String(item.addtime*1000)
                 helper.setText(R.id.time,millis2String)
             }
             1 -> {

@@ -180,15 +180,14 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
 
 
         }
-
-
         RecyclerViewset2(userlist2)
-        val jwt = activity!!.getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-        if (jwt == "") {
+        if (activity == null) {
             return
         }
+        val jwt = activity!!.getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
         mpersenter.madenghelper("Bearer " + jwt!!, 1)
         hz.finishRefresh()
+
 
     }
 
@@ -296,10 +295,10 @@ class HomeFarment : BaseMVPFragmnet<madenghelperpersenter>(), ConversationView, 
                 val id = userlist.toList().get(position).Name
                 if (id.substring(0, 5) == "@TGS#") {
                     TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
-                    ConversationPresenter(this).getConversation()
+                    updataview()
                 } else {
                     TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.C2C, id)
-                    ConversationPresenter(this).getConversation()
+                    updataview()
                 }
             }
         }

@@ -37,7 +37,7 @@ class madengscanActivity:BaseMVPActivity<HomePersenter>() {
         }
 
         val initWeb = MyWebViewSettings.initWeb(webview,this)
-        initWeb.loadUrl("http://192.168.1.105:9201/admin/button.html")
+        initWeb.loadUrl("http://madengwang.com/admin/button.html")
         initWeb.addJavascriptInterface(webtest(this,""),"webtest")
     }
 }

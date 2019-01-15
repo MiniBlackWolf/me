@@ -333,14 +333,13 @@
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/line_btn"
+        android:background="@drawable/h1"
         android:scaleType="center"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView15"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6"
-        app:srcCompat="@drawable/h1" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
 
     <ImageView
         android:id="@+id/imageView14"

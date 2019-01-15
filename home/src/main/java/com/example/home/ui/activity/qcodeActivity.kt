@@ -8,26 +8,31 @@ import com.example.home.R
 import com.example.home.persenter.HomePersenter
 import kotlinx.android.synthetic.main.qcode.*
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 
-class qcodeActivity:BaseMVPActivity<HomePersenter>(), QRCodeView.Delegate {
+class qcodeActivity : BaseMVPActivity<HomePersenter>(), QRCodeView.Delegate {
     val id by lazy { intent.extras?.getString("id") }
+    val type by lazy{ intent.extras!!.getString("type")}
     override fun onScanQRCodeSuccess(result: String) {
-        if(result.substring(6,result.length)=="madengwang"){
-            startActivity<PersonalhomeActivity>("id" to result.substring(0,6))
+        if (result.substring(6, result.length) == "madengwang") {
+            startActivity<PersonalhomeActivity>("id" to result.substring(0, 6))
             finish()
-        }else if(result.substring(0,result.indexOf(":"))=="madeng"){
-            if(id==null)return
-            startActivity<madengscanActivity>("code" to result,"id" to id)
+        } else if (result.substring(0, result.indexOf(":")) == "madeng") {
+            if (id == null) {
+                toast("请在自己社团进行扫描")
+                return
+            }
+            startActivity<madengscanActivity>("code" to result, "id" to id,"type" to type)
             finish()
         }
 
     }
 
     override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {
-        if(isDark){
+        if (isDark) {
             aaaaa.openFlashlight()
-        }else{
+        } else {
             aaaaa.closeFlashlight()
         }
     }

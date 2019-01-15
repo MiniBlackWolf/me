@@ -21,5 +21,6 @@
         <activity android:name=".ui.activity.madengviewActivity"/>
         <activity android:name=".ui.activity.ActivityInfoActivity"/>
         <activity android:name=".ui.activity.madengscanActivity"/>
+        <activity android:name=".ui.activity.madenghelprinfoactivity"/>
     </application>
 </manifest>

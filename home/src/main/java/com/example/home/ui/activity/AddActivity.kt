@@ -16,6 +16,7 @@ import com.example.home.data.articledata
 import com.example.home.persenter.HomePersenter
 import com.example.home.persenter.articlepersenter
 import com.example.home.persenter.view.articleView
+import com.google.gson.Gson
 import com.tencent.imsdk.TIMManager
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
@@ -67,7 +68,26 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
     override fun uploadimg(t: BaseResp<String>) {
         if (t.success) {
             hideLoading()
-            textedit.insertImage(t.message, "huangxiaoguo\" style=\"max-width:50%")
+            var replace = t.message.replace("[", "")
+            replace = replace.replace("]", "")
+            val split = replace.split(",")
+            var html = textedit.html
+            val indexOf = html.indexOf("src", 0)
+            getimagstops(indexOf)
+            if (list.isNotEmpty()) {
+                for (i in 0 until list.size) {
+                    val substring = html.substring(list[i] + 5, html.indexOf("\"", list[i] + 5))
+                    html = html.replace(substring, split[i])
+                }
+            }
+            val articledata = articledata(0, titles.text.toString(), timestart.text.toString(), timeend.text.toString(), address.text.toString(),
+                    id, TIMManager.getInstance().loginUser, html, "", ArrayList())
+            val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+            if (jwt == "") {
+                return
+            }
+            mpersenter.addactive("Bearer " + jwt!!, this@AddActivity, articledata)
+
         } else {
             hideLoading()
             toast("图片上传失败！请检查网络后重试")
@@ -110,15 +130,35 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
 
             }
             R.id.ok -> {
-                showLoading()
-                val articledata = articledata(0,titles.text.toString(), timestart.text.toString(), timeend.text.toString(), address.text.toString(),
-                        id, TIMManager.getInstance().loginUser, textedit.html, "",ArrayList())
-                val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-                if (jwt == "") {
+                if (textedit.html == null) {
+                    toast("内容不能是空")
                     return
                 }
-                mpersenter.addactive("Bearer " + jwt!!,this@AddActivity, articledata)
+                showLoading()
+                //构建上传文件
 
+                if (imgpath.isNotEmpty()) {
+                    val Builder = MultipartBody.Builder()
+                    Builder.setType(MultipartBody.FORM)
+                    for (file in imgpath) {
+                        val create = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                        Builder.addFormDataPart("files", file.name, create)
+                    }
+                    val parts = Builder.build().parts()
+                    val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+                    if (jwt == "") {
+                        return
+                    }
+                    mpersenter.uploadimg("Bearer " + jwt!!, this@AddActivity, parts)
+                }else{
+                    val articledata = articledata(0, titles.text.toString(), timestart.text.toString(), timeend.text.toString(), address.text.toString(),
+                            id, TIMManager.getInstance().loginUser, textedit.html, "", ArrayList())
+                    val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+                    if (jwt == "") {
+                        return
+                    }
+                    mpersenter.addactive("Bearer " + jwt!!, this@AddActivity, articledata)
+                }
             }
             R.id.timestart -> {
                 settime(timestart)
@@ -132,8 +172,8 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
             R.id.address -> {
                 setdatadialog("设置地点", address)
             }
-            R.id.edit->{
-                startActivity<qcodeActivity>("id" to id,"type" to "1")
+            R.id.edit -> {
+                startActivity<qcodeActivity>("id" to id, "type" to "1")
             }
 
         }
@@ -190,32 +230,22 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
         edit.setOnClickListener(this)
     }
 
-
+    var imgpath = ArrayList<File>()
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
-            if(data==null){
+            if (data == null) {
                 return
             }
-            showLoading()
             //获取图片路径
             val obtainPathResult = Matisse.obtainPathResult(data)
-            val bitmap = BitmapFactory.decodeFile(obtainPathResult.get(0))
-            //构建上传文件
             val file = File(obtainPathResult[0])
             if (file.length() > 2097152) {
                 toast("图片不能大于2mb")
                 return
             }
-            val Builder = MultipartBody.Builder()
-            Builder.setType(MultipartBody.FORM)
-            val create = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-            val addFormDataPart = Builder.addFormDataPart("file", file.name, create)
-            val parts = addFormDataPart.build().parts()
-            val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-            if (jwt == "") {
-                return
-            }
-            mpersenter.uploadimg("Bearer " + jwt!!,this@AddActivity, parts)
+            textedit.insertImage("file:///${obtainPathResult[0]}", "huangxiaoguo\" style=\"max-width:50%")
+            imgpath.add(File(obtainPathResult[0]))
+
             Log.d("Matisse", "mSelected: $obtainPathResult")
         }
 
@@ -255,5 +285,18 @@ class AddActivity : BaseMVPActivity<articlepersenter>(), View.OnClickListener, a
             }
             show()
         }
+
     }
+
+    val list = ArrayList<Int>()
+    fun getimagstops(a: Int) {
+        if (a != -1) {
+            list.add(a)
+            getimagstops(textedit.html.indexOf("src", a + 3))
+        } else {
+            return
+        }
+    }
+
 }
+

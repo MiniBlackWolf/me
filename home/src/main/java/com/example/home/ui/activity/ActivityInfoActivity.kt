@@ -52,6 +52,11 @@ class ActivityInfoActivity:BaseMVPActivity<articlepersenter>(),View.OnClickListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activityinfo)
         initview()
+        if(datas.address==null){
+            z1.isVisible=false
+            z2.isVisible=false
+            a3.isVisible=false
+        }
         myscrollview.smoothScrollTo(0,0)
         userlist.isFocusable=false
         val list=ArrayList<String>()
@@ -60,7 +65,7 @@ class ActivityInfoActivity:BaseMVPActivity<articlepersenter>(),View.OnClickListe
         }else {
             //list添加数据
             for (i in datas.num) {
-                list.add(i.tagProfileImNick)
+                list.add(i.tagProfileImNick!!)
             }
             userlist.text=list.toString()
             val arrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list)

@@ -60,9 +60,9 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
         initWeb.loadUrl(resources.getString(R.string.jobFind))
         initWeb.addJavascriptInterface(webtest(this,""),"webtest")
         initWeb.addJavascriptInterface(webset(),"webset")
+
     }
     override fun onBackPressed() {
-        super.onBackPressed()
         if(people.url=="http://madengwang.com/admin/job/jobFind.html"){
             super.onBackPressed()
         }else {

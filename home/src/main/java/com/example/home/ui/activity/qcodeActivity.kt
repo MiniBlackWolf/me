@@ -1,6 +1,7 @@
 package com.example.home.ui.activity
 
 import android.os.Bundle
+import androidx.core.view.isVisible
 import cn.bingoogolapple.qrcode.core.BarcodeType
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.alibaba.android.arouter.launcher.ARouter
@@ -48,6 +49,13 @@ class qcodeActivity : BaseMVPActivity<HomePersenter>(), QRCodeView.Delegate {
         aaaaa.startSpotAndShowRect();
         aaaaa.startSpot()
         aaaaa.setDelegate(this)
+        openscan.isVisible = id!=null
+        openscanbutton.setOnClickListener{
+            openscan.isVisible=false
+        }
+        chf.setOnClickListener{
+            finish()
+        }
     }
 
     override fun onStop() {

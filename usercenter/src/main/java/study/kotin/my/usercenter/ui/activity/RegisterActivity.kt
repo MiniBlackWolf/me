@@ -2,6 +2,7 @@ package study.kotin.my.usercenter.ui.activity
 
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
@@ -53,6 +54,7 @@ import study.kotin.my.baselibrary.utils.JWTUtils
 import study.kotin.my.baselibrary.utils.PushUtil
 import study.kotin.my.usercenter.common.PwdLoginListener
 import study.kotin.my.usercenter.common.RefreshUserSigListener
+import study.kotin.my.usercenter.common.permissionCallback
 import study.kotin.my.usercenter.ui.fragment.ResetFrament
 import tencent.tls.platform.TLSErrInfo
 import tencent.tls.platform.TLSHelper
@@ -136,22 +138,25 @@ class RegisterActivity : BaseMVPActivity<registerPersenter>(), registerView {
         })
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if(requestCode==1){
-            for(i in 0 until  grantResults.size){
-                if(grantResults[i]== PackageManager.PERMISSION_DENIED){
-                    ActivityCompat.requestPermissions(this,
-                            permissions, 1)
-                }
-            }
-
-        }
-    }
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        if(requestCode==1){
+//            for(i in 0 until  grantResults.size){
+//                if(grantResults[i]== PackageManager.PERMISSION_DENIED){
+//                    ActivityCompat.requestPermissions(this,
+//                            permissions, 1)
+//                }
+//            }
+//
+//        }
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA), 1)
+        PermissionUtils.permission(PermissionConstants.STORAGE,PermissionConstants.CAMERA,PermissionConstants.MICROPHONE).rationale {
+            it.again(true)
+        }.callback(permissionCallback()).request()
+//        Activity.requestPermissions(this,
+//                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA), 1)
         injectactivity()
      //   navToHome()
 //        val sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE)

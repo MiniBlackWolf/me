@@ -1,12 +1,17 @@
 package study.kotin.my.mycenter.ui.activity
 
+import android.Manifest
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.Gravity
@@ -17,6 +22,8 @@ import android.widget.*
 import androidx.core.view.isVisible
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.constant.PermissionConstants
+import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.RegexUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -42,7 +49,9 @@ import study.kotin.my.baselibrary.data.ProvinceList
 import study.kotin.my.baselibrary.data.SchoolList
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.utils.GifSizeFilter
+import study.kotin.my.baselibrary.utils.LocationUtils
 import study.kotin.my.baselibrary.utils.SelectSchool
+import study.kotin.my.mycenter.common.MyLocationListener
 import study.kotin.my.mycenter.persenter.ChangeInfoperserter
 import study.kotin.my.mycenter.persenter.view.ChangeInfoview
 import java.io.File
@@ -247,6 +256,10 @@ var datas=0L
                     param.setBirthday(datas/1000)
                 }
                 val map = HashMap<String, ByteArray>()
+                if(Latitude!=""&&Longitude!=""){
+                    map.put("Tag_Profile_Custom_lat", Latitude.toByteArray())
+                    map.put("Tag_Profile_Custom_Long", Longitude.toByteArray())
+                }
                 map.put("Tag_Profile_Custom_work", z5_1.text.toString().toByteArray())
                 map.put("Tag_Profile_Custom_school", z6_1.text.toString().toByteArray())
                 map.put("Tag_Profile_Custom_email", z7_1.text.toString().toByteArray())
@@ -300,10 +313,18 @@ var datas=0L
     }
 
     lateinit var selectSchool: SelectSchool
+    var Latitude=""
+    var Longitude=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.my_main)
         initinject()
+        val granted = PermissionUtils.isGranted(PermissionConstants.LOCATION)
+        if(!granted){
+            PermissionUtils.permission(PermissionConstants.LOCATION).request()
+        }
+//        ActivityCompat.requestPermissions(this,
+//                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION), 1)
         mpersenter.mView = this
         z1.setOnClickListener(this)
         z2.setOnClickListener(this)
@@ -319,9 +340,16 @@ var datas=0L
         fh.setOnClickListener(this)
         selectSchool = SelectSchool(z6_1, this,{loadper() },{loadschool(selectSchool.provinceId)})
         selectSchool.initPopView()
-        z6_1.isCursorVisible = false;
+        z6_1.isCursorVisible = false
         z6_1.isFocusable = false
         z6_1.isFocusableInTouchMode = false
+        LocationUtils().getLocation(this,object : MyLocationListener(){
+            override fun onLocationChanged(location: Location?) {
+                Latitude=location!!.latitude.toString()
+                Longitude=location.longitude.toString()
+            }
+
+        })
         TIMFriendshipManager.getInstance().getSelfProfile(object : TIMValueCallBack<TIMUserProfile> {
             override fun onSuccess(p0: TIMUserProfile?) {
                 if (p0 == null) return

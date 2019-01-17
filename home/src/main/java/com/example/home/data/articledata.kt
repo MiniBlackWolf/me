@@ -5,14 +5,14 @@ import android.os.Parcelable
 import study.kotin.my.baselibrary.common.Poko
 
 data class articledata(val id: Int,
-                       val title: String,
-                       val starttime: String,
-                       val endtime: String,
-                       val address: String,
-                       val communityid: String,
-                       val userid: String,
-                       val content: String,
-                       val createtime: String,
+                       val title: String?,
+                       val starttime: String?,
+                       val endtime: String?,
+                       val address: String?,
+                       val communityid: String?,
+                       val userid: String?,
+                       val content: String?,
+                       val createtime: String?,
                        val num: List<nums>
 
 ) : Parcelable {
@@ -54,21 +54,21 @@ data class articledata(val id: Int,
 }
 
  data class nums(
-        var toAccount: String,
-        var tagProfileImNick: String,
-        var tagProfileImGender: String,
-        var tagProfileImBirthday: String,
-        var tagProfileImSelfsignature: String,
-        var tagProfileImAllowtype: String,
-        var tagProfileImImage: String,
-        var tagProfileImMsgsettings: String,
-        var tagProfileCustomEmail: String,
+        var toAccount: String?,
+        var tagProfileImNick: String?,
+        var tagProfileImGender: String?,
+        var tagProfileImBirthday: String?,
+        var tagProfileImSelfsignature: String?,
+        var tagProfileImAllowtype: String?,
+        var tagProfileImImage: String?,
+        var tagProfileImMsgsettings: String?,
+        var tagProfileCustomEmail: String?,
         //var tagProfileCustomFollow: Any,
-        var tagProfileCustomLabel: String,
+        var tagProfileCustomLabel: String?,
         //  var tagProfileCustomPhotowa: Any,
-        var tagProfileCustomSchool: String,
-        var tagProfileCustomWork: String,
-        var keywords: String
+        var tagProfileCustomSchool: String?,
+        var tagProfileCustomWork: String?,
+        var keywords: String?
 
 ) : Parcelable {
     constructor(source: Parcel) : this(

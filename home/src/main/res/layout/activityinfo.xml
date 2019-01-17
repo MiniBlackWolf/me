@@ -78,7 +78,7 @@
             app:layout_constraintVertical_bias="0.26" />
 
         <LinearLayout
-            android:id="@+id/linearLayout14"
+            android:id="@+id/z1"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:background="@drawable/infoframe"
@@ -111,7 +111,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout16"
+            android:id="@+id/z2"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:background="@drawable/infoframe"
@@ -120,7 +120,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout14">
+            app:layout_constraintTop_toBottomOf="@+id/z1">
 
             <ImageView
                 android:layout_width="20dp"
@@ -146,7 +146,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout16">
+            app:layout_constraintTop_toBottomOf="@+id/z2">
 
             <ImageView
                 android:id="@+id/imageVie"

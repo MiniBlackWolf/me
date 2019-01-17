@@ -38,10 +38,13 @@ import org.jetbrains.anko.toast
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 
 class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListener {
+    lateinit var m1: TextView
+    lateinit var m2: TextView
+    lateinit var m3: TextView
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.l1 -> {
-                guset.isVisible=false
+                guset.isVisible = false
                 initview()
                 l1.setTextColor(ContextCompat.getColor(this, R.color.mainred))
                 l1.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -51,7 +54,7 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                 beginTransaction.commit()
             }
             R.id.l2 -> {
-                guset.isVisible=false
+                guset.isVisible = false
                 initview()
                 l2.setTextColor(ContextCompat.getColor(this, R.color.mainred))
                 l2.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -81,13 +84,29 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
             R.id.more -> {
                 val popWindow = PopupWindow(this)
                 val view = layoutInflater.inflate(R.layout.moreitem, null)
-                view.find<TextView>(R.id.m1).setOnClickListener {
-                    startActivity<AddActivity>("id" to id)
+                m1 = view.find<TextView>(R.id.m1)
+                m2 = view.find<TextView>(R.id.m2)
+                m3 = view.find<TextView>(R.id.m3)
+                when (membertype) {
+                    TIMGroupMemberRoleType.Admin, TIMGroupMemberRoleType.Owner -> {
+                        m1.setOnClickListener {
+                            startActivity<AddActivity>("id" to id)
+                        }
+                        m2.setOnClickListener {
+                            startActivity<PublicGroupFarment_3_Article_Activity>("id" to id)
+                        }
+                    }
+                    else -> {
+                        m1.setOnClickListener {
+                            toast("管理员和社长才可以发布")
+                        }
+                        m2.setOnClickListener {
+                            toast("管理员和社长才可以发布")
+                        }
+                    }
+
                 }
-                view.find<TextView>(R.id.m2).setOnClickListener {
-                    startActivity<PublicGroupFarment_3_Article_Activity>("id" to id)
-                }
-                view.find<TextView>(R.id.m3).setOnClickListener {
+                m3.setOnClickListener {
                     startActivity<PublicGroupFarment_3_Setting_Activity>("id" to id)
                 }
                 popWindow.contentView = view//显示的布局，还可以通过设置一个View // .size(600,400) //设置显示的大小，不设置就默认包裹内容
@@ -98,24 +117,24 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
             }
             R.id.addjoin -> {
                 when {
-                    addjoin.text.toString()=="申请加入" -> {
+                    addjoin.text.toString() == "申请加入" -> {
                         val builder = AlertDialog.Builder(this)
                         builder.setTitle("申请理由")
                         val editText = EditText(this)
                         builder.setView(editText)
-                        builder.setPositiveButton("确定",object: DialogInterface.OnClickListener{
+                        builder.setPositiveButton("确定", object : DialogInterface.OnClickListener {
                             override fun onClick(dialog: DialogInterface, which: Int) {
-                                if(editText.text.toString()==""){
+                                if (editText.text.toString() == "") {
                                     toast("申请理由不能是空！")
                                     return
-                                }else{
-                                    TIMGroupManager.getInstance().applyJoinGroup(id!!,editText.text.toString(),object : TIMCallBack{
+                                } else {
+                                    TIMGroupManager.getInstance().applyJoinGroup(id!!, editText.text.toString(), object : TIMCallBack {
                                         override fun onSuccess() {
                                             toast("申请成功！")
                                         }
 
                                         override fun onError(p0: Int, p1: String?) {
-                                            Log.e("eeeeeeee",p1)
+                                            Log.e("eeeeeeee", p1)
                                             toast("申请失败！$p1")
                                         }
                                     })
@@ -124,22 +143,22 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                                 dialog.dismiss()
                             }
                         })
-                        builder.setNegativeButton("取消",object: DialogInterface.OnClickListener{
+                        builder.setNegativeButton("取消", object : DialogInterface.OnClickListener {
                             override fun onClick(dialog: DialogInterface, which: Int) {
                                 dialog.dismiss()
                             }
                         })
                         builder.show()
                     }
-                    addjoin.text.toString()=="解散该群" -> {
+                    addjoin.text.toString() == "解散该群" -> {
                         val builder = AlertDialog.Builder(this)
                         builder.setTitle("真的要解散吗？")
-                        builder.setPositiveButton("确定",object: DialogInterface.OnClickListener{
+                        builder.setPositiveButton("确定", object : DialogInterface.OnClickListener {
                             override fun onClick(dialog: DialogInterface, which: Int) {
-                                TIMGroupManager.getInstance().deleteGroup(id!!,object : TIMCallBack{
+                                TIMGroupManager.getInstance().deleteGroup(id!!, object : TIMCallBack {
                                     override fun onSuccess() {
                                         toast("解散成功！")
-                                        addjoin.text="申请加入"
+                                        addjoin.text = "申请加入"
                                         ARouter.getInstance().build("/App/Homepage").navigation()
                                         TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
                                         ActivityUtils.finishActivity(HomeActivity::class.java)
@@ -154,7 +173,7 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                                 dialog.dismiss()
                             }
                         })
-                        builder.setNegativeButton("取消",object: DialogInterface.OnClickListener{
+                        builder.setNegativeButton("取消", object : DialogInterface.OnClickListener {
                             override fun onClick(dialog: DialogInterface, which: Int) {
                                 dialog.dismiss()
                             }
@@ -166,12 +185,12 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                     else -> {
                         val builder = AlertDialog.Builder(this)
                         builder.setTitle("真的要退出吗？")
-                        builder.setPositiveButton("确定",object: DialogInterface.OnClickListener{
+                        builder.setPositiveButton("确定", object : DialogInterface.OnClickListener {
                             override fun onClick(dialog: DialogInterface, which: Int) {
-                                TIMGroupManager.getInstance().quitGroup(id!!,object : TIMCallBack{
+                                TIMGroupManager.getInstance().quitGroup(id!!, object : TIMCallBack {
                                     override fun onSuccess() {
                                         toast("退出成功！")
-                                        addjoin.text="申请加入"
+                                        addjoin.text = "申请加入"
                                         TIMManagerExt.getInstance().deleteConversationAndLocalMsgs(TIMConversationType.Group, id)
                                         ActivityUtils.finishActivity(HomeActivity::class.java)
                                         finish()
@@ -184,7 +203,7 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
                                 dialog.dismiss()
                             }
                         })
-                        builder.setNegativeButton("取消",object: DialogInterface.OnClickListener{
+                        builder.setNegativeButton("取消", object : DialogInterface.OnClickListener {
                             override fun onClick(dialog: DialogInterface, which: Int) {
                                 dialog.dismiss()
                             }
@@ -209,6 +228,7 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
     val publicGroupFarment_3 by lazy { PublicGroupFarment_3() }
     val publicGroupFarment_4 by lazy { PublicGroupFarment_4() }
     val id by lazy { intent.extras?.getString("id") }
+    var membertype = TIMGroupMemberRoleType.NotMember
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -239,28 +259,37 @@ class PublicGroupmsgActivity : BaseMVPActivity<HomePersenter>(), View.OnClickLis
             override fun onError(p0: Int, p1: String?) {
             }
         })
-        TIMGroupManagerExt.getInstance().getSelfInfo(id!!,object: TIMValueCallBack<TIMGroupSelfInfo>{
+        TIMGroupManagerExt.getInstance().getSelfInfo(id!!, object : TIMValueCallBack<TIMGroupSelfInfo> {
             override fun onSuccess(p0: TIMGroupSelfInfo?) {
-                if(p0==null)return
-                if(p0.role==TIMGroupMemberRoleType.Admin||p0.role==TIMGroupMemberRoleType.Normal){
-                    addjoin.text="退出该群"
-                    more.isVisible=true
+                if (p0 == null) return
+                if (p0.role == TIMGroupMemberRoleType.Normal) {
+                    addjoin.text = "退出该群"
+                    more.isVisible = true
+                    membertype = TIMGroupMemberRoleType.Normal
                     return
                 }
-                if(p0.role==TIMGroupMemberRoleType.Owner){
-                    addjoin.text="解散该群"
-                    more.isVisible=true
+                if (p0.role == TIMGroupMemberRoleType.Admin) {
+                    addjoin.text = "退出该群"
+                    more.isVisible = true
+                    membertype = TIMGroupMemberRoleType.Admin
                     return
                 }
-                if(p0.role==TIMGroupMemberRoleType.NotMember){
-                    more.isVisible=false
-                    addjoin.text="申请加入"
+                if (p0.role == TIMGroupMemberRoleType.Owner) {
+                    addjoin.text = "解散该群"
+                    more.isVisible = true
+                    membertype = TIMGroupMemberRoleType.Admin
+                    return
+                }
+                if (p0.role == TIMGroupMemberRoleType.NotMember) {
+                    more.isVisible = false
+                    addjoin.text = "申请加入"
+                    membertype = TIMGroupMemberRoleType.NotMember
                     l3.setOnClickListener {
-                        guset.isVisible=true
+                        guset.isVisible = true
                     }
                     l4.setOnClickListener {
 
-                        guset.isVisible=true
+                        guset.isVisible = true
                     }
                     return
                 }

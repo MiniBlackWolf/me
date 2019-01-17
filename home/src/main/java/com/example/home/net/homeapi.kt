@@ -9,26 +9,26 @@ import study.kotin.my.baselibrary.protocol.BaseResp
 
 
 interface homeapi {
-    @POST("/user/searchUserinfo?pageNum=0&pageSize=20")
+    @POST("/user/searchUserinfo?pageNum=1&pageSize=20")
     fun search(@Header("Authorization") Authorization: String, @Query("keywords") keyword: String): Observable<searchuserdata>
 
-    @POST("/Group/search?pageNum=0&pageSize=20")
+    @POST("/Group/search?pageNum=1&pageSize=20")
     fun GroupSearch(@Header("Authorization") Authorization: String, @Query("name") name: String): Observable<searchgroupdata>
 
     @POST("/communityarticle/add")
     fun addarticle(@Header("Authorization") Authorization: String, @Body articledata: articledata): Observable<BaseResp<String>>
 
-    @POST("/communityarticle/findAll?page=0&size=9999")
+    @POST("/communityarticle/findAll?page=1&size=9999")
     fun findarticle(@Header("Authorization") Authorization: String,@Body id: Map<String, String>): Observable<listarticledata<articledata>>
 
     @Multipart
-    @POST("/upload/img")
+    @POST("/upload/imgs")
     fun uploadimg(@Header("Authorization") Authorization: String,@Part file: List<MultipartBody.Part>): Observable<BaseResp<String>>
 
     @POST("/communityactive/add")
     fun addactive(@Header("Authorization") Authorization: String,@Body articledata: articledata): Observable<BaseResp<String>>
 
-    @POST("/communityactive/findAll?page=0&size=9999")
+    @POST("/communityactive/findAll?page=1&size=9999")
     fun findactive(@Header("Authorization") Authorization: String,@Body id: Map<String, String>): Observable<listarticledata<articledata>>
 
     @POST("/ActiveUser/join")

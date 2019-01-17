@@ -14,8 +14,10 @@ import com.example.home.R
 import com.example.home.data.articledata
 import com.example.home.persenter.articlepersenter
 import com.example.home.persenter.view.articleView
+import com.example.home.ui.activity.ActivityInfoActivity
 import com.tencent.open.utils.Global
 import org.jetbrains.anko.find
+import org.jetbrains.anko.support.v4.startActivity
 import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.fragment.BaseMVPFragmnet
 import study.kotin.my.mycenter.injection.commponent.DaggerHomeCommponent
@@ -58,19 +60,10 @@ class PublicGroupFarment_4 : BaseMVPFragmnet<articlepersenter>(), articleView {
         publicGroupFarment_4_adapter = PublicGroupFarment_4_adapter(ArrayList())
         //全文点击事件
         publicGroupFarment_4_adapter.setOnItemChildClickListener { adapter, view, position ->
+           val Listarticledata=adapter.data as List<articledata>
             when(view.id){
                 R.id.enroll->{
-                    val content = adapter.getViewByPosition(f4list, position, R.id.content) as TextView
-                    val enroll = adapter.getViewByPosition(f4list, position, R.id.enroll) as TextView
-                    if(content.getTag() as Boolean){
-                        content.setSingleLine(true)
-                        content.tag=false
-                        enroll.setText("全文")
-                    }else{
-                        content.setSingleLine(false)
-                        content.tag=true
-                        enroll.setText("收回")
-                    }
+                    startActivity<ActivityInfoActivity>("articledata" to Listarticledata[position])
                 }
             }
         }

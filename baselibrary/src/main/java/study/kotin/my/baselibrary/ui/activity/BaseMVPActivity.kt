@@ -47,7 +47,7 @@ open class BaseMVPActivity<T : Basepersenter<*>> : BaseActivity(), BaseView {
                 .setHintTextSize(16f) // 设置字体大小 dp
                 .setHintTextColor(Color.WHITE)  // 设置字体颜色
                 .setDurationTime(0.5) // 设置动画时间百分比 - 0.5倍
-                .setDialogBackgroundColor(Color.parseColor("#5B000000")) // 设置背景色，默认白色
+                .setDialogBackgroundColor(Color.parseColor("#00000000")) // 设置背景色，默认白色
                 .setCancelable(false)
                 .setCanceledOnTouchOutside(false)
                 .show()

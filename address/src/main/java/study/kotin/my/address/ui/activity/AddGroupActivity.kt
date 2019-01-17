@@ -134,7 +134,6 @@ class AddGroupActivity : BaseMVPActivity<Addresspresenter>(), View.OnClickListen
                         finish()
                         ActivityUtils.finishActivity(PublicGroupActivity::class.java)
                         startActivity<PublicGroupActivity>()
-
                     }
 
                     override fun onError(p0: Int, p1: String?) {

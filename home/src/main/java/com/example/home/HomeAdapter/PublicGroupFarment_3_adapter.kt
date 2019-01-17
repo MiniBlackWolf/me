@@ -13,7 +13,7 @@ class PublicGroupFarment_3_adapter(data: List<articledata>) : BaseQuickAdapter<a
 (R.layout.publicgroupfarment_3_item, data) {
     override fun convert(helper: BaseViewHolder, item: articledata) {
         helper.setText(R.id.worksg, item.title)
-        helper.setText(R.id.worktime, item.createtime.substring(0,item.createtime.indexOf("T")))
+        helper.setText(R.id.worktime, item.createtime?.substring(0,item.createtime.indexOf("T")))
         helper.addOnClickListener(R.id.enroll)
         helper.addOnClickListener(R.id.tc)
         for(i in item.num){

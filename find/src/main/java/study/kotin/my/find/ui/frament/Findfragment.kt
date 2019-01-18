@@ -39,22 +39,33 @@ import com.tencent.smtt.sdk.QbSdk.getSettings
 import okhttp3.Cookie
 import okhttp3.HttpUrl
 import study.kotin.my.baselibrary.data.net.webset
+import study.kotin.my.find.ui.Activity.nearbyActivity
 
 
-class Findfragment : BaseMVPFragmnet<Findpresenter>(), Findview,View.OnClickListener {
+class Findfragment : BaseMVPFragmnet<Findpresenter>(), View.OnClickListener {
     override fun onClick(v: View?) {
-        if(TIMManager.getInstance().loginUser==""){
+        if (TIMManager.getInstance().loginUser == "") {
             toast("请先登录")
             ARouter.getInstance().build("/usercenter/RegisterActivity").navigation()
             return
         }
-        when(v!!.id){
-            R.id.people->{startActivity<RecruitActivity>()}
-            R.id.frienddt->{startActivity<FriendDtActivity>()}
-            R.id.publicgroups->{ ARouter.getInstance().build("/address/PublicGroupActivity").navigation() }
+        when (v!!.id) {
+            R.id.people -> {
+                startActivity<RecruitActivity>()
+            }
+            R.id.frienddt -> {
+                startActivity<FriendDtActivity>()
+            }
+            R.id.publicgroups -> {
+                ARouter.getInstance().build("/address/PublicGroupActivity").navigation()
+            }
+            R.id.nearby -> {
+                startActivity<nearbyActivity>()
+            }
         }
     }
-    lateinit var WebView:WebView
+
+    lateinit var WebView: WebView
     var trun = true
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.findlayout, container, false)
@@ -82,9 +93,10 @@ class Findfragment : BaseMVPFragmnet<Findpresenter>(), Findview,View.OnClickList
 //       }
 //        val initWeb = MyWebViewSettings.initWeb(WebView,activity as Activity)
 //        initWeb.loadUrl(resources.getString(R.string.jobFind))
-        view.find<LinearLayout>(R.id.people).setOnClickListener (this)
-        view.find<LinearLayout>(R.id.frienddt).setOnClickListener (this)
-        view.find<LinearLayout>(R.id.publicgroups).setOnClickListener (this)
+        view.find<LinearLayout>(R.id.people).setOnClickListener(this)
+        view.find<LinearLayout>(R.id.frienddt).setOnClickListener(this)
+        view.find<LinearLayout>(R.id.publicgroups).setOnClickListener(this)
+        view.find<LinearLayout>(R.id.nearby).setOnClickListener(this)
         val myscrol = view.find<SmartRefreshLayout>(R.id.myscrol)
 //        initWeb.addJavascriptInterface(webset(),"webset")
         myscrol.setEnableRefresh(false)

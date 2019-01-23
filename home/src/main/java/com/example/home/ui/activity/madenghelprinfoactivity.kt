@@ -35,9 +35,9 @@ class madenghelprinfoactivity:BaseMVPActivity<HomePersenter>() {
 
         val initWeb = MyWebViewSettings.initWeb(webview,this)
         if(type=="1"){
-            initWeb.loadUrl("http://madengwang.com/admin/others/zs.html")
+            initWeb.loadUrl("http://192.168.1.102:9002/admin/others/zs.html")
         }else{
-            initWeb.loadUrl("http://madengwang.com/admin/others/active.html")
+            initWeb.loadUrl("http://192.168.1.102:9002/admin/others/active.html")
         }
         initWeb.addJavascriptInterface(webtest(this,""),"webtest")
     }

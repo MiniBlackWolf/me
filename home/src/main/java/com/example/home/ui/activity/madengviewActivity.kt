@@ -57,7 +57,7 @@ class madengviewActivity : BaseMVPActivity<madenghelperpersenter>(), madenghelpe
         madenglist.adapter = madengviewAdapter
         madenglist.layoutManager = LinearLayoutManager(this)
         //初始数据
-        mpersenter.madenghelper("Bearer " + jwt!!, 1)
+        mpersenter.madenghelper("Bearer " + jwt!!, 2)
         //刷新
         hz.setOnRefreshListener {
             val random = Random()

@@ -2,19 +2,14 @@ package com.example.home.ui.activity
 
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import com.example.home.R
 import com.example.home.data.articledata
-import com.example.home.data.searchgroupdata
-import com.example.home.data.searchuserdata
-import com.example.home.persenter.HomePersenter
-import com.example.home.persenter.HomeSeachPersenter
 import com.example.home.persenter.articlepersenter
-import com.example.home.persenter.view.HomeSeachView
-import com.example.home.persenter.view.HomeView
 import com.example.home.persenter.view.articleView
 import com.tencent.imsdk.TIMManager
 import jp.wasabeef.richeditor.RichEditor
@@ -56,7 +51,11 @@ class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<articlepersenter>(
                 if (jwt == "") {
                     return
                 }
-                val articledata = articledata(0,Title.text.toString(), "", "", "", id, TIMManager.getInstance().loginUser, body.text.toString(),"",ArrayList())
+                if(body.html==null){
+                    toast("内容不能为空")
+                    return
+                }
+                val articledata = articledata(0,Title.text.toString(), "", "", "", id, TIMManager.getInstance().loginUser, body.html,"",ArrayList())
                 mpersenter.articledata("Bearer " + jwt!!,articledata)
             }
             R.id.Title->{
@@ -78,6 +77,22 @@ class PublicGroupFarment_3_Article_Activity : BaseMVPActivity<articlepersenter>(
         ok.setOnClickListener(this)
         Title.setOnClickListener(this)
         edit.setOnClickListener(this)
+        edittext()
+    }
+    fun edittext() {
+        //初始化编辑高度
+        body.setEditorHeight(200)
+        //初始化字体大小
+        body.setEditorFontSize(14)//初始化字体颜色
+        body.setEditorFontColor(Color.BLACK)
+        body.setEditorBackgroundColor(Color.BLUE)
+        //初始化内边距
+        body.setPadding(10, 10, 10, 10) //设置编辑框背景，可以是网络图片 //
+        //  textedit.setBackground(R.color.white) //
+        body.setBackgroundColor(Color.WHITE)
+        // mEditor.setBackgroundResource(R.drawable.bg)
+        body.setPlaceholder("请输入内容")  //设置默认显示语句
+        body.setInputEnabled(true);//设置编辑器是否可用
     }
     private fun setdatadialog(name: String, text: TextView) {
         alert {

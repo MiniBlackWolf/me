@@ -1,16 +1,10 @@
 package study.kotin.my.baselibrary.utils
 
-import android.R
-import android.annotation.SuppressLint
+
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityCompat.startActivityForResult
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.view.isVisible

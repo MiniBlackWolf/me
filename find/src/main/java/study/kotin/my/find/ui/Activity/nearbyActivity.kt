@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.alibaba.android.arouter.launcher.ARouter
+import com.scwang.smartrefresh.header.MaterialHeader
 import kotlinx.android.synthetic.main.nearbylayout.*
+import study.kotin.my.baselibrary.protocol.BaseResp
 import study.kotin.my.baselibrary.ui.activity.BaseMVPActivity
 import study.kotin.my.find.R
 import study.kotin.my.find.adapter.nearbyadapter
@@ -20,6 +22,14 @@ import study.kotin.my.find.presenter.view.Findview
  * system username : Administrator
  */
 class nearbyActivity : BaseMVPActivity<Findpresenter>(), Findview {
+    override fun uploadimg(t: BaseResp<String>) {
+
+    }
+
+    override fun friendcicle(t: BaseResp<String>) {
+
+    }
+
     override fun findByNear(t: List<neardata>) {
         nearbyadapter.addData(t)
     }
@@ -42,7 +52,7 @@ class nearbyActivity : BaseMVPActivity<Findpresenter>(), Findview {
             val data = adapter.data as List<neardata>
             ARouter.getInstance().build("/home/PersonalhomeActivity").withString("id",data[position].userid).navigation()
         }
-        sm.setEnableRefresh(false)
+        sm.setRefreshHeader(MaterialHeader(this))
         sm.setEnableOverScrollDrag(true)
     }
 

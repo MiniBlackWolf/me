@@ -64,3 +64,11 @@ fun Activity.getuserstting(key:String):Boolean{
     val edit = getSharedPreferences("UserSetting", Context.MODE_PRIVATE)
     return edit.getBoolean(key,false)
 }
+
+fun Context.getjwt():String?{
+    var sharedPreferences = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
+    if(sharedPreferences!=""){
+        sharedPreferences="Bearer $sharedPreferences"
+    }
+    return sharedPreferences
+}

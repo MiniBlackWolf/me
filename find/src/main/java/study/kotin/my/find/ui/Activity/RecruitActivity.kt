@@ -36,17 +36,17 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
         people.webViewClient = object : WebViewClient() {
             override fun onPageFinished(p0: WebView?, p1: String?) {
                 if (trun) {
-                    val httpUrl=HttpUrl.get(p1)
+                    val httpUrl = HttpUrl.get(p1)
                     val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-                    val string1 = getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString(httpUrl.host(), "")
+                    val string1 = getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString("madengwang.com", "")
                     val gson = Gson()
-                    val list = gson.fromJson(string1,object: TypeToken<List<Cookie>>(){}.type) as List<Cookie>
-                    if(jwt==""&&list[0].value()==""){
+                    val list = gson.fromJson(string1, object : TypeToken<List<Cookie>>() {}.type) as List<Cookie>
+                    if (jwt == "" && list[0].value() == "") {
                         return
                     }
                     val edit = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
                     val string = edit.getBoolean("status", true)
-                    val j=if(string)"1" else "2"
+                    val j = if (string) "1" else "2"
                     p0!!.evaluateJavascript("javascript:setdata('${list[0].value()}','$jwt','3',$j)") { its ->
                         Log.i("iiiiiiiiiiiii", its)
                     }
@@ -56,18 +56,22 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
 
         }
 
-        val initWeb = MyWebViewSettings.initWeb(people,this)
+        val initWeb = MyWebViewSettings.initWeb(people, this)
         initWeb.loadUrl(resources.getString(R.string.jobFind))
-        initWeb.addJavascriptInterface(webtest(this,""),"webtest")
-        initWeb.addJavascriptInterface(webset(),"webset")
+        initWeb.addJavascriptInterface(webtest(this, ""), "webtest")
+        initWeb.addJavascriptInterface(webset(), "webset")
 
     }
+
     override fun onBackPressed() {
-        if(people.url=="http://madengwang.com/admin/job/jobFind.html"){
+//        if (people.url == "http://madengwang.com/admin/job/jobFind.html"
+//                || people.url == "http://madengwang.com/admin/resume/wsrs.html"
+//                || people.url == "http://madengwang.com/admin/resume/wscom.html"
+//                || people.url == "http://madengwang.com/admin/resume/wsmy.html") {
             super.onBackPressed()
-        }else {
-            people.goBack()
-        }
+//        } else {
+//            people.goBack()
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

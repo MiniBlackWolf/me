@@ -13,13 +13,14 @@ import study.kotin.my.find.service.findService
 import javax.inject.Inject
 
 class findServiceimp @Inject constructor() : findService {
-    override fun addlike(Authorization: String, id: Int): Observable<BaseResp<String>> {
-        return findRepossitory.addlike(Authorization,id)
-    }
-
-
     @Inject
     lateinit var findRepossitory: findRepossitory
+
+
+    override fun addlike(Authorization: String, id: Int): Observable<BaseResp<String>> {
+        return findRepossitory.addlike(Authorization, id)
+    }
+
 
     override fun findByNear(Authorization: String): Observable<List<neardata>> {
         return findRepossitory.findByNear(Authorization).flatMap {
@@ -38,8 +39,15 @@ class findServiceimp @Inject constructor() : findService {
     override fun addConment(Authorization: String, ConmentData: ConmentData): Observable<BaseResp<String>> {
         return findRepossitory.addConment(Authorization, ConmentData)
     }
+
     override fun getfriendcicle(Authorization: String, page: Int, size: Int): Observable<List<Getfriendcicledata>> {
-        return findRepossitory.getfriendcicle(Authorization, page,size).flatMap {
+        return findRepossitory.getfriendcicle(Authorization, page, size).flatMap {
+            Observable.just(it.rows)
+        }
+    }
+
+    override fun getone(Authorization: String, userid: String, page: Int, size: Int): Observable<List<Getfriendcicledata>> {
+        return findRepossitory.getone(Authorization, userid, page, size).flatMap {
             Observable.just(it.rows)
         }
     }

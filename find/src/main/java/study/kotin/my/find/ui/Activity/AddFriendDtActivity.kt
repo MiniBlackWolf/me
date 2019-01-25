@@ -14,7 +14,6 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.filter.Filter
 import kotlinx.android.synthetic.main.addfrienddtlatout.*
-import kotlinx.android.synthetic.main.nearbylayout.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -57,6 +56,9 @@ class AddFriendDtActivity : BaseMVPActivity<Findpresenter>(), Findview, View.OnC
 
     override fun onClick(v: View) {
         when (v.id) {
+            R.id.chf->{
+                finish()
+            }
             R.id.ok -> {
                 if (editText.text.toString() == "") {
                     toast("内容不能为空")
@@ -137,6 +139,7 @@ class AddFriendDtActivity : BaseMVPActivity<Findpresenter>(), Findview, View.OnC
     fun initview() {
         ok.setOnClickListener(this)
         img.setOnClickListener(this)
+        chf.setOnClickListener(this)
     }
 
     fun initinject() {

@@ -2,7 +2,11 @@ package study.kotin.my.find.presenter
 
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import io.reactivex.Observable
+import org.jetbrains.anko.toast
 import retrofit2.http.Query
+import study.kotin.my.baselibrary.common.BaseApplication
 import study.kotin.my.baselibrary.ext.excute
 import study.kotin.my.baselibrary.presenter.Basepersenter
 import study.kotin.my.baselibrary.protocol.BaseResp
@@ -39,6 +43,7 @@ class friendsCirclePresenter @Inject constructor() : Basepersenter<friendsCircle
             }
 
             override fun onError(e: Throwable) {
+                BaseApplication.context.toast("加载错误")
                 super.onError(e)
             }
         },lifecycleProvider)
@@ -52,6 +57,18 @@ class friendsCirclePresenter @Inject constructor() : Basepersenter<friendsCircle
             override fun onError(e: Throwable) {
                 super.onError(e)
             }
+        },lifecycleProvider)
+    }
+    fun getone(Authorization: String, userid: String, page: Int, size: Int){
+        findService.getone(Authorization,userid,page,size).excute(object:BaseObserver<List<Getfriendcicledata>>(){
+            override fun onNext(t: List<Getfriendcicledata>) {
+               mView.getone(t)
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+            }
+
         },lifecycleProvider)
     }
 }

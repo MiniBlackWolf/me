@@ -76,7 +76,7 @@ class PushUtil private constructor() : Observer {
         }
 
         val mNotificationManager = BaseApplication.context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val mBuilder = NotificationCompat.Builder(BaseApplication.context)
+        val mBuilder = NotificationCompat.Builder(BaseApplication.context,"tt")
         val notificationIntent = Intent(BaseApplication.context, BaseMVPActivity::class.java)
         notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val intent = PendingIntent.getActivity(BaseApplication.context, 0,

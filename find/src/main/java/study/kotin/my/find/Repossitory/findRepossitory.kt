@@ -37,5 +37,8 @@ class findRepossitory @Inject constructor() {
     fun addlike(Authorization: String,id:Int ):Observable<BaseResp<String>>{
         return RetrofitFactory.instance.creat(FindApi::class.java).addlike(Authorization,id)
     }
+    fun getone(Authorization: String, userid: String,  page: Int,size: Int): Observable<rowsdata<Getfriendcicledata>>{
+        return RetrofitFactory.instance.creat(FindApi::class.java).getone(Authorization,userid,page,size)
+    }
 
 }

@@ -17,4 +17,5 @@ interface friendsCircleView:BaseView {
     fun addConment(t:BaseResp<String>, LinearLayout: LinearLayout, content: ConmentData, type:Int)
     fun getfriendcicle(t:List<Getfriendcicledata>)
     fun addlike(t:BaseResp<String>,goodcount: TextView)
+    fun getone(t:List<Getfriendcicledata>)
 }

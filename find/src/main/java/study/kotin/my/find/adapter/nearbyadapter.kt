@@ -21,10 +21,10 @@ class nearbyadapter(data: List<neardata>) : BaseQuickAdapter<neardata, BaseViewH
         }
         helper.setText(R.id.rang, item.distance.toInt().toString()+"m")
         when (item.sex) {
-            "男" -> {
+            "Gender_Type_Male" -> {
                 helper.setImageResource(R.id.sex, R.drawable.men)
             }
-            "女" -> {
+            "Gender_Type_Female" -> {
                 helper.setImageResource(R.id.sex, R.drawable.women)
             }
         }

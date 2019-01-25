@@ -38,7 +38,7 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
                 if (trun) {
                     val httpUrl = HttpUrl.get(p1)
                     val jwt = getSharedPreferences("UserAcc", Context.MODE_PRIVATE).getString("jwt", "")
-                    val string1 = getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString("madengwang.com", "")
+                    val string1 = getSharedPreferences("userCookie", Context.MODE_PRIVATE).getString(httpUrl.host(), "")
                     val gson = Gson()
                     val list = gson.fromJson(string1, object : TypeToken<List<Cookie>>() {}.type) as List<Cookie>
                     if (jwt == "" && list[0].value() == "") {
@@ -64,14 +64,14 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
     }
 
     override fun onBackPressed() {
-//        if (people.url == "http://madengwang.com/admin/job/jobFind.html"
-//                || people.url == "http://madengwang.com/admin/resume/wsrs.html"
-//                || people.url == "http://madengwang.com/admin/resume/wscom.html"
-//                || people.url == "http://madengwang.com/admin/resume/wsmy.html") {
-            super.onBackPressed()
-//        } else {
-//            people.goBack()
-//        }
+        if (people.url == "http://madengwang.com/admin/job/jobFind.html"
+                || people.url == "http://madengwang.com/admin/resume/wsrs.html"
+                || people.url == "http://madengwang.com/admin/resume/wscom.html"
+                || people.url == "http://madengwang.com/admin/resume/wsmy.html") {
+            finish()
+        } else {
+            people.goBack()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

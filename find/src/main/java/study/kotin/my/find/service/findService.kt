@@ -14,4 +14,5 @@ interface findService {
     fun addConment(Authorization: String,ConmentData: ConmentData): Observable<BaseResp<String>>
     fun getfriendcicle(Authorization: String,page: Int,size: Int):Observable<List<Getfriendcicledata>>
     fun addlike(Authorization: String,id:Int ):Observable<BaseResp<String>>
+    fun getone(Authorization: String, userid: String, page: Int,size: Int): Observable<List<Getfriendcicledata>>
 }

@@ -10,6 +10,7 @@ import android.view.animation.TranslateAnimation
 import android.widget.Button
 import androidx.core.view.isVisible
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.home.R
@@ -34,6 +35,9 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
             R.id.send -> {
                 startActivity<HomeActivity>("id" to id)
                 finish()
+            }
+            R.id.dt->{
+                ARouter.getInstance().build("/find/FriendDtActivity").withString("id",id).navigation()
             }
         }
     }
@@ -80,6 +84,7 @@ class PersonalhomeActivity : BaseMVPActivity<HomePersenter>(), View.OnClickListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.personalhomepage)
         chatfh.setOnClickListener(this)
+        dt.setOnClickListener(this)
         hz.setEnableOverScrollDrag(true)
         hz.setEnableOverScrollBounce(true)
         hz.setEnableRefresh(false)

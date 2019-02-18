@@ -67,7 +67,8 @@ class RecruitActivity : BaseMVPActivity<Findpresenter>() {
         if (people.url == "http://madengwang.com/admin/job/jobFind.html"
                 || people.url == "http://madengwang.com/admin/resume/wsrs.html"
                 || people.url == "http://madengwang.com/admin/resume/wscom.html"
-                || people.url == "http://madengwang.com/admin/resume/wsmy.html") {
+                || people.url == "http://madengwang.com/admin/resume/wsmy.html"
+                || people.url == "http://madengwang.com/admin/job/boss.html") {
             finish()
         } else {
             people.goBack()
